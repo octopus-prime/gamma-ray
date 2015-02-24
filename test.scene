@@ -1,0 +1,52 @@
+// CSG example
+
+include "constants.inc"
+include "surfaces.inc"
+include "textures.inc"
+
+sphere = Sphere {}
+
+cube = Cube {}
+cube.scale(<0.75, 0.75, 0.75>)
+
+cross = CylinderX + CylinderY + CylinderZ
+cross.scale(<0.5, 0.5, 0.5>)
+
+csg = Object
+{
+//	surface = (sphere - cross) & cube
+	surface = (sphere & cube) - cross
+	texture = Wood
+}
+csg.rotate(< 0, 44, 0>)
+csg.translate(<0, 0.7, 0>)
+
+scene = Scene
+{
+	camera = Camera
+	{
+		origin = -2 * Z
+		direction = Z
+	}
+
+	lights =
+	[
+		Light
+		{
+			origin = <+5, +5, -5>
+			color = White
+		},
+		Light
+		{
+			origin = <-5, +5, -5>
+			color = White
+		}
+	]
+
+	objects =
+	[
+		csg
+	]
+}
+
+render(scene)

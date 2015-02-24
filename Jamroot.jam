@@ -1,0 +1,45 @@
+using testing ;
+
+import path ;
+
+project gamma-ray
+	:
+		requirements
+		<cxxflags>-std=c++1y
+		<cxxflags>-ftemplate-depth=256
+		<include>source
+		<include>ext/gsl_poly
+		<define>BOOST_SPIRIT_USE_PHOENIX_V3
+		<define>BOOST_TEST_DYN_LINK
+		<define>BOOST_LOG_DYN_LINK
+	;
+	
+alias sources
+	:
+		[ path.glob-tree source : *.cpp : engine.cpp ]
+		[ path.glob-tree ext : *.cpp ]
+		/site-config//boost_filesystem
+		/site-config//boost_log
+		/site-config//boost_system
+		/site-config//gslcblas
+		/site-config//gsl
+	;
+
+exe gamma-ray
+	:
+		sources
+		source/engine.cpp
+#		/site-config//noise
+#		/site-config//tbb
+#		/site-config//jpeg
+#		/site-config//png
+#		/site-config//tiff
+#		/site-config//freetype
+	;
+
+unit-test gamma-ray-test
+	:
+		sources
+		[ path.glob-tree test : *.cpp ]
+		/site-config//boost_unit_test_framework
+	;
