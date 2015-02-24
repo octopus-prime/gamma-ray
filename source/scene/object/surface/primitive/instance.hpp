@@ -1,5 +1,5 @@
 /*
- * impl.hpp
+ * instance.hpp
  *
  *  Created on: 21.02.2015
  *      Author: mike_gresens
@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include <scene/object/surface/base.hpp>
+#include <scene/object/surface/instance.hpp>
 #include <math/matrix.hpp>
 #include <boost/make_shared.hpp>
 
@@ -18,14 +18,14 @@ namespace surface {
 namespace primitive {
 
 template <typename Model>
-class impl
+class instance
 :
-	public virtual base
+	public virtual surface::instance
 {
 public:
-	impl(const matrix44_t& transformation, Model&& model);
+	instance(const matrix44_t& transformation, Model&& model);
 
-	virtual hits_t::iterator hit(const ray_t& ray, const hits_t::iterator hits) const override;
+	virtual rendering::hits_t::iterator hit(const rendering::ray_t& ray, const rendering::hits_t::iterator hits) const override;
 	virtual bool inside(const vector3_t& point) const override;
 
 private:
@@ -35,10 +35,11 @@ private:
 };
 
 template<typename Model, typename... Args>
-base_t make(const matrix44_t& transformation, Args&&... args)
+surface::instance_t
+make(const matrix44_t& transformation, Args&&... args)
 {
 	Model model(std::forward<Args>(args)...);
-	return boost::make_shared<impl<Model>>(transformation, std::move(model));
+	return boost::make_shared<instance<Model>>(transformation, std::move(model));
 }
 
 }

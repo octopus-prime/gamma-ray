@@ -20,7 +20,7 @@ namespace surface {
 
 class make_visitor
 :
-	public boost::static_visitor<base_t>
+	public boost::static_visitor<instance_t>
 {
 public:
 	template <typename Description>
@@ -60,7 +60,7 @@ public:
 	}
 };
 
-base_t
+instance_t
 make(const description_t& description)
 {
 	return boost::apply_visitor(make_visitor(), description);

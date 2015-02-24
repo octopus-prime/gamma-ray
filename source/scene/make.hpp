@@ -7,18 +7,14 @@
 
 #pragma once
 
-#include <scene/object/surface/description.hpp>
-#include <scene/object/surface/instance.hpp>
+#include <scene/description.hpp>
+#include <scene/instance.hpp>
 
 namespace rt {
 namespace scene {
-namespace object {
-namespace surface {
 
 instance_t
 make(const description_t& description);
 
-}
-}
 }
 }

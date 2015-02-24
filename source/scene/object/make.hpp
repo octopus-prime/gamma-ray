@@ -7,22 +7,16 @@
 
 #pragma once
 
-#include <scene/object/surface/primitive/cube/description.hpp>
-#include <scene/object/surface/instance.hpp>
+#include <scene/object/description.hpp>
+#include <scene/object/instance.hpp>
 
 namespace rt {
 namespace scene {
 namespace object {
-namespace surface {
-namespace primitive {
-namespace cube {
 
-surface::instance_t
+instance_t
 make(const description_t& description);
 
-}
-}
-}
 }
 }
 }

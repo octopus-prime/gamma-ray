@@ -8,7 +8,7 @@
 #pragma once
 
 #include <scene/object/surface/primitive/sphere/description.hpp>
-#include <scene/object/surface/base.hpp>
+#include <scene/object/surface/instance.hpp>
 
 namespace rt {
 namespace scene {
@@ -17,7 +17,8 @@ namespace surface {
 namespace primitive {
 namespace sphere {
 
-base_t make(const description_t& description);
+surface::instance_t
+make(const description_t& description);
 
 }
 }

@@ -7,8 +7,8 @@
 
 #include <scene/object/surface/primitive/sphere/make.hpp>
 #include <scene/object/surface/primitive/sphere/model.hpp>
-#include <scene/object/surface/primitive/impl.hpp>
 #include <math/transformation.hpp>
+#include <scene/object/surface/primitive/instance.hpp>
 
 namespace rt {
 namespace scene {
@@ -16,11 +16,11 @@ namespace object {
 namespace surface {
 namespace primitive {
 
-extern template class impl<sphere::model>;
+extern template class instance<sphere::model>;
 
 namespace sphere {
 
-base_t
+surface::instance_t
 make(const description_t& description)
 {
 	matrix44_t transformation = identity<4>();

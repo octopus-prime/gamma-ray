@@ -17,11 +17,11 @@ namespace cube {
 class model
 {
 public:
-	hits_t::iterator
-	hit(const ray_t& ray, const hits_t::iterator hits) const
+	rendering::hits_t::iterator
+	hit(const rendering::ray_t& ray, const rendering::hits_t::iterator hits) const
 	{
-		hits[0].distance = ray.min;
-		hits[1].distance = ray.max;
+		hits[0].distance = ray.min();
+		hits[1].distance = ray.max();
 		return hits + 2 * (test<X>(ray, hits) && test<Y>(ray, hits) && test<Z>(ray, hits));
 	}
 
@@ -41,11 +41,11 @@ protected:
 
 	template <axis_t N>
 	static bool
-	test(const ray_t& ray, const hits_t::iterator hits)
+	test(const rendering::ray_t& ray, const rendering::hits_t::iterator hits)
 	{
-		const bool sign = std::signbit(ray.direction[N]);
-		const float min = (POINT[ sign][N] - ray.origin[N]) / ray.direction[N];
-		const float max = (POINT[!sign][N] - ray.origin[N]) / ray.direction[N];
+		const bool sign = std::signbit(ray.direction()[N]);
+		const float min = (POINT[ sign][N] - ray.origin()[N]) / ray.direction()[N];
+		const float max = (POINT[!sign][N] - ray.origin()[N]) / ray.direction()[N];
 
 		if (hits[0].distance > max || min > hits[1].distance)
 			return false;

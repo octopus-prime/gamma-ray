@@ -19,23 +19,23 @@ namespace sphere {
 class model
 {
 public:
-	hits_t::iterator
-	hit(const ray_t& ray, const hits_t::iterator hits) const
+	rendering::hits_t::iterator
+	hit(const rendering::ray_t& ray, const rendering::hits_t::iterator hits) const
 	{
 		const polynomial2_t polynomial
 		{{
-			ray.origin * ray.origin - 1.0f,
-			ray.origin * ray.direction * 2.0f,
-			ray.direction * ray.direction
+			ray.origin() * ray.origin() - 1.0f,
+			ray.origin() * ray.direction() * 2.0f,
+			ray.direction() * ray.direction()
 		}};
 
-		const distance_iterator begin(hits);
-		const distance_iterator end = solve(polynomial, begin);
+		const rendering::distance_iterator begin(hits);
+		const rendering::distance_iterator end = solve(polynomial, begin);
 
 		std::for_each
 		(
 			hits, hits + std::distance(begin, end),
-			[this, &ray](hit_t& hit)
+			[this, &ray](rendering::hit_t& hit)
 			{
 				hit.normal = normal(ray(hit.distance));
 			}

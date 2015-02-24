@@ -28,23 +28,23 @@ public:
 	{
 	}
 
-	hits_t::iterator
-	hit(const ray_t& ray, const hits_t::iterator hits) const
+	rendering::hits_t::iterator
+	hit(const rendering::ray_t& ray, const rendering::hits_t::iterator hits) const
 	{
-		const vector4_t om = point::operator*(ray.origin, _matrix);
-		const vector4_t dm = direction::operator*(ray.direction, _matrix);
+		const vector4_t om = point::operator*(ray.origin(), _matrix);
+		const vector4_t dm = direction::operator*(ray.direction(), _matrix);
 		const polynomial2_t polynomial
 		{{
-			point::operator*(om, ray.origin),
-			2.0f * point::operator*(dm, ray.origin),
-			direction::operator*(dm, ray.direction)
+			point::operator*(om, ray.origin()),
+			2.0f * point::operator*(dm, ray.origin()),
+			direction::operator*(dm, ray.direction())
 		}};
-		const distance_iterator begin(hits);
-		const distance_iterator end = solve(polynomial, begin);
+		const rendering::distance_iterator begin(hits);
+		const rendering::distance_iterator end = solve(polynomial, begin);
 		std::for_each
 		(
 			hits, hits + std::distance(begin, end),
-			[this, &ray](hit_t& hit)
+			[this, &ray](rendering::hit_t& hit)
 			{
 				hit.normal = normal(ray(hit.distance));
 			}

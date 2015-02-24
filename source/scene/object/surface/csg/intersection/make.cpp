@@ -5,9 +5,9 @@
  *      Author: mike_gresens
  */
 
+#include <scene/object/surface/csg/instance.hpp>
 #include <scene/object/surface/csg/intersection/make.hpp>
 #include <scene/object/surface/make.hpp>
-#include <scene/object/surface/csg/impl.hpp>
 #include <scene/object/surface/csg/intersection/model.hpp>
 
 namespace rt {
@@ -16,11 +16,12 @@ namespace object {
 namespace surface {
 namespace csg {
 
-extern template class impl<intersection::model>;
+extern template class instance<intersection::model>;
 
 namespace intersection {
 
-base_t make(const description_t& description)
+surface::instance_t
+make(const description_t& description)
 {
 	return csg::make<model>
 	(

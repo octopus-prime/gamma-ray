@@ -1,11 +1,11 @@
 /*
- * impl.cpp
+ * instance.cpp
  *
  *  Created on: 08.01.2014
  *      Author: mike_gresens
  */
 
-#include <scene/object/surface/csg/impl.hpp>
+#include <scene/object/surface/csg/instance.hpp>
 #include <scene/object/surface/csg/difference/model.hpp>
 #include <scene/object/surface/csg/intersection/model.hpp>
 #include <scene/object/surface/csg/union/model.hpp>
@@ -17,30 +17,30 @@ namespace surface {
 namespace csg {
 
 template <typename Model>
-impl<Model>::impl(const base_t& surface1, const base_t& surface2)
+instance<Model>::instance(const surface::instance_t& surface1, const surface::instance_t& surface2)
 :
-	base(),
+	surface::instance(),
 	_model(surface1, surface2)
 {
 }
 
 template <typename Model>
-hits_t::iterator
-impl<Model>::hit(const ray_t& ray, const hits_t::iterator hits) const
+rendering::hits_t::iterator
+instance<Model>::hit(const rendering::ray_t& ray, const rendering::hits_t::iterator hits) const
 {
 	return _model.hit(ray, hits);
 }
 
 template<typename Model>
 bool
-impl<Model>::inside(const vector3_t& point) const
+instance<Model>::inside(const vector3_t& point) const
 {
 	return _model.inside(point);
 }
 
-template class impl<difference::model>;
-template class impl<intersection::model>;
-template class impl<union_::model>;
+template class instance<difference::model>;
+template class instance<intersection::model>;
+template class instance<union_::model>;
 
 }
 }

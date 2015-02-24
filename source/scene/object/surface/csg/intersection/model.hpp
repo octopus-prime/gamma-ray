@@ -17,40 +17,40 @@ namespace intersection {
 class model
 {
 public:
-	model(const base_t& surface1, const base_t& surface2)
+	model(const surface::instance_t& surface1, const surface::instance_t& surface2)
 	:
 		_surface1(surface1),
 		_surface2(surface2)
 	{
 	}
 
-	hits_t::iterator
-	hit(const ray_t& ray, const hits_t::iterator hits) const
+	rendering::hits_t::iterator
+	hit(const rendering::ray_t& ray, const rendering::hits_t::iterator hits) const
 	{
-		const hits_t::iterator end1 = _surface1->hit(ray, hits);
+		const auto end1 = _surface1->hit(ray, hits);
 
 		if (end1 == hits)
 			return hits;
 
-		const hits_t::iterator end2 = _surface2->hit(ray, end1);
+		const auto end2 = _surface2->hit(ray, end1);
 
 		if (end2 == end1)
 			return hits;
 
-		const hits_t::iterator hits1 = std::copy_if
+		const auto hits1 = std::copy_if
 		(
 			hits, end1,
 			hits,
-			[this](const hit_t& hit)
+			[this](const rendering::hit_t& hit)
 			{
 				return _surface2->inside(hit.point);
 			}
 		);
-		const hits_t::iterator hits2 = std::copy_if
+		const auto hits2 = std::copy_if
 		(
 			end1, end2,
 			hits1,
-			[this](const hit_t& hit)
+			[this](const rendering::hit_t& hit)
 			{
 				return _surface1->inside(hit.point);
 			}
@@ -65,8 +65,8 @@ public:
 	}
 
 private:
-	base_t _surface1;
-	base_t _surface2;
+	surface::instance_t _surface1;
+	surface::instance_t _surface2;
 };
 
 }
