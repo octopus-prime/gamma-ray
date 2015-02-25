@@ -12,6 +12,7 @@
 #include <scene/object/surface/primitive/cube/parser.hpp>
 #include <scene/object/surface/primitive/mesh/parser.hpp>
 #include <scene/object/surface/primitive/quadric/parser.hpp>
+#include <scene/object/surface/primitive/torus/parser.hpp>
 #include <boost/spirit/include/qi_grammar.hpp>
 
 namespace qi = boost::spirit::qi;
@@ -36,6 +37,7 @@ private:
 	cube::parser<Iterator, Skipper> _cube;
 	mesh::parser<Iterator, Skipper> _mesh;
 	quadric::parser<Iterator, Skipper> _quadric;
+	torus::parser<Iterator, Skipper> _torus;
 };
 
 }

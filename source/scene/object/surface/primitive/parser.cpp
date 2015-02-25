@@ -29,6 +29,7 @@ extern template class sphere::parser<parsing::iterator_t, parsing::skipper::pars
 extern template class cube::parser<parsing::iterator_t, parsing::skipper::parser<parsing::iterator_t>>;
 extern template class mesh::parser<parsing::iterator_t, parsing::skipper::parser<parsing::iterator_t>>;
 extern template class quadric::parser<parsing::iterator_t, parsing::skipper::parser<parsing::iterator_t>>;
+extern template class torus::parser<parsing::iterator_t, parsing::skipper::parser<parsing::iterator_t>>;
 
 static const std::string NAME("Primitive");
 
@@ -50,6 +51,8 @@ parser<Iterator, Skipper>::parser(const parsing::variable::descriptions_t& descr
 			_mesh
 			|
 			_quadric
+			|
+			_torus
 	;
 }
 

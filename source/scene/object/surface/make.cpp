@@ -9,6 +9,7 @@
 #include <scene/object/surface/primitive/sphere/make.hpp>
 #include <scene/object/surface/primitive/quadric/make.hpp>
 #include <scene/object/surface/primitive/cube/make.hpp>
+#include <scene/object/surface/primitive/torus/make.hpp>
 #include <scene/object/surface/csg/difference/make.hpp>
 #include <scene/object/surface/csg/intersection/make.hpp>
 #include <scene/object/surface/csg/union/make.hpp>
@@ -23,11 +24,11 @@ class make_visitor
 	public boost::static_visitor<instance_t>
 {
 public:
-	template <typename Description>
-	result_type operator()(const Description& description) const
-	{
-		return result_type();
-	}
+//	template <typename Description>
+//	result_type operator()(const Description& description) const
+//	{
+//		return result_type();
+//	}
 
 	result_type operator()(const csg::difference::description_t& description) const
 	{
@@ -57,6 +58,16 @@ public:
 	result_type operator()(const primitive::quadric::description_t& description) const
 	{
 		return primitive::quadric::make(description);
+	}
+
+	result_type operator()(const primitive::torus::description_t& description) const
+	{
+		return primitive::torus::make(description);
+	}
+
+	result_type operator()(const primitive::mesh::description_t& description) const
+	{
+		return result_type(); // TODO
 	}
 };
 

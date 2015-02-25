@@ -9,6 +9,7 @@
 #include <scene/object/surface/primitive/sphere/model.hpp>
 #include <scene/object/surface/primitive/cube/model.hpp>
 #include <scene/object/surface/primitive/quadric/model.hpp>
+#include <scene/object/surface/primitive/torus/model.hpp>
 #include <boost/iterator/filter_iterator.hpp>
 
 namespace rt {
@@ -44,7 +45,8 @@ instance<Model>::hit(const rendering::ray_t& ray, const rendering::hits_t::itera
 			{
 				hit.distance,
 				ray(hit.distance),
-				normalize(direction::operator*(_object_scene, hit.normal)),
+//				normalize(direction::operator*(_object_scene, hit.normal)),
+				direction::operator*(_object_scene, hit.normal),
 				nullptr
 			};
 		}
@@ -64,6 +66,7 @@ constexpr basic_container_t<matrix33_t, 2> cube::model::NORMAL;
 template class instance<sphere::model>;
 template class instance<cube::model>;
 template class instance<quadric::model>;
+template class instance<torus::model>;
 
 }
 }

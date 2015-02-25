@@ -23,6 +23,7 @@ typedef boost::variant
 	primitive::cube::description_t,
 	primitive::mesh::description_t,
 	primitive::quadric::description_t,
+	primitive::torus::description_t,
 	// TODO: more surface types here...
 	boost::recursive_wrapper<csg::description_t<csg::union_tag>>,
 	boost::recursive_wrapper<csg::description_t<csg::intersection_tag>>,
