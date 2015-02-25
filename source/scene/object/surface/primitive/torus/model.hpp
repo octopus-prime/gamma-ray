@@ -59,8 +59,8 @@ public:
 	bool
 	inside(const vector3_t& point) const
 	{
-		const float delta = std::hypot(point[X], point[Z]) - _major;
-		return point[Y] * point[Y] + delta * delta <= _minor * _minor;
+		const float delta = std::hypot(point[X], point[Y]) - _major;
+		return point[Z] * point[Z] + delta * delta <= _minor * _minor;
 	}
 
 protected:
