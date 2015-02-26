@@ -15,15 +15,21 @@ namespace scene {
 namespace object {
 namespace texture {
 namespace noise {
-namespace cylinders {
+namespace generator {
+namespace billow {
 
 struct basic_description_t
 {
 	boost::optional<double> 	frequency;
+	boost::optional<double> 	lacunarity;
+	boost::optional<int> 		octaveCount;
+	boost::optional<double> 	persistence;
+	boost::optional<int> 		seed;
 };
 
 typedef boost::shared_ptr<basic_description_t> description_t;
 
+}
 }
 }
 }

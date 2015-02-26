@@ -1,3 +1,48 @@
 // Textures
 
 Wood = <0,0,0>
+
+baseWood = Cylinders
+{
+	frequency = 16.0
+}
+
+woodGrainNoise = Perlin
+{
+	seed = 0
+	frequency = 48.0
+	persistence = 0.5
+	lacunarity = 2.20703125
+	octaveCount = 3
+}
+woodGrainNoise.scale(0.25 * Y)
+
+woodGrain = woodGrainNoise * 0.25 + 0.125
+
+combinedWood = baseWood + woodGrain
+/*
+perturbedWood = Turbulence
+{
+	source = combinedWood
+	seed = 1
+	frequency = 4.0
+	power = 1.0 / 256.0
+	roughness = 4
+}
+*/
+combinedWood.translate(1.48 * Z)
+combinedWood.rotate(84.0 * X)
+
+/*
+perturbedWood.translate(1.48 * Z)
+perturbedWood.rotate(84.0 * X)
+
+finalWood = Turbulence
+{
+	source = perturbedWood
+	seed = 2
+	frequency = 2.0
+	power = 1.0 / 8.0
+	roughness = 4
+}
+*/

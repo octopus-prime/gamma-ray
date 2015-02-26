@@ -1,5 +1,5 @@
 /*
- * base.hpp
+ * instance.hpp
  *
  *  Created on: 21.02.2015
  *      Author: mike_gresens

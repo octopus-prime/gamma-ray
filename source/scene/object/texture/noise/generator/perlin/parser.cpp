@@ -5,7 +5,7 @@
  *      Author: mgresens
  */
 
-#include <scene/object/texture/noise/billow/parser.hpp>
+#include <scene/object/texture/noise/generator/perlin/parser.hpp>
 #include <boost/spirit/include/qi.hpp>
 #include <boost/spirit/include/phoenix.hpp>
 #include <boost/fusion/include/adapt_struct.hpp>
@@ -18,7 +18,7 @@ namespace px = boost::phoenix;
 
 BOOST_FUSION_ADAPT_STRUCT
 (
-    rt::scene::object::texture::noise::billow::basic_description_t,
+    rt::scene::object::texture::noise::generator::perlin::basic_description_t,
 	(boost::optional<double>, 	frequency)
 	(boost::optional<double>, 	lacunarity)
 	(boost::optional<int>, 		octaveCount)
@@ -38,9 +38,10 @@ namespace scene {
 namespace object {
 namespace texture {
 namespace noise {
-namespace billow {
+namespace generator {
+namespace perlin {
 
-static const std::string NAME("Billow");
+static const std::string NAME("Perlin");
 
 template <typename Iterator, typename Skipper>
 parser<Iterator, Skipper>::parser(const parsing::variable::descriptions_t& descriptions)
@@ -82,6 +83,7 @@ parser<Iterator, Skipper>::parser(const parsing::variable::descriptions_t& descr
 
 template class parser<parsing::iterator_t, parsing::skipper::parser<parsing::iterator_t>>;
 
+}
 }
 }
 }

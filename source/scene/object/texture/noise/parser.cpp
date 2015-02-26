@@ -29,8 +29,9 @@ namespace object {
 namespace texture {
 namespace noise {
 
-extern template class perlin::parser<parsing::iterator_t, parsing::skipper::parser<parsing::iterator_t>>;
-extern template class billow::parser<parsing::iterator_t, parsing::skipper::parser<parsing::iterator_t>>;
+extern template class generator::perlin::parser<parsing::iterator_t, parsing::skipper::parser<parsing::iterator_t>>;
+extern template class generator::billow::parser<parsing::iterator_t, parsing::skipper::parser<parsing::iterator_t>>;
+extern template class generator::cylinders::parser<parsing::iterator_t, parsing::skipper::parser<parsing::iterator_t>>;
 
 static const std::string NAME("Noise");
 
@@ -39,56 +40,69 @@ parser<Iterator, Skipper>::parser(const parsing::variable::descriptions_t& descr
 :
 	parser::base_type(_description),
 	_description(NAME),
-//	_term(),
-//	_primitive(),
+	_term(),
+	_factor(),
 	_variable(descriptions),
+	_generator(),
 	_perlin(descriptions),
 	_billow(descriptions),
 	_cylinders(descriptions)
 {
-	_description = _variable | _perlin | _billow | _cylinders;
-//	static const auto make_union = [](const desc::noise_t& noise1, const desc::noise_t& noise2) -> desc::noise_t
-//	{
-//		return std::make_shared<desc::basic_csg_t<desc::csg_union_tag>>(noise1, noise2);
-//	};
-//
-//	static const auto make_intersecation = [](const desc::noise_t& noise1, const desc::noise_t& noise2) -> desc::noise_t
-//	{
-//		return std::make_shared<desc::basic_csg_t<desc::csg_intersection_tag>>(noise1, noise2);
-//	};
-//
-//	static const auto make_difference = [](const desc::noise_t& noise1, const desc::noise_t& noise2) -> desc::noise_t
-//	{
-//		return std::make_shared<desc::basic_csg_t<desc::csg_difference_tag>>(noise1, noise2);
-//	};
-//
-//	_noise =
-//			_term 									[qi::_val = qi::_1]
-//			>
-//			*(
-//					(qi::lit('+') > _term)			[qi::_val = px::bind(make_union, qi::_val, qi::_1)]
+	static const auto make_add = [](const description_t& description1, const description_t& description2) -> description_t
+	{
+		return boost::make_shared<combiner::basic_description_t<combiner::add_tag>>(description1, description2);
+	};
+
+	static const auto make_mul = [](const description_t& description1, const description_t& description2) -> description_t
+	{
+		return boost::make_shared<combiner::basic_description_t<combiner::mul_tag>>(description1, description2);
+	};
+
+	_description =
+			_term 											[qi::_val = qi::_1]
+			>
+			*(
+					(qi::lit('+') > _term)					[qi::_val = px::bind(make_add, qi::_val, qi::_1)]
 //					|
-//					(qi::lit('-') > _term)			[qi::_val = px::bind(make_difference, qi::_val, qi::_1)]
+//					(qi::lit('-') > _term)					[px::bind(sub, qi::_val, qi::_1)]
+			)
+	;
+
+	_term =
+			_factor											[qi::_val = qi::_1]
+			>
+			*(
+					(qi::lit('*') > _factor)				[qi::_val = px::bind(make_mul, qi::_val, qi::_1)]
 //					|
-//					(qi::lit('^') > _term)			[qi::_val = px::bind(make_intersecation, qi::_val, qi::_1)]
-//			)
-//	;
-//
-//	_term =
-//			_primitive
+//					(qi::lit('/') > _factor)				[px::bind(div, qi::_val, qi::_1)]
+			)
+	;
+
+	_factor =
+			_generator										[qi::_val = qi::_1]
+			|
+//			qi::double_										[qi::_val = qi::_1]
 //			|
-//			_variable
+			(qi::lit('(') > _description > qi::lit(')'))	[qi::_val = qi::_1]
 //			|
-//			(qi::lit('(') > _noise > qi::lit(')'))
-//	;
-//
-//	_primitive =
-//			_sphere
+//			(qi::lit('+') > _factor)						[qi::_val = qi::_1]
 //			|
-//			_cube
+//			(qi::lit('-') > _factor)						[qi::_val = px::bind(neg, qi::_1)]
+			|
+//			(qi::double_ > qi::lit('*') > _factor)			[qi::_val = px::bind(make_mul, qi::_1, qi::_2)]
 //			|
-//			_mesh
-//	;
+			_variable										[qi::_val = qi::_1]
+	;
+
+	_generator =
+			qi::double_
+			|
+			_perlin
+			|
+			_billow
+			|
+			_cylinders
+	;
 }
 
 template class parser<parsing::iterator_t, parsing::skipper::parser<parsing::iterator_t>>;

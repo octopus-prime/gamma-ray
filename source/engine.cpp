@@ -15,7 +15,25 @@
 #include <boost/filesystem.hpp>
 #include <iostream>
 
+#include <scene/object/texture/noise/make.hpp>
+#include <boost/make_shared.hpp>
+
 using namespace rt;
+
+void test_noise()
+{
+	using namespace scene::object::texture::noise;
+
+	const double desc1(50.0);
+	const auto desc2 = boost::make_shared<generator::cylinders::basic_description_t>();
+	desc2->frequency = 16.0;
+	const auto desc3 = boost::make_shared<combiner::basic_description_t<combiner::add_tag>>(desc1, desc2);
+	const auto desc4 = boost::make_shared<combiner::basic_description_t<combiner::mul_tag>>(desc1, desc3);
+
+	const auto noise = make(desc4);
+
+	std::cout << noise({{1,2,3}}) << std::endl;
+}
 
 scene::instance_t
 preprocess(const std::string& file)
@@ -29,6 +47,9 @@ int main(int argc, char** argv)
 {
 	try
 	{
+		test_noise();
+		exit(0);
+
 		const configuration config(argc, argv);
 		const auto input = config.get_required<std::string>(configuration::INPUT);
 		const auto output = config.get_required<std::string>(configuration::OUTPUT);

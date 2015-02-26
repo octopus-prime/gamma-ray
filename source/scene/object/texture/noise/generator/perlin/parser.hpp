@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include <scene/object/texture/noise/billow/description.hpp>
+#include <scene/object/texture/noise/generator/perlin/description.hpp>
 #include <parsing/variable/description.hpp>
 #include <boost/spirit/include/qi_grammar.hpp>
 
@@ -18,7 +18,8 @@ namespace scene {
 namespace object {
 namespace texture {
 namespace noise {
-namespace billow {
+namespace generator {
+namespace perlin {
 
 template <typename Iterator, typename Skipper>
 class parser
@@ -34,6 +35,7 @@ private:
 	qi::rule<Iterator, Skipper, basic_description_t()> _options;
 };
 
+}
 }
 }
 }

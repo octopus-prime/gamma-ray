@@ -15,7 +15,8 @@ namespace scene {
 namespace object {
 namespace texture {
 namespace noise {
-namespace billow {
+namespace generator {
+namespace perlin {
 
 struct basic_description_t
 {
@@ -28,6 +29,7 @@ struct basic_description_t
 
 typedef boost::shared_ptr<basic_description_t> description_t;
 
+}
 }
 }
 }

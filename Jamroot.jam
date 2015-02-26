@@ -23,6 +23,7 @@ alias sources
 		/site-config//boost_system
 		/site-config//gslcblas
 		/site-config//gsl
+		/site-config//noise
 	;
 
 exe gamma-ray
@@ -32,7 +33,6 @@ exe gamma-ray
 		source/configuration.cpp
 		[ path.glob-tree source/rendering : *.cpp ]
 		/site-config//boost_program_options
-#		/site-config//noise
 		/site-config//tbb
 		/site-config//jpeg
 		/site-config//png
