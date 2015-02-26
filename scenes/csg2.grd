@@ -1,0 +1,69 @@
+// CSG example
+
+include "includes/constants.gri"
+include "includes/surfaces.gri"
+include "includes/textures.gri"
+
+torusZ = Torus
+{
+	major = 2.0
+	minor = 0.5
+}
+
+torusX = Torus
+{
+	major = 2.0
+	minor = 0.5
+}
+torusX.rotate(90 * Y)
+
+torusY = Torus
+{
+	major = 2.0
+	minor = 0.5
+}
+torusY.rotate(90 * X)
+
+sphere = Sphere
+{
+	radius = 2.0
+}
+
+csg = Object
+{
+	surface = sphere - torusX - torusY - torusZ
+	texture = Wood
+}
+csg.rotate(<0, 0, -50.0>).rotate(<-55.0, 0, 0>).rotate(<0.0, -30, 0>)
+
+scene = Scene
+{
+	camera = Camera
+	{
+		origin = -5 * Z
+		direction = Z
+	}
+
+	lights =
+	[
+		Light
+		{
+			origin = <+5, +5, -5>
+			color = White * 4
+		}
+	/*
+		Light
+		{
+			origin = <-5, +5, -5>
+			color = White * 5
+		}
+	*/
+	]
+
+	objects =
+	[
+		csg
+	]
+}
+
+render(scene)

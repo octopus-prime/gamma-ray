@@ -16,7 +16,7 @@ project gamma-ray
 	
 alias sources
 	:
-		[ path.glob-tree source : *.cpp : engine.cpp ]
+		[ path.glob-tree source : *.cpp : engine.cpp configuration.cpp rendering ]
 		[ path.glob-tree ext : *.cpp ]
 		/site-config//boost_filesystem
 		/site-config//boost_log
@@ -29,11 +29,14 @@ exe gamma-ray
 	:
 		sources
 		source/engine.cpp
+		source/configuration.cpp
+		[ path.glob-tree source/rendering : *.cpp ]
+		/site-config//boost_program_options
 #		/site-config//noise
-#		/site-config//tbb
-#		/site-config//jpeg
-#		/site-config//png
-#		/site-config//tiff
+		/site-config//tbb
+		/site-config//jpeg
+		/site-config//png
+		/site-config//tiff
 #		/site-config//freetype
 	;
 

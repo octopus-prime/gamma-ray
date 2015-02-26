@@ -1,8 +1,8 @@
 // CSG example
 
-include "constants.inc"
-include "surfaces.inc"
-include "textures.inc"
+include "includes/constants.gri"
+include "includes/surfaces.gri"
+include "includes/textures.gri"
 
 sphere = Sphere {}
 
@@ -18,14 +18,15 @@ csg = Object
 	surface = (sphere & cube) - cross
 	texture = Wood
 }
-csg.rotate(< 0, 44, 0>)
-csg.translate(<0, 0.7, 0>)
+//csg.rotate(< 30, 60, 0>)
+//csg.translate(<0, 0.7, 0>)
+csg.rotate(<0, 0, -50.0>).rotate(<-55.0, 0, 0>).rotate(<0.0, -30, 0>)
 
 scene = Scene
 {
 	camera = Camera
 	{
-		origin = -2 * Z
+		origin = -3 * Z
 		direction = Z
 	}
 
@@ -34,12 +35,12 @@ scene = Scene
 		Light
 		{
 			origin = <+5, +5, -5>
-			color = White
+			color = White * 5
 		},
 		Light
 		{
 			origin = <-5, +5, -5>
-			color = White
+			color = White * 5
 		}
 	]
 

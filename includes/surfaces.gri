@@ -1,14 +1,14 @@
 // Surfaces
 
-/*
-Sphere = Quadric
+
+aSphere = Quadric
 {
 	square =	<+1, +1, +1>
 	mixed =		< 0,  0,  0>
 	absolute =	< 0,  0,  0>
 	constant =	-1
 }
-*/
+
 
 CylinderX = Quadric
 {

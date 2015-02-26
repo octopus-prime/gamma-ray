@@ -16,10 +16,10 @@ namespace rendering {
 class ray_t
 {
 public:
-	ray_t(const vector3_t& origin, vector3_t&& direction, const float min, const float max) noexcept
+	ray_t(const vector3_t& origin, const vector3_t& direction, const float min, const float max) noexcept
 	:
 		_origin(origin),
-		_direction(std::forward<vector3_t>(direction)),
+		_direction(direction),
 		_min(min),
 		_max(max)
 	{

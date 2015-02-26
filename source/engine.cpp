@@ -9,6 +9,10 @@
 #include <scene/instance.hpp>
 #include <scene/make.hpp>
 #include <parsing/parser.hpp>
+#include <rendering/renderer.hpp>
+#include <rendering/image.hpp>
+#include <configuration.hpp>
+#include <boost/filesystem.hpp>
 #include <iostream>
 
 using namespace rt;
@@ -25,25 +29,36 @@ int main(int argc, char** argv)
 {
 	try
 	{
-		const scene::instance_t scene = preprocess(argv[1]);
+		const configuration config(argc, argv);
+		const auto input = config.get_required<std::string>(configuration::INPUT);
+		const auto output = config.get_required<std::string>(configuration::OUTPUT);
+		const auto width = config.get_required<std::size_t>(configuration::WIDTH);
+		const auto height = config.get_required<std::size_t>(configuration::HEIGHT);
+		const auto depth = config.get_required<std::size_t>(configuration::DEPTH);
+		const auto aa = config.get_required<std::size_t>(configuration::AA);
+
+		const scene::instance_t scene = preprocess(input);
 		std::cout << scene.objects().size() << " objects" << std::endl;
 
-		const rendering::ray_t ray { {{0,0,-2}}, {{0,0,+1}}, 0, 1e10 };
-		rendering::hits_t hits(10);
-		auto end = hits.begin();
-		for (const auto& object : scene.objects())
-			end = object.hit(ray, end);
-		std::cout << std::distance(hits.begin(), end) << " hits" << std::endl;
-		std::cout << "min = " << std::min_element(hits.begin(), end)->point << std::endl;
+		std::cout << "Lights       = " << scene.lights().size() << std::endl;
+		std::cout << "Objects      = " << scene.objects().size() << std::endl;
+		std::cout << "Antialiasing = " << static_cast<std::size_t>(aa) << std::endl;
+		std::cout << "Depth        = " << depth << std::endl;
+		std::cout << "Resolution   = " << width << 'x' << height << std::endl;
 
-		std::for_each
-		(
-			hits.begin(), end,
-			[](const rendering::hit_t& hit)
-			{
-				std::cout << hit.point << std::endl;
-			}
-		);
+//		const auto output_path = boost::filesystem::path("pictures") / output;//"picture.png";
+		const auto output_path = boost::filesystem::path(output);//"picture.png";
+
+		std::cout << "Output       = " << output << std::endl;
+
+		boost::filesystem::create_directories(output_path.parent_path());
+		const rendering::image_writer_t write = rendering::make_writer(output_path.extension().string());
+
+		const rendering::renderer_t render(scene, static_cast<rendering::AA>(aa), depth);
+		rendering::image_t image(width, height);
+
+		render(boost::gil::view(image));
+		write(boost::gil::view(image), output_path.string());
 
 		return EXIT_SUCCESS;
 	}
