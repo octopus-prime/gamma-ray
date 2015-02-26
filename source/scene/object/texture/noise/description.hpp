@@ -9,6 +9,7 @@
 
 #include <scene/object/texture/noise/perlin/description.hpp>
 #include <scene/object/texture/noise/billow/description.hpp>
+#include <scene/object/texture/noise/cylinders/description.hpp>
 #include <boost/variant.hpp>
 
 namespace rt {
@@ -20,7 +21,8 @@ namespace noise {
 typedef boost::variant
 <
 	perlin::description_t,
-	billow::description_t
+	billow::description_t,
+	cylinders::description_t
 > description_t;
 
 }

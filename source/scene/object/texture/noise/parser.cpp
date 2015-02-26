@@ -43,9 +43,10 @@ parser<Iterator, Skipper>::parser(const parsing::variable::descriptions_t& descr
 //	_primitive(),
 	_variable(descriptions),
 	_perlin(descriptions),
-	_billow(descriptions)
+	_billow(descriptions),
+	_cylinders(descriptions)
 {
-	_description = _variable | _perlin | _billow;
+	_description = _variable | _perlin | _billow | _cylinders;
 //	static const auto make_union = [](const desc::noise_t& noise1, const desc::noise_t& noise2) -> desc::noise_t
 //	{
 //		return std::make_shared<desc::basic_csg_t<desc::csg_union_tag>>(noise1, noise2);
