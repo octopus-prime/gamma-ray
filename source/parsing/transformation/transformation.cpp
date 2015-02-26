@@ -46,6 +46,11 @@ public:
 //		boost::apply_visitor(*this, transformable);
 	}
 
+	result_type operator()(const scene::object::texture::noise::description_t& transformable) const
+	{
+//		boost::apply_visitor(*this, transformable);
+	}
+
 	result_type operator()(const scene::object::description_t& transformable) const
 	{
 		this->operator()(transformable->surface);

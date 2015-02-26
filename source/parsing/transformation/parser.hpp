@@ -34,6 +34,7 @@ private:
 	variable::get::parser<Iterator, Skipper, scene::object::surface::description_t> _surface;
 	variable::get::parser<Iterator, Skipper, scene::object::description_t> _object;
 	vector::parser<Iterator, Skipper, 3> _vector3;
+	variable::get::parser<Iterator, Skipper, scene::object::texture::noise::description_t> _noise;
 };
 
 }

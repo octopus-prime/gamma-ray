@@ -23,6 +23,7 @@ extern template class variable::get::parser<iterator_t, skipper::parser<iterator
 extern template class variable::get::parser<iterator_t, skipper::parser<iterator_t>, scene::object::surface::description_t>;
 extern template class variable::get::parser<iterator_t, skipper::parser<iterator_t>, scene::object::description_t>;
 extern template class vector::parser<iterator_t, skipper::parser<iterator_t>, 3>;
+extern template class variable::get::parser<iterator_t, skipper::parser<iterator_t>, scene::object::texture::noise::description_t>;
 
 namespace transformation {
 
@@ -35,7 +36,8 @@ parser<Iterator, Skipper>::parser(variable::descriptions_t& descriptions)
 	_texture(descriptions),
 	_surface(descriptions),
 	_object(descriptions),
-	_vector3(descriptions)
+	_vector3(descriptions),
+	_noise(descriptions)
 {
 	_description =
 			_transformable										[qi::_a = qi::_1]
@@ -63,6 +65,8 @@ parser<Iterator, Skipper>::parser(variable::descriptions_t& descriptions)
 			_surface
 			|
 			_object
+			|
+			_noise
 	;
 }
 
