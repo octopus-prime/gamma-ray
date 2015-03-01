@@ -15,13 +15,15 @@ namespace rendering {
 
 class ray_t
 {
+	static constexpr float epsilon = 1e-3;
+
 public:
-	ray_t(const vector3_t& origin, const vector3_t& direction, const float min, const float max) noexcept
+	ray_t(const vector3_t& origin, const vector3_t& direction, const float min = 0.0f, const float max = std::numeric_limits<float>::max()) noexcept
 	:
 		_origin(origin),
 		_direction(direction),
-		_min(min),
-		_max(max)
+		_min(min + epsilon),
+		_max(max - epsilon)
 	{
 	}
 

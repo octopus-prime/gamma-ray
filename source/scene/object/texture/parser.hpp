@@ -7,9 +7,8 @@
 
 #pragma once
 
-#include <scene/object/description.hpp>
-#include <scene/object/surface/parser.hpp>
-#include <scene/object/texture/parser.hpp>
+#include <scene/object/texture/description.hpp>
+#include <scene/object/texture/noise/parser.hpp>
 #include <parsing/variable/get/parser.hpp>
 #include <parsing/vector/parser.hpp>
 #include <boost/spirit/include/qi_grammar.hpp>
@@ -19,6 +18,7 @@ namespace qi = boost::spirit::qi;
 namespace rt {
 namespace scene {
 namespace object {
+namespace texture {
 
 template <typename Iterator, typename Skipper>
 class parser
@@ -31,12 +31,12 @@ public:
 private:
 	qi::rule<Iterator, Skipper, description_t()> _description;
 	qi::rule<Iterator, Skipper, basic_description_t()> _basic_description;
-	surface::parser<Iterator, Skipper> _surface;
-	texture::parser<Iterator, Skipper> _texture;
+	noise::parser<Iterator, Skipper> _noise;
 	parsing::variable::get::parser<Iterator, Skipper, description_t> _variable;
 	parsing::vector::parser<Iterator, Skipper, 3> _vector3;
 };
 
+}
 }
 }
 }

@@ -5,7 +5,7 @@
  *      Author: mgresens
  */
 
-#include <scene/object/parser.hpp>
+#include <scene/object/texture/parser.hpp>
 #include <boost/spirit/include/qi.hpp>
 #include <boost/spirit/include/phoenix.hpp>
 #include <boost/fusion/include/adapt_struct.hpp>
@@ -18,9 +18,16 @@ namespace px = boost::phoenix;
 
 BOOST_FUSION_ADAPT_STRUCT
 (
-    rt::scene::object::basic_description_t,
-	(rt::scene::object::surface::description_t, surface)
-	(rt::scene::object::texture::description_t, texture)
+    rt::scene::object::texture::basic_description_t,
+	(rt::vector3_t, pigment)
+	(rt::vector3_t, bump)
+	(rt::scene::object::texture::noise::description_t, ambient)
+	(rt::scene::object::texture::noise::description_t, diffuse)
+	(rt::scene::object::texture::noise::description_t, specular)
+	(rt::scene::object::texture::noise::description_t, shininess)
+	(rt::scene::object::texture::noise::description_t, reflection)
+	(rt::scene::object::texture::noise::description_t, transparency)
+	(rt::scene::object::texture::noise::description_t, refraction)
 )
 
 namespace rt {
@@ -28,18 +35,16 @@ namespace rt {
 namespace parsing {
 
 extern template class skipper::parser<iterator_t>;
-extern template class variable::get::parser<iterator_t, skipper::parser<iterator_t>, scene::object::description_t>;
+extern template class variable::get::parser<iterator_t, skipper::parser<iterator_t>, scene::object::texture::description_t>;
 extern template class vector::parser<iterator_t, skipper::parser<iterator_t>, 3>;
 
 }
 
 namespace scene {
 namespace object {
+namespace texture {
 
-extern template class surface::parser<parsing::iterator_t, parsing::skipper::parser<parsing::iterator_t>>;
-extern template class texture::parser<parsing::iterator_t, parsing::skipper::parser<parsing::iterator_t>>;
-
-static const std::string NAME("Object");
+static const std::string NAME("Texture");
 
 template <typename Iterator, typename Skipper>
 parser<Iterator, Skipper>::parser(const parsing::variable::descriptions_t& descriptions)
@@ -47,8 +52,7 @@ parser<Iterator, Skipper>::parser(const parsing::variable::descriptions_t& descr
 	parser::base_type(_description),
 	_description(NAME),
 	_basic_description(),
-	_surface(descriptions),
-	_texture(descriptions),
+	_noise(descriptions),
 	_variable(descriptions),
 	_vector3(descriptions)
 {
@@ -66,9 +70,23 @@ parser<Iterator, Skipper>::parser(const parsing::variable::descriptions_t& descr
 	_basic_description =
 				qi::lit(NAME) > qi::lit('{')
 				>
-				qi::lit("surface") > qi::lit('=') > _surface
+				qi::lit("pigment") > qi::lit('=') > _vector3
 				>
-				qi::lit("texture") > qi::lit('=') > _texture
+				qi::lit("bump") > qi::lit('=') > _vector3
+				>
+				qi::lit("ambient") > qi::lit('=') > _noise
+				>
+				qi::lit("diffuse") > qi::lit('=') > _noise
+				>
+				qi::lit("specular") > qi::lit('=') > _noise
+				>
+				qi::lit("shininess") > qi::lit('=') > _noise
+				>
+				qi::lit("reflection") > qi::lit('=') > _noise
+				>
+				qi::lit("transparency") > qi::lit('=') > _noise
+				>
+				qi::lit("refraction") > qi::lit('=') > _noise
 				>
 				qi::lit('}')
 	;
@@ -76,6 +94,7 @@ parser<Iterator, Skipper>::parser(const parsing::variable::descriptions_t& descr
 
 template class parser<parsing::iterator_t, parsing::skipper::parser<parsing::iterator_t>>;
 
+}
 }
 }
 }

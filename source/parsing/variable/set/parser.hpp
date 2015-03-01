@@ -15,6 +15,7 @@
 #include <scene/light/parser.hpp>
 #include <scene/object/parser.hpp>
 #include <scene/object/surface/parser.hpp>
+#include <scene/object/texture/parser.hpp>
 #include <scene/object/texture/noise/parser.hpp>
 #include <boost/spirit/include/qi_grammar.hpp>
 
@@ -44,6 +45,7 @@ private:
 	scene::light::parser<Iterator, Skipper> _light;
 	scene::object::parser<Iterator, Skipper> _object;
 	scene::object::surface::parser<Iterator, Skipper> _surface;
+	scene::object::texture::parser<Iterator, Skipper> _texture;
 	scene::object::texture::noise::parser<Iterator, Skipper> _noise;
 };
 

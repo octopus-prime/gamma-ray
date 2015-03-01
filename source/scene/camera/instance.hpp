@@ -52,9 +52,7 @@ public:
 		const rendering::ray_t ray
 		(
 			_origin,
-			normalize(_direction + _right * point[X] + _up * point[Y]),
-			0,
-			std::numeric_limits<float>::max()
+			normalize(_direction + _right * point[X] + _up * point[Y])
 		);
 		return std::move(ray);
 	}

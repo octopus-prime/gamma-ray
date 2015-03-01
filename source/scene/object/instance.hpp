@@ -8,6 +8,7 @@
 #pragma once
 
 #include "surface/instance.hpp"
+#include "texture/instance.hpp"
 
 #include <rendering/ray.hpp>
 #include <rendering/hit.hpp>
@@ -20,9 +21,10 @@ namespace object {
 class instance_t
 {
 public:
-	instance_t(surface::instance_t&& surface)
+	instance_t(surface::instance_t&& surface, texture::instance_t&& texture)
 	:
-		_surface(std::forward<surface::instance_t>(surface))
+		_surface(std::forward<surface::instance_t>(surface)),
+		_texture(std::forward<texture::instance_t>(texture))
 	{
 	}
 
@@ -41,9 +43,21 @@ public:
 		return end;
 	}
 
+	const surface::instance_t&
+	surface() const noexcept
+	{
+		return _surface;
+	}
+
+	const texture::instance_t&
+	texture() const noexcept
+	{
+		return _texture;
+	}
+
 private:
 	surface::instance_t _surface;
-	// texture
+	texture::instance_t _texture;
 };
 
 typedef std::vector<instance_t> instances_t;

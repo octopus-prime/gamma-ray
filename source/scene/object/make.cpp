@@ -7,6 +7,7 @@
 
 #include <scene/object/make.hpp>
 #include <scene/object/surface/make.hpp>
+#include <scene/object/texture/make.hpp>
 
 namespace rt {
 namespace scene {
@@ -17,8 +18,8 @@ make(const description_t& description)
 {
 	const instance_t instance
 	(
-		surface::make(description->surface)
-		// texture
+		surface::make(description->surface),
+		texture::make(description->texture)
 	);
 	return std::move(instance);
 }

@@ -28,13 +28,67 @@ sphere = Sphere
 {
 	radius = 2.0
 }
+/*
+texture = Texture
+{
+	pigment = Red
+	bump = N
+	ambient = Perlin {}
+	diffuse = 0.5
+	specular = 0.7
+	shininess = 164.0
+	reflection = 0.8
+	transparency = 0.0
+	refraction = 0.0
+}
+*/
+texture = Texture
+{
+	pigment = Red
+	bump = N
+	ambient = Perlin {}
+	diffuse = Perlin {}
+	specular = Perlin {}
+	shininess = 164 * Perlin {}
+	reflection = Perlin {}
+	transparency = 0.0
+	refraction = 0.0
+}
 
 csg = Object
 {
 	surface = sphere - torusX - torusY - torusZ
-	texture = Wood
+	texture = texture
 }
 csg.rotate(<0, 0, -50.0>).rotate(<-55.0, 0, 0>).rotate(<0.0, -30, 0>)
+
+left1 = Object
+{
+	surface = Sphere { }
+	texture = texture
+}
+left1.translate(<-3.5, +2, 0>)
+
+left2 = Object
+{
+	surface = Sphere { }
+	texture = texture
+}
+left2.translate(<-3.5, -2, 0>)
+
+right1 = Object
+{
+	surface = Sphere { }
+	texture = texture
+}
+right1.translate(<+3.5 , +2, 0>)
+
+right2 = Object
+{
+	surface = Sphere { }
+	texture = texture
+}
+right2.translate(<+3.5 , -2, 0>)
 
 scene = Scene
 {
@@ -51,18 +105,22 @@ scene = Scene
 			origin = <+5, +5, -5>
 			color = White * 4
 		}
-	/*
+	,
 		Light
 		{
 			origin = <-5, +5, -5>
 			color = White * 5
 		}
-	*/
+	
 	]
 
 	objects =
 	[
-		csg
+		csg,
+		left1,
+		right1,
+		left2,
+		right2
 	]
 }
 

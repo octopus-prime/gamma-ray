@@ -47,8 +47,8 @@ int main(int argc, char** argv)
 {
 	try
 	{
-		test_noise();
-		exit(0);
+//		test_noise();
+//		exit(0);
 
 		const configuration config(argc, argv);
 		const auto input = config.get_required<std::string>(configuration::INPUT);

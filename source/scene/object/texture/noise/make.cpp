@@ -7,6 +7,7 @@
 
 #include <scene/object/texture/noise/make.hpp>
 #include <libnoise/module/module.h>
+#include <boost/algorithm/clamp.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/make_shared.hpp>
 
@@ -109,7 +110,7 @@ make(const description_t& description)
 	const module_t module = boost::apply_visitor(make_visitor(), description);
 	return [module](const vector3_t& point)
 	{
-		return module->GetValue(point[X], point[Y], point[Z]);
+		return boost::algorithm::clamp(module->GetValue(point[X], point[Y], point[Z]) * 0.5 + 0.5, 0, 1);
 	};
 }
 

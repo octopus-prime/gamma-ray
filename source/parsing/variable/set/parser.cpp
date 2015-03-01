@@ -37,6 +37,7 @@ parser<Iterator, Skipper>::parser(descriptions_t& descriptions)
 	_light(descriptions),
 	_object(descriptions),
 	_surface(descriptions),
+	_texture(descriptions),
 	_noise(descriptions)
 {
 	const auto check = [&descriptions](const std::string& identifier) -> bool
@@ -77,6 +78,8 @@ parser<Iterator, Skipper>::parser(descriptions_t& descriptions)
 			_scene
 			|
 			_noise
+			|
+			_texture
 	;
 }
 
