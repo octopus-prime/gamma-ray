@@ -52,6 +52,7 @@ parser<Iterator, Skipper>::parser(const parsing::variable::descriptions_t& descr
 	parser::base_type(_description),
 	_description(NAME),
 	_basic_description(),
+	_options(),
 	_noise(descriptions),
 	_variable(descriptions),
 	_vector3(descriptions)
@@ -70,25 +71,29 @@ parser<Iterator, Skipper>::parser(const parsing::variable::descriptions_t& descr
 	_basic_description =
 				qi::lit(NAME) > qi::lit('{')
 				>
-				qi::lit("pigment") > qi::lit('=') > _vector3
-				>
-				qi::lit("bump") > qi::lit('=') > _vector3
-				>
-				qi::lit("ambient") > qi::lit('=') > _noise
-				>
-				qi::lit("diffuse") > qi::lit('=') > _noise
-				>
-				qi::lit("specular") > qi::lit('=') > _noise
-				>
-				qi::lit("shininess") > qi::lit('=') > _noise
-				>
-				qi::lit("reflection") > qi::lit('=') > _noise
-				>
-				qi::lit("transparency") > qi::lit('=') > _noise
-				>
-				qi::lit("refraction") > qi::lit('=') > _noise
+				-_options
 				>
 				qi::lit('}')
+	;
+
+	_options =
+				(qi::lit("pigment") > qi::lit('=') > _vector3)
+				^
+				(qi::lit("bump") > qi::lit('=') > _vector3)
+				^
+				(qi::lit("ambient") > qi::lit('=') > _noise)
+				^
+				(qi::lit("diffuse") > qi::lit('=') > _noise)
+				^
+				(qi::lit("specular") > qi::lit('=') > _noise)
+				^
+				(qi::lit("shininess") > qi::lit('=') > _noise)
+				^
+				(qi::lit("reflection") > qi::lit('=') > _noise)
+				^
+				(qi::lit("transparency") > qi::lit('=') > _noise)
+				^
+				(qi::lit("refraction") > qi::lit('=') > _noise)
 	;
 }
 

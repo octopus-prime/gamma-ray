@@ -7,7 +7,6 @@
 
 #include <scene/object/texture/noise/make.hpp>
 #include <libnoise/module/module.h>
-#include <boost/algorithm/clamp.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/make_shared.hpp>
 
@@ -80,7 +79,12 @@ public:
 		if (description->frequency)
 			module->SetFrequency(*description->frequency);
 		// todo...
-		return module;
+		const auto module2 = make<module::ScaleBias, 1>(module);
+		module2->SetScale(0.5);
+		module2->SetBias(0.5);
+		const auto module3 = make<module::Clamp, 1>(module2);
+		module3->SetBounds(0, 1);
+		return module3;
 	}
 
 	result_type operator()(const combiner::description_t<combiner::add_tag>& description) const
@@ -110,7 +114,7 @@ make(const description_t& description)
 	const module_t module = boost::apply_visitor(make_visitor(), description);
 	return [module](const vector3_t& point)
 	{
-		return boost::algorithm::clamp(module->GetValue(point[X], point[Y], point[Z]) * 0.5 + 0.5, 0, 1);
+		return module->GetValue(point[X], point[Y], point[Z]);
 	};
 }
 

@@ -28,31 +28,15 @@ sphere = Sphere
 {
 	radius = 2.0
 }
-/*
+
 texture = Texture
 {
 	pigment = Red
-	bump = N
 	ambient = Perlin {}
 	diffuse = 0.5
 	specular = 0.7
 	shininess = 164.0
 	reflection = 0.8
-	transparency = 0.0
-	refraction = 0.0
-}
-*/
-texture = Texture
-{
-	pigment = Red
-	bump = N
-	ambient = Perlin {}
-	diffuse = Perlin {}
-	specular = Perlin {}
-	shininess = 164 * Perlin {}
-	reflection = Perlin {}
-	transparency = 0.0
-	refraction = 0.0
 }
 
 csg = Object

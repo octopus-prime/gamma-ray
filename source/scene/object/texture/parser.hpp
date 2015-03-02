@@ -31,6 +31,7 @@ public:
 private:
 	qi::rule<Iterator, Skipper, description_t()> _description;
 	qi::rule<Iterator, Skipper, basic_description_t()> _basic_description;
+	qi::rule<Iterator, Skipper, basic_description_t()> _options;
 	noise::parser<Iterator, Skipper> _noise;
 	parsing::variable::get::parser<Iterator, Skipper, description_t> _variable;
 	parsing::vector::parser<Iterator, Skipper, 3> _vector3;
