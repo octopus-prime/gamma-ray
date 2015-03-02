@@ -10,6 +10,7 @@
 #include <math/vector.hpp>
 #include <scene/instance.hpp>
 #include <boost/bind.hpp>
+#include <boost/algorithm/cxx11/any_of.hpp>
 #include <boost/optional.hpp>
 
 namespace rt {
@@ -158,13 +159,13 @@ protected:
 	bool
 	shadow(const ray_t& ray) const
 	{
-		return std::any_of
+		return boost::algorithm::any_of
 		(
-			_scene.objects().cbegin(), _scene.objects().cend(),
-			std::bind
+			_scene.objects(),
+			boost::bind
 			(
 				std::not_equal_to<hits_t::const_iterator>(),
-				std::bind(&scene::object::instance_t::hit, std::placeholders::_1, ray, _hits.begin()),
+				boost::bind(&scene::object::instance_t::hit, _1, ray, _hits.begin()),
 				_hits.cbegin()
 			)
 		);
@@ -173,11 +174,11 @@ protected:
 	hits_t::iterator
 	find_hits(const ray_t& ray, const hits_t::iterator hits) const
 	{
-		return std::accumulate
+		return boost::accumulate
 		(
-			_scene.objects().cbegin(), _scene.objects().cend(),
+			_scene.objects(),
 			hits,
-			std::bind(&scene::object::instance_t::hit, std::placeholders::_2, ray, std::placeholders::_1)
+			boost::bind(&scene::object::instance_t::hit, _2, ray, _1)
 		);
 	}
 
