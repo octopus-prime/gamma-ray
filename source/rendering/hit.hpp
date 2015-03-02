@@ -36,8 +36,7 @@ struct hit_t
 	}
 };
 
-//typedef std::vector<hit_t> hits_t;
-typedef std::array<hit_t, 100> hits_t;
+typedef std::vector<hit_t> hits_t;
 
 class distance_iterator
 :

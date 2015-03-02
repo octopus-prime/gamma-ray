@@ -7,8 +7,7 @@
 
 #pragma once
 
-//#include <boost/array.hpp>
-#include <array>
+#include <boost/array.hpp>
 #include <boost/range/algorithm/transform.hpp>
 #include <boost/range/algorithm/for_each.hpp>
 #include <iostream>
@@ -16,7 +15,7 @@
 namespace rt {
 
 template <typename E, std::size_t N>
-using basic_container_t = std::array<E, N>;
+using basic_container_t = boost::array<E, N>;
 
 template <typename E, std::size_t N>
 inline constexpr const auto&

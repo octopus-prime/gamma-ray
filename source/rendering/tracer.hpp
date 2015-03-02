@@ -21,7 +21,7 @@ public:
 	tracer_t(const scene::instance_t& scene, const std::size_t max_hits)
 	:
 		_scene(scene),
-		_hits()//max_hits)
+		_hits(max_hits)
 	{
 	}
 

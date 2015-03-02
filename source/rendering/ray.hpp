@@ -18,7 +18,8 @@ class ray_t
 	static constexpr float epsilon = 1e-3;
 
 public:
-	ray_t(const vector3_t& origin, const vector3_t& direction, const float min = 0.0f, const float max = std::numeric_limits<float>::max()) noexcept
+//	ray_t(const vector3_t& origin, const vector3_t& direction, const float min = 0.0f, const float max = std::numeric_limits<float>::max()) noexcept
+	ray_t(const vector3_t& origin, const vector3_t& direction, const float min = 0.0f, const float max = 1e5f) noexcept
 	:
 		_origin(origin),
 		_direction(direction),

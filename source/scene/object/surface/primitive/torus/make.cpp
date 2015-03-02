@@ -8,6 +8,7 @@
 #include <scene/object/surface/primitive/torus/make.hpp>
 #include <scene/object/surface/primitive/torus/model.hpp>
 #include <scene/object/surface/primitive/instance.hpp>
+#include <boost/log/trivial.hpp>
 
 namespace rt {
 namespace scene {
@@ -22,6 +23,8 @@ namespace torus {
 surface::instance_t
 make(const description_t& description)
 {
+	BOOST_LOG_TRIVIAL(trace) << "Make torus" << std::endl;
+
 	return primitive::make<model>
 	(
 		description->transformation,

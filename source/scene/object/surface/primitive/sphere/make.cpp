@@ -9,6 +9,7 @@
 #include <scene/object/surface/primitive/sphere/model.hpp>
 #include <math/transformation.hpp>
 #include <scene/object/surface/primitive/instance.hpp>
+#include <boost/log/trivial.hpp>
 
 namespace rt {
 namespace scene {
@@ -23,6 +24,8 @@ namespace sphere {
 surface::instance_t
 make(const description_t& description)
 {
+	BOOST_LOG_TRIVIAL(trace) << "Make sphere" << std::endl;
+
 	matrix44_t transformation = identity<4>();
 	if (description->radius)
 		transformation *= rt::scale({{*description->radius, *description->radius, *description->radius}});
