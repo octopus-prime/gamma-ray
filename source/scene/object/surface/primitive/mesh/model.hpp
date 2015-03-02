@@ -158,15 +158,12 @@ typedef geo::index::rtree<value_t, geo::index::quadratic<8>> rtree_t;
 class model
 {
 public:
-	model(mesh_t&& mesh, triangles_t&& triangles, rtree_t&& rtree)
+	model(triangles_t&& triangles, rtree_t&& rtree)
 	:
-		_mesh(std::forward<mesh_t>(mesh)),
 		_triangles(std::forward<triangles_t>(triangles)),
 		_rtree(std::forward<rtree_t>(rtree))
 	{
 	}
-
-//	model(model&& model) = default;
 
 	rendering::hits_t::iterator
 	hit(const rendering::ray_t& ray, const rendering::hits_t::iterator hits) const
@@ -202,7 +199,6 @@ public:
 	}
 
 private:
-	mesh_t _mesh;
 	triangles_t _triangles;
 	rtree_t _rtree;
 };

@@ -60,7 +60,6 @@ make(const description_t& description)
 	);
 
 	// Build mesh
-//	mesh_t mesh(std::forward<vertexes_t>(vertexes), std::forward<faces_t>(faces), std::forward<normals_t>(normals));
 	mesh_t mesh = boost::make_shared<basic_mesh_t>(std::move(vertexes), std::move(faces), std::move(normals));
 
 	// Build triangles and rtree
@@ -83,17 +82,9 @@ make(const description_t& description)
 	return primitive::make<model>
 	(
 		description->transformation,
-		std::move(mesh),
 		std::move(triangles),
 		std::move(rtree)
 	);
-//	return primitive::make<model>
-//	(
-//		description->transformation,
-//		std::forward<mesh_t>(mesh),
-//		std::forward<triangles_t>(triangles),
-//		std::forward<rtree_t>(rtree)
-//	);
 }
 
 }
