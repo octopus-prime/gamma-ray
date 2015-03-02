@@ -103,7 +103,9 @@ public:
 
 					const vector3_t n = normal(0) * a0 + normal(1) * a1 + normal(2) * a2;
 
-					*hits = rendering::hit_t {t, p, n, nullptr};
+					hits->distance = t;
+					hits->normal = n;
+
 					return hits + 1;
 				}
 			}
@@ -148,12 +150,12 @@ private:
 
 typedef std::vector<triangle_t> triangles_t;
 
-static constexpr std::size_t MAX = 32; // todo: parse
+static constexpr std::size_t MAX = 32;
 
 typedef geo::model::box<vector3_t> box_t;
 typedef std::pair<box_t, boost::uint32_t> value_t;
 typedef boost::container::static_vector<value_t, MAX> values_t;
-typedef geo::index::rtree<value_t, geo::index::quadratic<8>> rtree_t;
+typedef geo::index::rtree<value_t, geo::index::quadratic<8>> rtree_t; // todo: parse
 
 class model
 {
