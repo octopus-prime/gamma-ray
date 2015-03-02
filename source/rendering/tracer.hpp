@@ -9,92 +9,12 @@
 
 #include <math/vector.hpp>
 #include <scene/instance.hpp>
-#include <vector>
-
 #include <boost/bind.hpp>
 #include <boost/optional.hpp>
 
-#include <scene/object/texture/instance.hpp>
-#include <libnoise/module/perlin.h>
-#include <boost/make_shared.hpp>
-#include <boost/algorithm/clamp.hpp>
-
 namespace rt {
 namespace rendering {
-/*
-static const noise::module::Perlin perlin;// = boost::make_shared<noise::module::Perlin>();
 
-float noise(const vector3_t& point)
-{
-	return boost::algorithm::clamp(perlin.GetValue(point[X], point[Y], point[Z]) * 0.5 + 0.5, 0, 1);
-}
-
-const scene::object::texture::instance_t texture
-(
-	// pigment
-	[](const vector3_t& point) -> vector3_t
-	{
-//		const float value = noise(point);
-		return
-		{{
-			1,0,0
-//			value,
-//			value,
-//			value
-//			noise(point),
-//			noise(point),
-//			noise(point)
-		}};
-	},
-	// bump
-	[](const vector3_t& point) -> vector3_t
-	{
-		return
-		{{
-			0,
-			0,
-			0
-		}};
-	},
-	// ambient
-	[](const vector3_t& point) -> float
-	{
-//		return perlin.GetValue(point[X], point[Y], point[Z]);
-//		return 0.3;
-		return noise(point);
-	},
-	// diffuse
-	[](const vector3_t& point) -> float
-	{
-		return 0.5;
-	},
-	// specular
-	[](const vector3_t& point) -> float
-	{
-		return 0.7;
-	},
-	// shininess
-	[](const vector3_t& point) -> float
-	{
-		return 164;
-	},
-	// reflection
-	[](const vector3_t& point) -> float
-	{
-		return 0.8;
-	},
-	// transparency
-	[](const vector3_t& point) -> float
-	{
-		return 0.0;
-	},
-	// refraction
-	[](const vector3_t& point) -> float
-	{
-		return 0.0;
-	}
-);
-*/
 class tracer_t
 {
 public:
@@ -117,7 +37,6 @@ public:
 		const scene::object::texture::instance_t& texture = hit->object->texture();
 		const vector3_t point = hit->point;
 		const vector3_t N = normalize(hit->normal + texture.bump(point));
-//		const float factor = (texture.shininess(point) + 2.f) / (8.f * M_PI);
 		const float factor = (texture.shininess(point) + 2.f) / (2.f * M_PI);
 		const vector3_t color = texture.pigment(point);
 
@@ -266,8 +185,6 @@ private:
 	const scene::instance_t& _scene;
 	mutable hits_t _hits;
 };
-
-//constexpr float tracer_t::epsilon;
 
 }
 }

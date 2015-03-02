@@ -29,48 +29,38 @@ sphere = Sphere
 	radius = 2.0
 }
 
-texture = Texture
-{
-	pigment = Red
-	ambient = Perlin {}
-	diffuse = 0.5
-	specular = 0.7
-	shininess = 164.0
-	reflection = 0.8
-}
-
 csg = Object
 {
 	surface = sphere - torusX - torusY - torusZ
-	texture = texture
+	texture = MetallicRed
 }
 csg.rotate(<0, 0, -50.0>).rotate(<-55.0, 0, 0>).rotate(<0.0, -30, 0>)
 
 left1 = Object
 {
 	surface = Sphere { }
-	texture = texture
+	texture = MetallicGreen
 }
 left1.translate(<-3.5, +2, 0>)
 
 left2 = Object
 {
 	surface = Sphere { }
-	texture = texture
+	texture = MetallicCyan
 }
 left2.translate(<-3.5, -2, 0>)
 
 right1 = Object
 {
 	surface = Sphere { }
-	texture = texture
+	texture = MetallicBlue
 }
 right1.translate(<+3.5 , +2, 0>)
 
 right2 = Object
 {
 	surface = Sphere { }
-	texture = texture
+	texture = MetallicYellow
 }
 right2.translate(<+3.5 , -2, 0>)
 
@@ -88,8 +78,7 @@ scene = Scene
 		{
 			origin = <+5, +5, -5>
 			color = White * 4
-		}
-	,
+		},
 		Light
 		{
 			origin = <-5, +5, -5>

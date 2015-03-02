@@ -14,19 +14,16 @@ cross.scale(<0.5, 0.5, 0.5>)
 
 csg = Object
 {
-//	surface = (sphere - cross) & cube
 	surface = (sphere & cube) - cross
-	texture = Wood
+	texture = MetallicRed
 }
-//csg.rotate(< 30, 60, 0>)
-//csg.translate(<0, 0.7, 0>)
-csg.rotate(<0, 0, -50.0>).rotate(<-55.0, 0, 0>).rotate(<0.0, -30, 0>)
+csg.rotate(< 45, 45, 0>)
 
 scene = Scene
 {
 	camera = Camera
 	{
-		origin = -3 * Z
+		origin = -2.5 * Z
 		direction = Z
 	}
 

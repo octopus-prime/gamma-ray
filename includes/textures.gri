@@ -1,6 +1,64 @@
 // Textures
 
-//Wood = <0,0,0>
+MetallicRed = Texture
+{
+	pigment = Red
+	ambient = Perlin {}
+	diffuse = 0.5
+	specular = 0.7
+	shininess = 164.0
+	reflection = 0.8
+}
+
+MetallicGreen = Texture
+{
+	pigment = Green
+	ambient = Perlin {}
+	diffuse = 0.5
+	specular = 0.7
+	shininess = 164.0
+	reflection = 0.8
+}
+
+MetallicBlue = Texture
+{
+	pigment = Blue
+	ambient = Perlin {}
+	diffuse = 0.5
+	specular = 0.7
+	shininess = 164.0
+	reflection = 0.8
+}
+
+MetallicYellow = Texture
+{
+	pigment = Yellow
+	ambient = Perlin {}
+	diffuse = 0.5
+	specular = 0.7
+	shininess = 164.0
+	reflection = 0.8
+}
+
+MetallicCyan = Texture
+{
+	pigment = Cyan
+	ambient = Perlin {}
+	diffuse = 0.5
+	specular = 0.7
+	shininess = 164.0
+	reflection = 0.8
+}
+
+MetallicMagenta = Texture
+{
+	pigment = Magenta
+	ambient = Perlin {}
+	diffuse = 0.5
+	specular = 0.7
+	shininess = 164.0
+	reflection = 0.8
+}
 
 baseWood = Cylinders
 {
