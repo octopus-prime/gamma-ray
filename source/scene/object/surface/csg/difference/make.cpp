@@ -21,15 +21,25 @@ extern template class instance<difference::model>;
 
 namespace difference {
 
-surface::instance_t
+boost::tuple<surface::instance_t, box_t>
 make(const description_t& description)
 {
-	BOOST_LOG_TRIVIAL(trace) << "Make difference" << std::endl;
+	const auto surface1 = surface::make(description->surface1);
+	const auto surface2 = surface::make(description->surface2);
 
-	return csg::make<model>
+	const auto& box = surface1.get<1>();
+
+	BOOST_LOG_TRIVIAL(trace) << "Make difference";
+	BOOST_LOG_TRIVIAL(trace) << "Box: " << geo::wkt(box.min_corner()) << ", " << geo::wkt(box.max_corner()) << std::endl;
+
+	return boost::make_tuple
 	(
-		surface::make(description->surface1),
-		surface::make(description->surface2)
+		csg::make<model>
+		(
+			surface1.get<0>(),
+			surface2.get<0>()
+		),
+		box
 	);
 }
 

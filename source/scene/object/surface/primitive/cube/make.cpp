@@ -8,6 +8,7 @@
 #include <scene/object/surface/primitive/cube/make.hpp>
 #include <scene/object/surface/primitive/cube/model.hpp>
 #include <scene/object/surface/primitive/instance.hpp>
+#include <boost/log/trivial.hpp>
 
 namespace rt {
 namespace scene {
@@ -19,10 +20,19 @@ extern template class instance<cube::model>;
 
 namespace cube {
 
-surface::instance_t
+boost::tuple<surface::instance_t, box_t>
 make(const description_t& description)
 {
-	return primitive::make<model>(description->transformation);
+	static const box_t box({{-1,-1,-1}}, {{+1,+1,+1}});
+
+	BOOST_LOG_TRIVIAL(trace) << "Make cube";
+	BOOST_LOG_TRIVIAL(trace) << "Box: " << geo::wkt(box.min_corner()) << ", " << geo::wkt(box.max_corner()) << std::endl;
+
+	return boost::make_tuple
+	(
+		primitive::make<model>(description->transformation),
+		box
+	);
 }
 
 }

@@ -9,6 +9,8 @@
 
 #include <scene/object/surface/csg/difference/description.hpp>
 #include <scene/object/surface/instance.hpp>
+#include <geo/box.hpp>
+#include <boost/tuple/tuple.hpp>
 
 namespace rt {
 namespace scene {
@@ -17,7 +19,7 @@ namespace surface {
 namespace csg {
 namespace difference {
 
-surface::instance_t
+boost::tuple<surface::instance_t, box_t>
 make(const description_t& description);
 
 }

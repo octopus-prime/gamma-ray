@@ -21,17 +21,25 @@ extern template class instance<sphere::model>;
 
 namespace sphere {
 
-surface::instance_t
+boost::tuple<surface::instance_t, box_t>
 make(const description_t& description)
 {
-	BOOST_LOG_TRIVIAL(trace) << "Make sphere" << std::endl;
+	static const box_t box({{-1,-1,-1}}, {{+1,+1,+1}});
 
 	matrix44_t transformation = identity<4>();
 	if (description->radius)
 		transformation *= rt::scale({{*description->radius, *description->radius, *description->radius}});
 	if (description->origin)
 		transformation *= rt::translate(*description->origin);
-	return primitive::make<model>(transformation * description->transformation);
+
+	BOOST_LOG_TRIVIAL(trace) << "Make sphere";
+	BOOST_LOG_TRIVIAL(trace) << "Box: " << geo::wkt(box.min_corner()) << ", " << geo::wkt(box.max_corner()) << std::endl;
+
+	return boost::make_tuple
+	(
+		primitive::make<model>(transformation * description->transformation),
+		box
+	);
 }
 
 }

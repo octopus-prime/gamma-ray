@@ -23,10 +23,10 @@ extern template class instance<mesh::model>;
 
 namespace mesh {
 
-surface::instance_t
+boost::tuple<surface::instance_t, box_t>
 make(const description_t& description)
 {
-	BOOST_LOG_TRIVIAL(trace) << "Make mesh" << std::endl;
+	BOOST_LOG_TRIVIAL(trace) << "Make mesh";
 
 	// Read vertextes and faces
 	const reader_t read = open(description->file);
@@ -34,6 +34,9 @@ make(const description_t& description)
 	vertexes_t vertexes;
 	faces_t faces;
 	read(vertexes, faces);
+
+	BOOST_LOG_TRIVIAL(trace) << "Vertexes: " << vertexes.size();
+	BOOST_LOG_TRIVIAL(trace) << "Faces: " << faces.size();
 
 	// Calculate normals
 	normals_t normals(vertexes.size(), {{0, 0, 0}});
@@ -79,11 +82,31 @@ make(const description_t& description)
 		rtree.insert(value_t(geo::return_envelope<box_t>(ring), i));
 	}
 
-	return primitive::make<model>
+	const box_t	box// TODO: puke =>
 	(
-		description->transformation,
-		std::move(triangles),
-		std::move(rtree)
+		{{
+			geo::get<X>(rtree.bounds().min_corner()),
+			geo::get<Y>(rtree.bounds().min_corner()),
+			geo::get<Z>(rtree.bounds().min_corner())
+		}},
+		{{
+			geo::get<X>(rtree.bounds().max_corner()),
+			geo::get<Y>(rtree.bounds().max_corner()),
+			geo::get<Z>(rtree.bounds().max_corner())
+		}}
+	);
+
+	BOOST_LOG_TRIVIAL(trace) << "Box: " << geo::wkt(box.min_corner()) << ", " << geo::wkt(box.max_corner()) << std::endl;
+
+	return boost::make_tuple
+	(
+		primitive::make<model>
+		(
+			description->transformation,
+			std::move(triangles),
+			std::move(rtree)
+		),
+		box
 	);
 }
 

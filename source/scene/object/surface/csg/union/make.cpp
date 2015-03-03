@@ -9,6 +9,7 @@
 #include <scene/object/surface/csg/union/make.hpp>
 #include <scene/object/surface/make.hpp>
 #include <scene/object/surface/csg/union/model.hpp>
+#include <boost/log/trivial.hpp>
 
 namespace rt {
 namespace scene {
@@ -20,13 +21,40 @@ extern template class instance<union_::model>;
 
 namespace union_ {
 
-surface::instance_t
+boost::tuple<surface::instance_t, box_t>
 make(const description_t& description)
 {
-	return csg::make<model>
+	const auto surface1 = surface::make(description->surface1);
+	const auto surface2 = surface::make(description->surface2);
+
+	const auto& box1 = surface1.get<1>();
+	const auto& box2 = surface2.get<1>();
+
+	const box_t box
 	(
-		surface::make(description->surface1),
-		surface::make(description->surface2)
+		{{
+			std::min(box1.min_corner()[X], box2.min_corner()[X]),
+			std::min(box1.min_corner()[Y], box2.min_corner()[Y]),
+			std::min(box1.min_corner()[Z], box2.min_corner()[Z])
+		}},
+		{{
+			std::max(box1.max_corner()[X], box2.max_corner()[X]),
+			std::max(box1.max_corner()[Y], box2.max_corner()[Y]),
+			std::max(box1.max_corner()[Z], box2.max_corner()[Z])
+		}}
+	);
+
+	BOOST_LOG_TRIVIAL(trace) << "Make union";
+	BOOST_LOG_TRIVIAL(trace) << "Box: " << geo::wkt(box.min_corner()) << ", " << geo::wkt(box.max_corner()) << std::endl;
+
+	return boost::make_tuple
+	(
+		csg::make<model>
+		(
+			surface1.get<0>(),
+			surface2.get<0>()
+		),
+		box
 	);
 }
 

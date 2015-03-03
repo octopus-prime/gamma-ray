@@ -21,10 +21,10 @@ namespace object {
 class instance_t
 {
 public:
-	instance_t(surface::instance_t&& surface, texture::instance_t&& texture)
+	instance_t(const surface::instance_t& surface, const texture::instance_t& texture)
 	:
-		_surface(std::forward<surface::instance_t>(surface)),
-		_texture(std::forward<texture::instance_t>(texture))
+		_surface(surface),
+		_texture(texture)
 	{
 	}
 

@@ -9,13 +9,15 @@
 
 #include <scene/object/surface/description.hpp>
 #include <scene/object/surface/instance.hpp>
+#include <geo/box.hpp>
+#include <boost/tuple/tuple.hpp>
 
 namespace rt {
 namespace scene {
 namespace object {
 namespace surface {
 
-instance_t
+boost::tuple<instance_t, box_t>
 make(const description_t& description);
 
 }

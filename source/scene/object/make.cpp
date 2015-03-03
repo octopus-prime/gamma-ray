@@ -18,7 +18,7 @@ make(const description_t& description)
 {
 	const instance_t instance
 	(
-		surface::make(description->surface),
+		surface::make(description->surface).get<0>(),
 		texture::make(description->texture)
 	);
 	return std::move(instance);

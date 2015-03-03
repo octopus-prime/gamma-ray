@@ -20,20 +20,25 @@ extern template class instance<torus::model>;
 
 namespace torus {
 
-surface::instance_t
+boost::tuple<surface::instance_t, box_t>
 make(const description_t& description)
 {
-	BOOST_LOG_TRIVIAL(trace) << "Make torus" << std::endl;
-
 	const float radius = description->major + description->minor;
 	const vector3_t bound {{radius, radius, description->minor}};
 	const box_t box(-bound, +bound);
 
-	return primitive::make<model>
+	BOOST_LOG_TRIVIAL(trace) << "Make torus";
+	BOOST_LOG_TRIVIAL(trace) << "Box: " << geo::wkt(box.min_corner()) << ", " << geo::wkt(box.max_corner()) << std::endl;
+
+	return boost::make_tuple
 	(
-		description->transformation,
-		description->major,
-		description->minor,
+		primitive::make<model>
+		(
+			description->transformation,
+			description->major,
+			description->minor,
+			box
+		),
 		box
 	);
 }
