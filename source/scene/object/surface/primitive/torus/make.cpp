@@ -25,11 +25,16 @@ make(const description_t& description)
 {
 	BOOST_LOG_TRIVIAL(trace) << "Make torus" << std::endl;
 
+	const float radius = description->major + description->minor;
+	const vector3_t bound {{radius, radius, description->minor}};
+	const box_t box(-bound, +bound);
+
 	return primitive::make<model>
 	(
 		description->transformation,
 		description->major,
-		description->minor
+		description->minor,
+		box
 	);
 }
 

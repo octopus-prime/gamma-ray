@@ -9,6 +9,7 @@
 
 #include <math/vector.hpp>
 #include <math/homogeneous.hpp>
+#include <geo/segment.hpp>
 
 namespace rt {
 namespace rendering {
@@ -18,8 +19,8 @@ class ray_t
 	static constexpr float epsilon = 1e-3;
 
 public:
-//	ray_t(const vector3_t& origin, const vector3_t& direction, const float min = 0.0f, const float max = std::numeric_limits<float>::max()) noexcept
-	ray_t(const vector3_t& origin, const vector3_t& direction, const float min = 0.0f, const float max = 1e5f) noexcept
+	ray_t(const vector3_t& origin, const vector3_t& direction, const float min = 0.0f, const float max = std::numeric_limits<float>::max() * 0.1f) noexcept
+//	ray_t(const vector3_t& origin, const vector3_t& direction, const float min = 0.0f, const float max = 1e5f) noexcept
 	:
 		_origin(origin),
 		_direction(direction),
@@ -69,6 +70,11 @@ public:
 		};
 	}
 
+	operator segment_t() const noexcept
+	{
+		return segment_t((*this)(_min), (*this)(_max));
+	}
+
 private:
 	vector3_t _origin;
 	vector3_t _direction;
@@ -78,3 +84,62 @@ private:
 
 }
 }
+/*
+namespace boost {
+namespace geometry {
+namespace traits {
+
+//template <typename Point>
+template <>
+struct tag<rt::rendering::ray_t>
+{
+    typedef segment_tag type;
+};
+
+//template <typename Point>
+template <>
+struct point_type<rt::rendering::ray_t>
+{
+    typedef rt::vector3_t type;
+};
+
+//template <typename Point, std::size_t Dimension>
+template <std::size_t Dimension>
+struct indexed_access<rt::rendering::ray_t, 0, Dimension>
+{
+    typedef rt::rendering::ray_t segment_type;
+    typedef typename geometry::cs::cartesian coordinate_type;
+
+    static inline coordinate_type get(segment_type const& s)
+    {
+        return geometry::get<Dimension>(s(s.min()));
+    }
+
+    static inline void set(segment_type& s, coordinate_type const& value)
+    {
+//        geometry::set<Dimension>(s.first, value);
+    }
+};
+
+//template <typename Point, std::size_t Dimension>
+template <std::size_t Dimension>
+struct indexed_access<rt::rendering::ray_t, 1, Dimension>
+{
+    typedef rt::rendering::ray_t segment_type;
+    typedef typename geometry::cs::cartesian coordinate_type;
+
+    static inline coordinate_type get(segment_type const& s)
+    {
+        return geometry::get<Dimension>(s(s.max()));
+    }
+
+    static inline void set(segment_type& s, coordinate_type const& value)
+    {
+//        geometry::set<Dimension>(s.first, value);
+    }
+};
+
+}
+}
+}
+*/

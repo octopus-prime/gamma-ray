@@ -8,17 +8,18 @@
 #pragma once
 
 #include <scene/object/surface/primitive/mesh/model_fwd.hpp>
-#include <boost/geometry/geometry.hpp>
-#include <boost/geometry/geometries/adapted/boost_array.hpp>
-#include <boost/geometry/geometries/segment.hpp>
+#include <geo/segment.hpp>
+#include <geo/box.hpp>
+//#include <boost/geometry/geometry.hpp>
+//#include <boost/geometry/geometries/segment.hpp>
 #include <boost/geometry/geometries/ring.hpp>
-#include <boost/geometry/geometries/box.hpp>
+//#include <boost/geometry/geometries/box.hpp>
 #include <boost/geometry/index/rtree.hpp>
 #include <boost/container/static_vector.hpp>
 
 namespace geo = boost::geometry;
 
-BOOST_GEOMETRY_REGISTER_BOOST_ARRAY_CS(geo::cs::cartesian);
+//BOOST_GEOMETRY_REGISTER_BOOST_ARRAY_CS(geo::cs::cartesian);
 
 namespace rt {
 namespace scene {
@@ -152,7 +153,7 @@ typedef std::vector<triangle_t> triangles_t;
 
 static constexpr std::size_t MAX = 32;
 
-typedef geo::model::box<vector3_t> box_t;
+//typedef geo::model::box<vector3_t> box_t;
 typedef std::pair<box_t, boost::uint32_t> value_t;
 typedef boost::container::static_vector<value_t, MAX> values_t;
 typedef geo::index::rtree<value_t, geo::index::quadratic<8>> rtree_t; // todo: parse
@@ -170,9 +171,9 @@ public:
 	rendering::hits_t::iterator
 	hit(const rendering::ray_t& ray, const rendering::hits_t::iterator hits) const
 	{
-		typedef geo::model::segment<vector3_t> segment_t;
+//		typedef geo::model::segment<vector3_t> segment_t;
 
-		const segment_t segment(ray(ray.min()), ray(ray.max()));
+		const segment_t segment = ray;//(ray(ray.min()), ray(ray.max()));
 
 		values_t values;
 		_rtree.query

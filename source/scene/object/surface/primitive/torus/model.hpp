@@ -8,6 +8,9 @@
 #pragma once
 
 #include <math/polynomial.hpp>
+#include <math/vector.hpp>
+#include <geo/segment.hpp>
+#include <geo/box.hpp>
 
 namespace rt {
 namespace scene {
@@ -19,16 +22,23 @@ namespace torus {
 class model
 {
 public:
-	model(const float major, const float minor)
+	model(const float major, const float minor, const box_t& box)
 	:
 		_major(major),
-		_minor(minor)
+		_minor(minor),
+		_box(box)
 	{
 	}
 
 	rendering::hits_t::iterator
 	hit(const rendering::ray_t& ray, const rendering::hits_t::iterator hits) const
 	{
+//		const segment_t segment(ray(ray.min()), ray(ray.max()));
+		const segment_t segment = ray;//(ray(ray.min()), ray(ray.max()));
+		if (!geo::intersects(_box, segment))
+//		if (!geo::intersects(_box, ray))
+			return hits;
+
 		const float a = ray.direction() * ray.direction();
 		const float b = ray.origin() * ray.direction() * 2.0f;
 		const float c = ray.origin() * ray.origin() - _minor * _minor - _major * _major;
@@ -75,6 +85,7 @@ protected:
 private:
 	float _major;
 	float _minor;
+	box_t _box;
 };
 
 }
