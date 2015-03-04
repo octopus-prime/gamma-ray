@@ -10,16 +10,9 @@
 #include <scene/object/surface/primitive/mesh/model_fwd.hpp>
 #include <geo/segment.hpp>
 #include <geo/box.hpp>
-//#include <boost/geometry/geometry.hpp>
-//#include <boost/geometry/geometries/segment.hpp>
-#include <boost/geometry/geometries/ring.hpp>
-//#include <boost/geometry/geometries/box.hpp>
 #include <boost/geometry/index/rtree.hpp>
-#include <boost/container/static_vector.hpp>
 
 namespace geo = boost::geometry;
-
-//BOOST_GEOMETRY_REGISTER_BOOST_ARRAY_CS(geo::cs::cartesian);
 
 namespace rt {
 namespace scene {
@@ -150,13 +143,8 @@ private:
 };
 
 typedef std::vector<triangle_t> triangles_t;
-
-static constexpr std::size_t MAX = 32;
-
-//typedef geo::model::box<vector3_t> box_t;
 typedef std::pair<box_t, boost::uint32_t> value_t;
-typedef boost::container::static_vector<value_t, MAX> values_t;
-typedef geo::index::rtree<value_t, geo::index::quadratic<8>> rtree_t; // todo: parse
+typedef geo::index::rtree<value_t, geo::index::quadratic<8>> rtree_t; // TODO: parse parameter
 
 class model
 {
@@ -171,28 +159,23 @@ public:
 	rendering::hits_t::iterator
 	hit(const rendering::ray_t& ray, const rendering::hits_t::iterator hits) const
 	{
-//		typedef geo::model::segment<vector3_t> segment_t;
+		rendering::hits_t::iterator end = hits;
+		const auto test = [this, &ray, &end](const value_t& value)
+		{
+			const triangle_t& triangle = _triangles[value.second];
+			end = triangle.hit(ray, end);
+			return false;
+		};
 
-		const segment_t segment = ray;//(ray(ray.min()), ray(ray.max()));
+		const segment_t segment = ray;
+		_rtree.query(geo::index::intersects(segment) && geo::index::satisfies(test), (value_t*) nullptr);
 
-		values_t values;
-		_rtree.query
-		(
-			geo::index::intersects(segment) &&
-			geo::index::nearest(segment.first, MAX),
-			std::back_inserter(values)
-		);
+		if (end == hits)
+			return hits;
 
-		return boost::accumulate
-		(
-			values,
-			hits,
-			[this, &ray](const rendering::hits_t::iterator hit, const value_t& value)
-			{
-				const triangle_t& triangle = _triangles[value.second];
-				return triangle.hit(ray, hit);
-			}
-		);
+		*hits = *std::min_element(hits, end); // TODO: deliver max element too ?!
+
+		return hits + 1;
 	}
 
 	bool
