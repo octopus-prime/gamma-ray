@@ -217,6 +217,30 @@ BOOST_AUTO_TEST_CASE(test_transpose)
 }
 
 
+BOOST_AUTO_TEST_CASE(test_invert)
+{
+	constexpr matrix44_t expected
+	{{
+		{{ -17/18.f,	-61/153.f,	+7/306.f,	1/51.f}},
+		{{ -29/36.f,	-161/612.f,	+13/612.f,	+11/204.f}},
+		{{ -7/9.f,		-101/306.f,	-4/153.f,	+5/102.f}},
+		{{ -2/3.f,		-11/51.f,	-5/204.f,	+1/68.f}}
+	}};
+	const auto result = invert(matrix1);
+	for (int i = 0; i < 4; ++i)
+		for (int j = 0; j < 4; ++j)
+			BOOST_CHECK_CLOSE(result[i][j], expected[i][j], 1e-4);
+}
+
+BOOST_AUTO_TEST_CASE(test_invert_identity)
+{
+	const auto expected = identity<4>();
+	const auto result = invert(expected);
+	for (int i = 0; i < 4; ++i)
+		for (int j = 0; j < 4; ++j)
+			BOOST_CHECK_CLOSE(result[i][j], expected[i][j], 1e-4);
+}
+
 BOOST_AUTO_TEST_CASE(test_size)
 {
 	constexpr std::size_t expected = 4;
