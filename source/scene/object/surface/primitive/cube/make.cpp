@@ -23,7 +23,7 @@ namespace cube {
 boost::tuple<surface::instance_t, box_t>
 make(const description_t& description)
 {
-	static const box_t box({{-1,-1,-1}}, {{+1,+1,+1}});
+	const box_t box = transform(description->transformation, box_t({{-1,-1,-1}}, {{+1,+1,+1}}));
 
 	BOOST_LOG_TRIVIAL(trace) << "Make cube";
 	BOOST_LOG_TRIVIAL(trace) << "Box: " << geo::wkt(box.min_corner()) << ", " << geo::wkt(box.max_corner()) << std::endl;

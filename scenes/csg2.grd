@@ -29,6 +29,9 @@ sphere = Sphere
 	radius = 2.0
 }
 
+//sphere = aSphere
+//sphere.scale(<2,2,2>)
+
 csg = Object
 {
 	surface = sphere - torusX - torusY - torusZ

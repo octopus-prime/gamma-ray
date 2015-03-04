@@ -32,21 +32,16 @@ make(const description_t& description)
 		{{description->absolute[0],		description->absolute[1],	description->absolute[2],	2 * description->constant}}
 	}};
 
-//	matrix44_t m = description->transformation * mx * transpose(description->transformation);
+	vector3_t min, max;
 
-	const float dx = std::sqrt(m[W][X] * m[W][X] - m[W][W] * m[X][X]) + std::numeric_limits<float>::min();
-	const float x0 = m[W][W] / (m[W][X] + dx);
-	const float x1 = m[W][W] / (m[W][X] - dx);
+	for (std::size_t i = 0; i < 3; ++i)
+	{
+		const float d = std::sqrt(m[W][i] * m[W][i] - m[W][W] * m[i][i]) + std::numeric_limits<float>::min();
+		min[i] = m[W][W] / (m[W][i] + d);
+		max[i] = m[W][W] / (m[W][i] - d);
+	}
 
-	const float dy = std::sqrt(m[W][Y] * m[W][Y] - m[W][W] * m[Y][Y]) + std::numeric_limits<float>::min();
-	const float y0 = m[W][W] / (m[W][Y] + dy);
-	const float y1 = m[W][W] / (m[W][Y] - dy);
-
-	const float dz = std::sqrt(m[W][Z] * m[W][Z] - m[W][W] * m[Z][Z]) + std::numeric_limits<float>::min();
-	const float z0 = m[W][W] / (m[W][Z] + dz);
-	const float z1 = m[W][W] / (m[W][Z] - dz);
-
-	const box_t box({{x0, y0, z0}}, {{x1, y1, z1}});
+	const box_t box = transform(description->transformation, box_t(min, max));
 
 	BOOST_LOG_TRIVIAL(trace) << "Make quadric";
 	BOOST_LOG_TRIVIAL(trace) << "Box: " << geo::wkt(box.min_corner()) << ", " << geo::wkt(box.max_corner()) << std::endl;

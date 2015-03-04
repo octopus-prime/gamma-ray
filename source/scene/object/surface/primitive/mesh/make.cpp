@@ -82,18 +82,22 @@ make(const description_t& description)
 		rtree.insert(value_t(geo::return_envelope<box_t>(ring), i));
 	}
 
-	const box_t	box// TODO: puke =>
+	const box_t box = transform
 	(
-		{{
-			geo::get<X>(rtree.bounds().min_corner()),
-			geo::get<Y>(rtree.bounds().min_corner()),
-			geo::get<Z>(rtree.bounds().min_corner())
-		}},
-		{{
-			geo::get<X>(rtree.bounds().max_corner()),
-			geo::get<Y>(rtree.bounds().max_corner()),
-			geo::get<Z>(rtree.bounds().max_corner())
-		}}
+		description->transformation,
+		box_t// TODO: puke =>
+		(
+			{{
+				geo::get<X>(rtree.bounds().min_corner()),
+				geo::get<Y>(rtree.bounds().min_corner()),
+				geo::get<Z>(rtree.bounds().min_corner())
+			}},
+			{{
+				geo::get<X>(rtree.bounds().max_corner()),
+				geo::get<Y>(rtree.bounds().max_corner()),
+				geo::get<Z>(rtree.bounds().max_corner())
+			}}
+		)
 	);
 
 	BOOST_LOG_TRIVIAL(trace) << "Box: " << geo::wkt(box.min_corner()) << ", " << geo::wkt(box.max_corner()) << std::endl;

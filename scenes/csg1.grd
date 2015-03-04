@@ -17,7 +17,7 @@ csg = Object
 	surface = (sphere & cube) - cross
 	texture = MetallicRed
 }
-csg.rotate(< 45, 45, 0>)
+//csg.rotate(< 45, 45, 0>)
 
 scene = Scene
 {

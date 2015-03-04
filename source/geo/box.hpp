@@ -8,10 +8,44 @@
 #pragma once
 
 #include <geo/point.hpp>
+#include <math/matrix.hpp>
+#include <math/homogeneous.hpp>
+#include <vector>
 #include <boost/geometry/geometries/box.hpp>
+#include <boost/geometry/geometries/multi_point.hpp>
 
 namespace rt {
 
 typedef geo::model::box<vector3_t> box_t;
+
+inline box_t
+transform(const matrix44_t& transformation, const box_t& box)
+{
+	const matrix44_t matrix = invert(transformation);
+	const vector3_t& min = box.min_corner();
+	const vector3_t& max = box.max_corner();
+
+	geo::model::multi_point<vector3_t> points;
+	points.push_back({{min[X], min[Y], min[Z]}});
+	points.push_back({{min[X], min[Y], max[Z]}});
+	points.push_back({{min[X], max[Y], min[Z]}});
+	points.push_back({{min[X], max[Y], max[Z]}});
+	points.push_back({{max[X], min[Y], min[Z]}});
+	points.push_back({{max[X], min[Y], max[Z]}});
+	points.push_back({{max[X], max[Y], min[Z]}});
+	points.push_back({{max[X], max[Y], max[Z]}});
+
+	boost::transform
+	(
+		points,
+		points.begin(),
+		[&matrix](const vector3_t& point)
+		{
+			return point::operator*(matrix, point);
+		}
+	);
+
+	return geo::return_envelope<box_t>(points);
+}
 
 }

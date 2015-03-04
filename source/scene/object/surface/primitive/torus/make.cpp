@@ -25,7 +25,8 @@ make(const description_t& description)
 {
 	const float radius = description->major + description->minor;
 	const vector3_t bound {{radius, radius, description->minor}};
-	const box_t box(-bound, +bound);
+
+	const box_t box = transform(description->transformation, box_t(-bound, +bound));
 
 	BOOST_LOG_TRIVIAL(trace) << "Make torus";
 	BOOST_LOG_TRIVIAL(trace) << "Box: " << geo::wkt(box.min_corner()) << ", " << geo::wkt(box.max_corner()) << std::endl;
@@ -36,8 +37,7 @@ make(const description_t& description)
 		(
 			description->transformation,
 			description->major,
-			description->minor,
-			box
+			description->minor
 		),
 		box
 	);

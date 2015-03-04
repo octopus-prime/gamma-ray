@@ -23,7 +23,7 @@ alias sources
 		/site-config//boost_log
 		/site-config//boost_system
 		/site-config//tbb
-		/site-config//pthread
+#		/site-config//pthread
 		/site-config//gslcblas
 		/site-config//gsl
 		/site-config//noise
