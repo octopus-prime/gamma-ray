@@ -9,8 +9,6 @@
 
 #include <math/vector.hpp>
 #include <scene/instance.hpp>
-#include <boost/bind.hpp>
-#include <boost/algorithm/cxx11/any_of.hpp>
 #include <boost/optional.hpp>
 
 namespace rt {
@@ -30,15 +28,15 @@ public:
 	operator()(const ray_t& ray, const std::size_t depth) const
 	{
 		constexpr vector3_t ambient = {{1,1,1}};
-		const hits_t::const_iterator end = find_hits(ray);//, _hits.begin());
-		const auto hit = std::min_element(_hits.cbegin(), end);
-		if (hit == end)
-//		if (hit == _hits.begin())
-			return {{0,0,0}};
 
-		const scene::object::texture::instance_t& texture = hit->object->texture();
-		const vector3_t point = hit->point;
-		const vector3_t N = normalize(hit->normal + texture.bump(point));
+		const hits_t::const_iterator end = _scene.hit(ray, _hits.begin());
+		if (end == _hits.begin())
+			return {{0,0,0}};
+		const hit_t& hit = _hits.front();
+
+		const scene::object::texture::instance_t& texture = hit.object->texture();
+		const vector3_t point = hit.point;
+		const vector3_t N = normalize(hit.normal + texture.bump(point));
 		const float factor = (texture.shininess(point) + 2.f) / (2.f * M_PI);
 		const vector3_t color = texture.pigment(point);
 
@@ -51,7 +49,7 @@ public:
 				const vector3_t LP = light.origin() - point;
 				const float LPl = length(LP);
 				const vector3_t L = LP / LPl;
-				if (shadow(ray_t(point, L, 0, LPl)))
+				if (_scene.hit(ray_t(point, L, 0, LPl), _hits.begin()) == _hits.begin()) // shadow test
 					return I;
 				const vector3_t H = normalize(L - ray.direction());
 				const vector3_t d = std::max(0.0f, L * N) * texture.diffuse(point) * color;
@@ -155,37 +153,6 @@ protected:
 			return boost::none;
 
 		return n * (direction - normal * DN) - normal * std::sqrt(D);
-	}
-
-	bool
-	shadow(const ray_t& ray) const
-	{
-		/*
-		return boost::algorithm::any_of
-		(
-			_scene.objects(),
-			boost::bind
-			(
-				std::not_equal_to<hits_t::const_iterator>(),
-				boost::bind(&scene::object::instance_t::hit, _1, ray, _hits.begin()),
-				_hits.cbegin()
-			)
-		);
-		*/
-//		return _scene.any(ray, _hits.begin());
-		return _scene.hit(ray, _hits.begin()) != _hits.begin();
-	}
-
-	hits_t::iterator
-	find_hits(const ray_t& ray/*, const hits_t::iterator hits*/) const
-	{
-		return _scene.hit(ray, _hits.begin());
-//		return boost::accumulate
-//		(
-//			_scene.objects(),
-//			hits,
-//			boost::bind(&scene::object::instance_t::hit, _2, ray, _1)
-//		);
 	}
 
 private:

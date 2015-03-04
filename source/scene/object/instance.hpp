@@ -15,9 +15,6 @@
 
 #include <geo/box.hpp>
 
-#include <boost/shared_ptr.hpp>
-#include <boost/geometry/index/rtree.hpp>
-
 namespace rt {
 namespace scene {
 namespace object {
@@ -36,19 +33,14 @@ public:
 	hit(const rendering::ray_t& ray, const rendering::hits_t::iterator hits) const
 	{
 		const auto end = _surface->hit(ray, hits);
-//		auto foo = std::min_element(hits, end);
-//		if (foo != end)
-//			foo->object = this;
-//		return foo;
-		std::for_each
-		(
-			hits, end,
-			[this](rendering::hit_t& hit)
-			{
-				hit.object = this;
-			}
-		);
-		return end;
+
+		if (end == hits)
+			return hits;
+
+		*hits = *std::min_element(hits, end);
+		hits->object = this;
+
+		return hits + 1;
 	}
 
 	const surface::instance_t&

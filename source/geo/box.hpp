@@ -12,7 +12,7 @@
 #include <math/homogeneous.hpp>
 #include <vector>
 #include <boost/geometry/geometries/box.hpp>
-#include <boost/geometry/geometries/multi_point.hpp>
+#include <boost/geometry/geometries/linestring.hpp>
 
 namespace rt {
 
@@ -25,7 +25,7 @@ transform(const matrix44_t& transformation, const box_t& box)
 	const vector3_t& min = box.min_corner();
 	const vector3_t& max = box.max_corner();
 
-	geo::model::multi_point<vector3_t> points;
+	geo::model::linestring<vector3_t> points;
 	points.push_back({{min[X], min[Y], min[Z]}});
 	points.push_back({{min[X], min[Y], max[Z]}});
 	points.push_back({{min[X], max[Y], min[Z]}});

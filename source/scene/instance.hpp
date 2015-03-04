@@ -10,14 +10,13 @@
 #include <scene/camera/instance.hpp>
 #include <scene/light/instance.hpp>
 #include <scene/object/instance.hpp>
-#include <boost/container/static_vector.hpp>
-#include <boost/algorithm/cxx11/any_of.hpp>
+#include <boost/geometry/index/rtree.hpp>
 
 namespace rt {
 namespace scene {
 
 typedef std::pair<box_t, boost::uint32_t> value_t;
-typedef geo::index::rtree<value_t, geo::index::quadratic<8>> rtree_t;
+typedef geo::index::rtree<value_t, geo::index::rstar<8>> rtree_t;
 
 class instance_t
 {
@@ -52,69 +51,28 @@ public:
 	rendering::hits_t::iterator
 	hit(const rendering::ray_t& ray, const rendering::hits_t::iterator hits) const
 	{
-//		constexpr boost::uint32_t missed = -1;
-
-		rendering::hits_t::iterator foo = hits;
-		const auto f = [this, &ray, &hits, &foo](const value_t& value)
-		{
-			const object::instance_t& object = _objects[value.second];
-			foo = object.hit(ray, hits);
-			return foo != hits;
-		};
-
-		static constexpr std::size_t MAX = 1;
-		typedef boost::container::static_vector<value_t, MAX> values_t;
-
 		const segment_t segment = ray;
 
-		values_t values;
-		_rtree.query
-		(
-			geo::index::intersects(segment) &&
-			geo::index::satisfies(f) &&
-			geo::index::nearest(segment.first, MAX),
-			std::back_inserter(values)
-		);
-
-		return foo;
-/*
-		return boost::accumulate
-		(
-			values,
-			hits,
-			[this, &ray](const rendering::hits_t::iterator hit, const value_t& value)
+		rendering::hits_t::iterator end = hits;
+		const auto test = [this, &ray, &hits, &end, &segment](const value_t& value)
+		{
+			if (geo::intersects(segment, value.first))
 			{
-//				std::cout << "bounding hit" << std::endl;
 				const object::instance_t& object = _objects[value.second];
-				return object.hit(ray, hit);
+				end = object.hit(ray, end);
 			}
-		);
-*/
-	}
-
-	bool
-	any(const rendering::ray_t& ray, const rendering::hits_t::iterator hits) const
-	{
-		constexpr boost::uint32_t missed = -1;
-
-		const auto f = [this, &ray, &hits](const value_t& value)
-		{
-			const object::instance_t& object = _objects[value.second];
-			return object.hit(ray, hits) != hits;
+			return false;
 		};
 
-		const segment_t segment = ray;
+		value_t value;
+		_rtree.query(geo::index::satisfies(test), &value);
 
-		value_t v(box_t(), missed);
-		_rtree.query
-		(
-			geo::index::intersects(segment) &&
-			geo::index::satisfies(f) &&
-			geo::index::nearest(segment.first, 1),
-			&v
-		);
+		if (end == hits)
+			return hits;
 
-		return v.second != missed;
+		*hits = *std::min_element(hits, end);
+
+		return hits + 1;
 	}
 
 private:
