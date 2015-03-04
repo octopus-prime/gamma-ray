@@ -45,6 +45,25 @@ transform(const matrix44_t& transformation, const box_t& box)
 		}
 	);
 
+//	boost::for_each // TODO: hack :(
+//	(
+//		points,
+//		[](vector3_t& point)
+//		{
+//			boost::for_each
+//			(
+//				point,
+//				[](float& f)
+//				{
+//					if (f > +1e10f)
+//						f = +1e10f;
+//					if (f < -1e10f)
+//						f = -1e10f;
+//				}
+//			);
+//		}
+//	);
+
 	return geo::return_envelope<box_t>(points);
 }
 

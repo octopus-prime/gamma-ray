@@ -30,9 +30,10 @@ public:
 	operator()(const ray_t& ray, const std::size_t depth) const
 	{
 		constexpr vector3_t ambient = {{1,1,1}};
-		const hits_t::const_iterator end = find_hits(ray, _hits.begin());
+		const hits_t::const_iterator end = find_hits(ray);//, _hits.begin());
 		const auto hit = std::min_element(_hits.cbegin(), end);
 		if (hit == end)
+//		if (hit == _hits.begin())
 			return {{0,0,0}};
 
 		const scene::object::texture::instance_t& texture = hit->object->texture();
@@ -159,6 +160,7 @@ protected:
 	bool
 	shadow(const ray_t& ray) const
 	{
+		/*
 		return boost::algorithm::any_of
 		(
 			_scene.objects(),
@@ -169,17 +171,21 @@ protected:
 				_hits.cbegin()
 			)
 		);
+		*/
+//		return _scene.any(ray, _hits.begin());
+		return _scene.hit(ray, _hits.begin()) != _hits.begin();
 	}
 
 	hits_t::iterator
-	find_hits(const ray_t& ray, const hits_t::iterator hits) const
+	find_hits(const ray_t& ray/*, const hits_t::iterator hits*/) const
 	{
-		return boost::accumulate
-		(
-			_scene.objects(),
-			hits,
-			boost::bind(&scene::object::instance_t::hit, _2, ray, _1)
-		);
+		return _scene.hit(ray, _hits.begin());
+//		return boost::accumulate
+//		(
+//			_scene.objects(),
+//			hits,
+//			boost::bind(&scene::object::instance_t::hit, _2, ray, _1)
+//		);
 	}
 
 private:

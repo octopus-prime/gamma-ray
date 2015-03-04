@@ -18,7 +18,7 @@ renderer_t::renderer_t(const scene::instance_t& scene, const AA aa, const std::s
 	_scene(scene),
 	_deltas(DELTAS.at(static_cast<std::size_t>(aa))),
 	_depth(depth),
-	_max(max(_scene.objects()))
+	_max(100)//max(_scene.objects()))
 {
 }
 
@@ -71,24 +71,24 @@ renderer_t::to_pixel(const vector3_t& color)
 	);
 }
 
-inline std::size_t
-renderer_t::max(const scene::object::instances_t& objects)
-{
-	/*
-	return boost::accumulate
-	(
-		objects,
-		0,
-		std::bind
-		(
-			std::plus<std::size_t>(),
-			std::placeholders::_1,
-			std::bind(&scene::base_object_t::max, std::placeholders::_2)
-		)
-	);
-	*/
-	return 100;
-}
+//inline std::size_t
+//renderer_t::max(const scene::object::instances_t& objects)
+//{
+//	/*
+//	return boost::accumulate
+//	(
+//		objects,
+//		0,
+//		std::bind
+//		(
+//			std::plus<std::size_t>(),
+//			std::placeholders::_1,
+//			std::bind(&scene::base_object_t::max, std::placeholders::_2)
+//		)
+//	);
+//	*/
+//	return 100;
+//}
 
 const std::unordered_map<std::size_t, std::vector<vector2_t>>
 renderer_t::DELTAS

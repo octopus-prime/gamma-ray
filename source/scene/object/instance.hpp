@@ -12,7 +12,11 @@
 
 #include <rendering/ray.hpp>
 #include <rendering/hit.hpp>
-#include <vector>
+
+#include <geo/box.hpp>
+
+#include <boost/shared_ptr.hpp>
+#include <boost/geometry/index/rtree.hpp>
 
 namespace rt {
 namespace scene {
@@ -32,6 +36,10 @@ public:
 	hit(const rendering::ray_t& ray, const rendering::hits_t::iterator hits) const
 	{
 		const auto end = _surface->hit(ray, hits);
+//		auto foo = std::min_element(hits, end);
+//		if (foo != end)
+//			foo->object = this;
+//		return foo;
 		std::for_each
 		(
 			hits, end,
@@ -61,6 +69,7 @@ private:
 };
 
 typedef std::vector<instance_t> instances_t;
+typedef std::vector<box_t> boxes_t;
 
 }
 }

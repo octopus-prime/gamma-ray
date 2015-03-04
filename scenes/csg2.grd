@@ -29,15 +29,13 @@ sphere = Sphere
 	radius = 2.0
 }
 
-//sphere = aSphere
-//sphere.scale(<2,2,2>)
-
 csg = Object
 {
 	surface = sphere - torusX - torusY - torusZ
 	texture = MetallicRed
 }
-csg.rotate(<0, 0, -50.0>).rotate(<-55.0, 0, 0>).rotate(<0.0, -30, 0>)
+//csg.rotate(<0, 0, -50.0>).rotate(<-55.0, 0, 0>).rotate(<0.0, -30, 0>)
+//csg.translate(<0,0,1>)
 
 left1 = Object
 {

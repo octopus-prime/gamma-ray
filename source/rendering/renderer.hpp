@@ -35,7 +35,7 @@ public:
 protected:
 	vector3_t render(const vector2_t& point, const vector2_t& inc, const tracer_t& trace) const;
 	static inline pixel_t to_pixel(const vector3_t& color);
-	static std::size_t max(const scene::object::instances_t& objects);
+//	static std::size_t max(const scene::object::instances_t& objects);
 
 private:
 	const scene::instance_t& _scene;
