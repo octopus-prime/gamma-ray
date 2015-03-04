@@ -1,0 +1,96 @@
+// Mesh example
+
+include "includes/constants.gri"
+include "includes/surfaces.gri"
+include "includes/textures.gri"
+
+skull1 = Mesh
+{
+	file = "mesh/skull.ply"
+}
+skull1.rotate(-90 * X)
+
+mesh1 = Object
+{
+	surface = skull1
+	texture = MetallicMagenta
+}
+
+skull2 = Mesh
+{
+	file = "mesh/skull.ply"
+}
+skull2.scale(<0.03, 0.03, 0.03>)
+skull2.rotate(+180 * X)
+skull2.rotate(+180 * Z)
+skull2.translate(<0.0, 2.0, 0.0>)
+
+mesh2 = Object
+{
+	surface = skull2
+	texture = MetallicRed
+}
+
+left1 = Object
+{
+	surface = Sphere { }
+	texture = MetallicGreen
+}
+left1.translate(<-3.5, +2, 0>)
+
+left2 = Object
+{
+	surface = Sphere { }
+	texture = MetallicCyan
+}
+left2.translate(<-3.5, -2, 0>)
+
+right1 = Object
+{
+	surface = Sphere { }
+	texture = MetallicBlue
+}
+right1.translate(<+3.5 , +2, 0>)
+
+right2 = Object
+{
+	surface = Sphere { }
+	texture = MetallicYellow
+}
+right2.translate(<+3.5 , -2, 0>)
+
+scene = Scene
+{
+	camera = Camera
+	{
+		origin = -5 * Z
+		direction = Z
+	}
+
+	lights =
+	[
+		Light
+		{
+			origin = <+5, +5, -5>
+			color = White * 4
+		},
+		Light
+		{
+			origin = <-5, +5, -5>
+			color = White * 5
+		}
+	
+	]
+
+	objects =
+	[
+		mesh1,
+		mesh2,
+		left1,
+		right1,
+		left2,
+		right2
+	]
+}
+
+render(scene)
