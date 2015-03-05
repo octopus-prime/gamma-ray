@@ -23,12 +23,13 @@ namespace torus {
 boost::tuple<surface::instance_t, box_t>
 make(const description_t& description)
 {
+	BOOST_LOG_TRIVIAL(debug) << "Make surface torus";
+
 	const float radius = description->major + description->minor;
 	const vector3_t bound {{radius, radius, description->minor}};
 
 	const box_t box = transform(description->transformation, box_t(-bound, +bound));
 
-	BOOST_LOG_TRIVIAL(trace) << "Make torus";
 	BOOST_LOG_TRIVIAL(trace) << "Box: min = " << box.min_corner() << ", max = " << box.max_corner() << std::endl;
 
 	return boost::make_tuple

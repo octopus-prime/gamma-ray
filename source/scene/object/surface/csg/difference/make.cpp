@@ -27,9 +27,10 @@ make(const description_t& description)
 	const auto surface1 = surface::make(description->surface1);
 	const auto surface2 = surface::make(description->surface2);
 
+	BOOST_LOG_TRIVIAL(debug) << "Make surface difference";
+
 	const auto& box = surface1.get<1>();
 
-	BOOST_LOG_TRIVIAL(trace) << "Make difference";
 	BOOST_LOG_TRIVIAL(trace) << "Box: min = " << box.min_corner() << ", max = " << box.max_corner() << std::endl;
 
 	return boost::make_tuple

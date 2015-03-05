@@ -9,6 +9,7 @@
 #include <scene/object/surface/make.hpp>
 #include <scene/object/texture/make.hpp>
 #include <boost/make_shared.hpp>
+#include <boost/log/trivial.hpp>
 
 namespace rt {
 namespace scene {
@@ -29,6 +30,9 @@ boost::tuple<instance_t, box_t>
 make(const description_t& description)
 {
 	const boost::tuple<surface::instance_t, box_t> surface = surface::make(description->surface);
+
+	BOOST_LOG_TRIVIAL(debug) << "Make object";
+
 	return boost::make_tuple
 	(
 		instance_t

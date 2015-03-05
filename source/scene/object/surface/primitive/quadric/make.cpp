@@ -24,6 +24,8 @@ namespace quadric {
 boost::tuple<surface::instance_t, box_t>
 make(const description_t& description)
 {
+	BOOST_LOG_TRIVIAL(debug) << "Make surface quadric";
+
 	matrix44_t m = 0.5f * matrix44_t
 	{{
 		{{2 * description->square[0],	description->mixed[0],		description->mixed[1],		description->absolute[0]}},
@@ -43,7 +45,6 @@ make(const description_t& description)
 
 	const box_t box = transform(description->transformation, box_t(min, max));
 
-	BOOST_LOG_TRIVIAL(trace) << "Make quadric";
 	BOOST_LOG_TRIVIAL(trace) << "Box: min = " << box.min_corner() << ", max = " << box.max_corner() << std::endl;
 
 	return boost::make_tuple

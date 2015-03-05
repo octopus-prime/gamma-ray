@@ -26,7 +26,7 @@ namespace mesh {
 boost::tuple<surface::instance_t, box_t>
 make(const description_t& description)
 {
-	BOOST_LOG_TRIVIAL(trace) << "Make mesh";
+	BOOST_LOG_TRIVIAL(debug) << "Make surface mesh";
 
 	// Read vertextes and faces
 	const reader_t read = open(description->file);

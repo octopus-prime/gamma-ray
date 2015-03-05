@@ -6,14 +6,28 @@
  */
 
 #include "configuration.hpp"
+#include <boost/program_options.hpp>
 #include <boost/program_options/parsers.hpp>
+#include <boost/optional.hpp>
 #include <fstream>
 #include <iostream>
 
+namespace po = boost::program_options;
+
 namespace rt {
 
+static const std::string HELP("help");
+static const std::string CONFIG("config");
+static const std::string INPUT("input");
+static const std::string OUTPUT("output");
+static const std::string WIDTH("width");
+static const std::string HEIGHT("height");
+static const std::string DEPTH("depth");
+static const std::string AA("aa");
+static const std::string LEVEL("level");
+
 template <typename T>
-T
+static T
 get_required(const po::variables_map& vm, const std::string& option)
 {
 	const auto value = vm.find(option);
@@ -23,7 +37,7 @@ get_required(const po::variables_map& vm, const std::string& option)
 }
 
 template <typename T>
-boost::optional<T>
+static boost::optional<T>
 get_optional(const po::variables_map& vm, const std::string& option)
 {
 	const auto value = vm.find(option);
@@ -32,32 +46,11 @@ get_optional(const po::variables_map& vm, const std::string& option)
 	return value->second.as<T>();
 }
 
-template <>
-std::string
-configuration::get_required(const std::string& option) const
+configuration_t
+configure(const int argc, const char* const argv[])
 {
-	return rt::get_required<std::string>(_vm, option);
-}
+	po::options_description description;
 
-template <>
-std::size_t
-configuration::get_required(const std::string& option) const
-{
-	return rt::get_required<std::size_t>(_vm, option);
-}
-
-template <>
-boost::optional<std::string>
-configuration::get_optional(const std::string& option) const
-{
-	return rt::get_optional<std::string>(_vm, option);
-}
-
-configuration::configuration(const int argc, const char* const argv[])
-:
-	_options(),
-	_vm()
-{
 	po::options_description actions("Actions");
 	actions.add_options()
 		((HELP + ",H").c_str(),	"help")
@@ -72,41 +65,46 @@ configuration::configuration(const int argc, const char* const argv[])
 		((HEIGHT + ",h").c_str(),	po::value<std::size_t>(),	"resolution height")
 		((DEPTH  + ",d").c_str(),	po::value<std::size_t>(),	"rendering depth")
 		((AA     + ",a").c_str(),	po::value<std::size_t>(),	"anti aliasing")
+		((LEVEL  + ",l").c_str(),	po::value<std::string>(),	"log level")
 	;
 
-	_options.add(actions);
-	_options.add(options);
+	description.add(actions);
+	description.add(options);
 
-	po::store(po::parse_command_line(argc, argv, _options), _vm);
-	po::notify(_vm);
+	po::variables_map vm;
 
-	if (argc == 1 || _vm.empty() || _vm.count(HELP))
+	po::store(po::parse_command_line(argc, argv, description), vm);
+	po::notify(vm);
+
+	if (argc == 1 || vm.empty() || vm.count(HELP))
 	{
 		std::cout << std::endl;
 		std::cout << "Usage: " << argv[0] << " <action> <options>" << std::endl;
-		std::cout << _options << std::endl;
-		exit(_vm.count(HELP) == 1);
+		std::cout << description << std::endl;
+		exit(vm.count(HELP) == 1);
 	}
 
-	const auto config = get_optional<std::string>(CONFIG);
+	const auto config = get_optional<std::string>(vm, CONFIG);
 	if (config)
 	{
 		std::ifstream file(*config);
 		if (file.fail())
 			throw std::runtime_error(*config + " not found.");
-		po::store(po::parse_config_file(file, _options), _vm);
+		po::store(po::parse_config_file(file, description), vm);
 		file.close();
-		po::notify(_vm);
+		po::notify(vm);
 	}
-}
 
-const std::string configuration::HELP("help");
-const std::string configuration::CONFIG("config");
-const std::string configuration::INPUT("input");
-const std::string configuration::OUTPUT("output");
-const std::string configuration::WIDTH("width");
-const std::string configuration::HEIGHT("height");
-const std::string configuration::DEPTH("depth");
-const std::string configuration::AA("aa");
+	return configuration_t
+	{
+		get_required<std::string>(vm, INPUT),
+		get_required<std::string>(vm, OUTPUT),
+		get_required<std::size_t>(vm, WIDTH),
+		get_required<std::size_t>(vm, HEIGHT),
+		get_required<std::size_t>(vm, DEPTH),
+		get_required<std::size_t>(vm, AA),
+		get_required<std::string>(vm, LEVEL)
+	};
+}
 
 }

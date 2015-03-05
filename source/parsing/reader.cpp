@@ -5,13 +5,14 @@
  *      Author: mike_gresens
  */
 
+#include <parsing/reader.hpp>
 #include <parsing/iterator.hpp>
 #include <parsing/skipper/parser.hpp>
 #include <parsing/description/parser.hpp>
 #include <boost/spirit/include/qi.hpp>
 #include <boost/format.hpp>
 #include <boost/algorithm/string/replace.hpp>
-#include <parsing/reader.hpp>
+#include <boost/log/trivial.hpp>
 #include <fstream>
 
 namespace qi = boost::spirit::qi;
@@ -26,7 +27,8 @@ extern template class definition::parser<iterator_t, skipper::parser<iterator_t>
 template <typename Parser, typename Attribute>
 bool read(const std::string& file, Parser& parser, Attribute& attribute)
 {
-	std::clog << __func__ << " " << file << std::endl;
+	BOOST_LOG_TRIVIAL(debug) << "Parse file " << '"' << file << '"';
+
 	std::ifstream stream(file);
 	if (stream.fail())
 		return false;

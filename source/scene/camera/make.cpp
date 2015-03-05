@@ -6,6 +6,7 @@
  */
 
 #include <scene/camera/make.hpp>
+#include <boost/log/trivial.hpp>
 
 namespace rt {
 namespace scene {
@@ -14,6 +15,8 @@ namespace camera {
 instance_t
 make(const description_t& description)
 {
+	BOOST_LOG_TRIVIAL(debug) << "Make camera";
+
 	const instance_t instance
 	(
 		description->origin,

@@ -12,24 +12,15 @@
 #include <rendering/renderer.hpp>
 #include <rendering/image.hpp>
 #include <configuration.hpp>
-#include <boost/filesystem.hpp>
+#include <logging.hpp>
 #include <iostream>
+#include <boost/filesystem.hpp>
+#include <boost/log/trivial.hpp>
+#include <boost/log/attributes/named_scope.hpp>
 
-#include <scene/object/texture/noise/make.hpp>
-#include <boost/make_shared.hpp>
-
-
-#include <boost/log/sources/logger.hpp>
-#include <boost/log/sources/record_ostream.hpp>
-#include <boost/log/sources/global_logger_storage.hpp>
-#include <boost/log/utility/setup/console.hpp>
-#include <boost/log/utility/setup/common_attributes.hpp>
-
-//namespace boost::log;
-//namespace src = boost::log::sources;
-//namespace keywords = boost::log::keywords;
-
-BOOST_LOG_INLINE_GLOBAL_LOGGER_DEFAULT(logger, boost::log::sources::logger_mt)
+/*
+//#include <scene/object/texture/noise/make.hpp>
+//#include <boost/make_shared.hpp>
 
 using namespace rt;
 
@@ -47,58 +38,86 @@ void test_noise()
 
 	std::cout << noise({{1,2,3}}) << std::endl;
 }
+*/
 
-scene::instance_t
+static rt::configuration_t
+configure(const int argc, const char* const argv[])
+{
+	const rt::configuration_t configuration = rt::configure(argc, argv);
+	rt::logging(configuration.level.at(0));
+
+	BOOST_LOG_NAMED_SCOPE("Configuration");
+	BOOST_LOG_TRIVIAL(info) << "Configuration start";
+	BOOST_LOG_TRIVIAL(info) << "Input " << '"' << configuration.input << '"';
+	BOOST_LOG_TRIVIAL(info) << "Output " << '"' << configuration.output << '"';
+	BOOST_LOG_TRIVIAL(info) << "Resolution " << configuration.width << 'x' << configuration.height;
+	BOOST_LOG_TRIVIAL(info) << "Recursion " << configuration.depth;
+	BOOST_LOG_TRIVIAL(info) << "Antialiasing " << configuration.aa;
+	BOOST_LOG_TRIVIAL(info) << "Configuration done" << std::endl;
+
+	return std::move(configuration);
+}
+
+static rt::scene::instance_t
 preprocess(const std::string& file)
 {
-	const scene::description_t description = parsing::parse(file);
-	const scene::instance_t instance = scene::make(description);
+	BOOST_LOG_NAMED_SCOPE("Preprocessing");
+	BOOST_LOG_TRIVIAL(info) << "Preprocessing start";
+
+	const rt::scene::description_t description = rt::parsing::parse(file);
+	const rt::scene::instance_t instance = rt::scene::make(description);
+
+	BOOST_LOG_TRIVIAL(info) << "Created " << instance.lights().size() << " lights";
+	BOOST_LOG_TRIVIAL(info) << "Created " << instance.objects().size() << " objects";
+	BOOST_LOG_TRIVIAL(info) << "Preprocessing done" << std::endl;
+
 	return std::move(instance);
 }
 
-int main(int argc, char** argv)
+static rt::rendering::image_t
+render(const rt::configuration_t& configuration, const rt::scene::instance_t& scene)
 {
+	BOOST_LOG_NAMED_SCOPE("Rendering");
+	BOOST_LOG_TRIVIAL(info) << "Rendering start";
+
+	const rt::rendering::renderer_t render(scene, static_cast<rt::rendering::AA>(configuration.aa), configuration.depth);
+	rt::rendering::image_t image(configuration.width, configuration.height);
+
+	render(boost::gil::view(image));
+
+	BOOST_LOG_TRIVIAL(info) << "Rendering done" << std::endl;
+
+	return std::move(image);
+}
+
+static void
+postprocess(rt::rendering::image_t& image, const rt::rendering::image_writer_t& write, const std::string& output)
+{
+	BOOST_LOG_NAMED_SCOPE("Postprocessing");
+	BOOST_LOG_TRIVIAL(info) << "Postprocessing start";
+
+	write(boost::gil::view(image), output);
+
+	BOOST_LOG_TRIVIAL(info) << "Postprocessing done" << std::endl;
+}
+
+int
+main(int argc, char** argv)
+{
+	std::cout << std::endl << "γ-ray version 0.1" << std::endl << std::endl;
+
 	try
 	{
-		boost::log::add_console_log(std::cout, boost::log::keywords::format = ">> %Message%");
+		const rt::configuration_t configuration = configure(argc, argv);
+		const rt::scene::instance_t scene = preprocess(configuration.input);
 
-//		boost::log::add_common_attributes();
-//		logger::get().
-//		boost::log::core::get()->get_global_attributes().
-		BOOST_LOG(logger::get()) << "Foo and bar";
-//		test_noise();
-//		exit(0);
-
-		const configuration config(argc, argv);
-		const auto input = config.get_required<std::string>(configuration::INPUT);
-		const auto output = config.get_required<std::string>(configuration::OUTPUT);
-		const auto width = config.get_required<std::size_t>(configuration::WIDTH);
-		const auto height = config.get_required<std::size_t>(configuration::HEIGHT);
-		const auto depth = config.get_required<std::size_t>(configuration::DEPTH);
-		const auto aa = config.get_required<std::size_t>(configuration::AA);
-
-		const scene::instance_t scene = preprocess(input);
-		std::cout << scene.objects().size() << " objects" << std::endl;
-
-		std::cout << "Lights       = " << scene.lights().size() << std::endl;
-		std::cout << "Objects      = " << scene.objects().size() << std::endl;
-		std::cout << "Antialiasing = " << static_cast<std::size_t>(aa) << std::endl;
-		std::cout << "Depth        = " << depth << std::endl;
-		std::cout << "Resolution   = " << width << 'x' << height << std::endl;
-
-//		const auto output_path = boost::filesystem::path("pictures") / output;//"picture.png";
-		const auto output_path = boost::filesystem::path(output);//"picture.png";
-
-		std::cout << "Output       = " << output << std::endl;
-
+		const auto output_path = boost::filesystem::path(configuration.output);
 		boost::filesystem::create_directories(output_path.parent_path());
-		const rendering::image_writer_t write = rendering::make_writer(output_path.extension().string());
+		const rt::rendering::image_writer_t write = rt::rendering::make_writer(output_path.extension().string());
 
-		const rendering::renderer_t render(scene, static_cast<rendering::AA>(aa), depth);
-		rendering::image_t image(width, height);
+		rt::rendering::image_t image = render(configuration, scene);
 
-		render(boost::gil::view(image));
-		write(boost::gil::view(image), output_path.string());
+		postprocess(image, write, output_path.string());
 
 		return EXIT_SUCCESS;
 	}

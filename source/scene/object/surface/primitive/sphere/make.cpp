@@ -24,6 +24,8 @@ namespace sphere {
 boost::tuple<surface::instance_t, box_t>
 make(const description_t& description)
 {
+	BOOST_LOG_TRIVIAL(debug) << "Make surface sphere";
+
 	matrix44_t transformation = identity<4>();
 	if (description->radius)
 		transformation *= rt::scale({{*description->radius, *description->radius, *description->radius}});
@@ -32,7 +34,6 @@ make(const description_t& description)
 
 	const box_t box = transform(transformation * description->transformation, box_t({{-1,-1,-1}}, {{+1,+1,+1}}));
 
-	BOOST_LOG_TRIVIAL(trace) << "Make sphere";
 	BOOST_LOG_TRIVIAL(trace) << "Box: min = " << box.min_corner() << ", max = " << box.max_corner() << std::endl;
 
 	return boost::make_tuple
