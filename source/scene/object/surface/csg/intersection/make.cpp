@@ -34,7 +34,7 @@ make(const description_t& description)
 	geo::intersection(box1, box2, box);
 
 	BOOST_LOG_TRIVIAL(trace) << "Make intersection";
-	BOOST_LOG_TRIVIAL(trace) << "Box: " << geo::wkt(box.min_corner()) << ", " << geo::wkt(box.max_corner()) << std::endl;
+	BOOST_LOG_TRIVIAL(trace) << "Box: min = " << box.min_corner() << ", max = " << box.max_corner() << std::endl;
 
 	return boost::make_tuple
 	(

@@ -11,8 +11,9 @@ project gamma-ray
 		<include>ext/gsl_poly
 		<include>ext/rply
 		<define>BOOST_SPIRIT_USE_PHOENIX_V3
-		<define>BOOST_TEST_DYN_LINK
-		<define>BOOST_LOG_DYN_LINK
+#		<define>BOOST_TEST_DYN_LINK
+#		<define>BOOST_LOG_DYN_LINK
+		<define>BOOST_ALL_DYN_LINK
 	;
 	
 alias sources
@@ -21,9 +22,10 @@ alias sources
 		[ path.glob-tree ext : *.c* ]
 		/site-config//boost_filesystem
 		/site-config//boost_log
+		/site-config//boost_log_setup
 		/site-config//boost_system
 		/site-config//tbb
-		/site-config//pthread
+#		/site-config//pthread
 		/site-config//gslcblas
 		/site-config//gsl
 		/site-config//noise

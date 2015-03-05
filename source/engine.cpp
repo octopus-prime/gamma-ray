@@ -18,6 +18,19 @@
 #include <scene/object/texture/noise/make.hpp>
 #include <boost/make_shared.hpp>
 
+
+#include <boost/log/sources/logger.hpp>
+#include <boost/log/sources/record_ostream.hpp>
+#include <boost/log/sources/global_logger_storage.hpp>
+#include <boost/log/utility/setup/console.hpp>
+#include <boost/log/utility/setup/common_attributes.hpp>
+
+//namespace boost::log;
+//namespace src = boost::log::sources;
+//namespace keywords = boost::log::keywords;
+
+BOOST_LOG_INLINE_GLOBAL_LOGGER_DEFAULT(logger, boost::log::sources::logger_mt)
+
 using namespace rt;
 
 void test_noise()
@@ -47,6 +60,12 @@ int main(int argc, char** argv)
 {
 	try
 	{
+		boost::log::add_console_log(std::cout, boost::log::keywords::format = ">> %Message%");
+
+//		boost::log::add_common_attributes();
+//		logger::get().
+//		boost::log::core::get()->get_global_attributes().
+		BOOST_LOG(logger::get()) << "Foo and bar";
 //		test_noise();
 //		exit(0);
 

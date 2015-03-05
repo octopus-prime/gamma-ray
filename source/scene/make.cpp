@@ -10,6 +10,7 @@
 #include <scene/light/make.hpp>
 #include <scene/object/make.hpp>
 #include <boost/range/algorithm/transform.hpp>
+#include <boost/log/trivial.hpp>
 
 namespace rt {
 namespace scene {
@@ -44,6 +45,23 @@ make(const description_t& description)
 		objects.push_back(o.get<0>());
 		rtree.insert(value_t(o.get<1>(), i));
 	}
+
+	const box_t box// TODO: puke =>
+	(
+		{{
+			geo::get<X>(rtree.bounds().min_corner()),
+			geo::get<Y>(rtree.bounds().min_corner()),
+			geo::get<Z>(rtree.bounds().min_corner())
+		}},
+		{{
+			geo::get<X>(rtree.bounds().max_corner()),
+			geo::get<Y>(rtree.bounds().max_corner()),
+			geo::get<Z>(rtree.bounds().max_corner())
+		}}
+	);
+
+	BOOST_LOG_TRIVIAL(trace) << "Make scene";
+	BOOST_LOG_TRIVIAL(trace) << "Box: min = " << box.min_corner() << ", max = " << box.max_corner() << std::endl;
 
 	const instance_t instance
 	(

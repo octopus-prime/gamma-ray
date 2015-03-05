@@ -44,7 +44,7 @@ make(const description_t& description)
 	const box_t box = transform(description->transformation, box_t(min, max));
 
 	BOOST_LOG_TRIVIAL(trace) << "Make quadric";
-	BOOST_LOG_TRIVIAL(trace) << "Box: " << geo::wkt(box.min_corner()) << ", " << geo::wkt(box.max_corner()) << std::endl;
+	BOOST_LOG_TRIVIAL(trace) << "Box: min = " << box.min_corner() << ", max = " << box.max_corner() << std::endl;
 
 	return boost::make_tuple
 	(

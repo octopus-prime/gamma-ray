@@ -122,8 +122,8 @@ operator<<(ostream& s, const rt::basic_container_t<T, N>& c)
 	for (auto e = c.cbegin(); e != c.cend(); ++e)
 	{
 		if (e != c.cbegin())
-			s << ',';
-		s << *e;
+			s << ", ";
+		s << std::showpos /*<< std::showpoint*/ << *e;
 	}
 	s << '>';
 	return s;
