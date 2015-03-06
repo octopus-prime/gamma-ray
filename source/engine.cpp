@@ -5,16 +5,15 @@
  *      Author: mgresens
  */
 
+#include <configuration.hpp>
+#include <logging.hpp>
+#include <parsing/parser.hpp>
 #include <scene/description.hpp>
 #include <scene/instance.hpp>
 #include <scene/make.hpp>
-#include <parsing/parser.hpp>
 #include <rendering/renderer.hpp>
 #include <rendering/image.hpp>
-#include <configuration.hpp>
-#include <logging.hpp>
 #include <iostream>
-#include <boost/filesystem.hpp>
 #include <boost/log/trivial.hpp>
 #include <boost/log/attributes/named_scope.hpp>
 
@@ -91,12 +90,12 @@ render(const rt::configuration_t& configuration, const rt::scene::instance_t& sc
 }
 
 static void
-postprocess(rt::rendering::image_t& image, const rt::rendering::image_writer_t& write, const std::string& output)
+postprocess(const rt::rendering::image_writer_t& write, const rt::rendering::image_t& image)
 {
 	BOOST_LOG_NAMED_SCOPE("Postprocessing");
 	BOOST_LOG_TRIVIAL(info) << "Postprocessing start";
 
-	write(boost::gil::view(image), output);
+	write(boost::gil::const_view(image));
 
 	BOOST_LOG_TRIVIAL(info) << "Postprocessing done" << std::endl;
 }
@@ -109,15 +108,10 @@ main(int argc, char** argv)
 	try
 	{
 		const rt::configuration_t configuration = configure(argc, argv);
+		const rt::rendering::image_writer_t write = rt::rendering::make_writer(configuration.output);
 		const rt::scene::instance_t scene = preprocess(configuration.input);
-
-		const auto output_path = boost::filesystem::path(configuration.output);
-		boost::filesystem::create_directories(output_path.parent_path());
-		const rt::rendering::image_writer_t write = rt::rendering::make_writer(output_path.extension().string());
-
-		rt::rendering::image_t image = render(configuration, scene);
-
-		postprocess(image, write, output_path.string());
+		const rt::rendering::image_t image = render(configuration, scene);
+		postprocess(write, image);
 
 		return EXIT_SUCCESS;
 	}

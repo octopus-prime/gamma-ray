@@ -17,58 +17,63 @@
 #include <boost/gil/extension/io/jpeg_io.hpp>
 #include <boost/gil/extension/io/png_io.hpp>
 #include <boost/gil/extension/io/tiff_io.hpp>
-#include <unordered_map>
+#include <boost/filesystem.hpp>
+#include <boost/unordered_map.hpp>
+#include <boost/assign/list_of.hpp>
+
+namespace fs = boost::filesystem;
+namespace gil = boost::gil;
 
 namespace rt {
 namespace rendering {
 
 image_writer_t
-make_writer(const std::string& extension)
+make_writer(const std::string& output)
 {
-	static const std::unordered_map<std::string, image_writer_t> WRITERS
-	{
+	const fs::path file(output);
+	fs::create_directories(file.parent_path());
+
+	const boost::unordered_map<fs::path, image_writer_t> writers = boost::assign::map_list_of<fs::path, image_writer_t>
+	(
+		".jpg", [file](const const_view_t& view)
 		{
-			".jpg",
-			[](const view_t& view, const std::string& file)
-			{
-				boost::gil::jpeg_write_view
-				(
-					file,
-					boost::gil::color_converted_view<boost::gil::rgb8_pixel_t>(view)
-				);
-			}
-		},
-		{
-			".png",
-			[](const view_t& view, const std::string& file)
-			{
-				boost::gil::png_write_view
-				(
-					file,
-					boost::gil::color_converted_view<boost::gil::rgb16_pixel_t>(view)
-				);
-			}
-		},
-		{
-			".tif",
-			[](const view_t& view, const std::string& file)
-			{
-				boost::gil::tiff_write_view
-				(
-					file,
-					view
-				);
-			}
+			gil::jpeg_write_view
+			(
+				file.string(),
+				gil::color_converted_view<gil::rgb8_pixel_t>(view)
+			);
 		}
-	};
+	)
+	(
+		".png", [file](const const_view_t& view)
+		{
+			gil::png_write_view
+			(
+				file.string(),
+				gil::color_converted_view<gil::rgb16_pixel_t>(view)
+			);
+		}
+	)
+	(
+		".tif", [file](const const_view_t& view)
+		{
+			gil::tiff_write_view
+			(
+				file.string(),
+				view
+			);
+		}
+	);
+
+	const fs::path extension = file.extension();
 
 	try
 	{
-		return WRITERS.at(extension);
+		return writers.at(extension);
 	}
 	catch (const std::out_of_range& exception)
 	{
-		throw std::runtime_error("Extension '" + extension + "' not valid. Use '.jpg', '.png' or '.tif'.");
+		throw std::runtime_error("Extension '" + extension.string() + "' not valid. Use '.jpg', '.png' or '.tif'.");
 	}
 }
 
