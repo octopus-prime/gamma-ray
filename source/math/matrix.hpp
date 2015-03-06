@@ -45,7 +45,7 @@ inline auto
 invert(basic_matrix_t<N, N> m)
 {
 	basic_matrix_t<N, N> r = identity<N>();
-
+/*
 	for (std::size_t i = N - 1; i > 0; --i)
 	{
 		if (m[i-1][0] < m[i][0])
@@ -54,7 +54,7 @@ invert(basic_matrix_t<N, N> m)
 			std::swap(r[i-1], r[i]);
 		}
 	}
-
+*/
 	for (std::size_t i = 0; i < N; ++i)
 	{
 		for (std::size_t j = 0; j < N; ++j)

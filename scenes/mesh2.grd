@@ -21,9 +21,8 @@ skull2 = Mesh
 	file = "mesh/skull.ply"
 }
 skull2.scale(<0.03, 0.03, 0.03>)
-skull2.rotate(+180 * X)
-skull2.rotate(+180 * Z)
-skull2.translate(<0.0, 2.0, 0.0>)
+skull2.rotate(+180 * Y)
+skull2.translate(2.5 * Y)
 
 mesh2 = Object
 {

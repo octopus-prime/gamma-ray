@@ -216,7 +216,6 @@ BOOST_AUTO_TEST_CASE(test_transpose)
 	BOOST_CHECK_EQUAL(transpose(matrix1), expected);
 }
 
-
 BOOST_AUTO_TEST_CASE(test_invert)
 {
 	constexpr matrix44_t expected
@@ -227,6 +226,28 @@ BOOST_AUTO_TEST_CASE(test_invert)
 		{{ -2/3.f,		-11/51.f,	-5/204.f,	+1/68.f}}
 	}};
 	const auto result = invert(matrix1);
+	for (int i = 0; i < 4; ++i)
+		for (int j = 0; j < 4; ++j)
+			BOOST_CHECK_CLOSE(result[i][j], expected[i][j], 1e-4);
+}
+
+BOOST_AUTO_TEST_CASE(test_invert_foo)
+{
+	constexpr matrix44_t matrix
+	{{
+		{{ -100/3.f,	0,			0,			0}},
+		{{ 0,			+100/3.f,	0,			-100}},
+		{{ 0,			0,			-100/3.f,	0}},
+		{{ 0,			0,			0,			1}}
+	}};
+	constexpr matrix44_t expected
+	{{
+		{{ -0.03f,	0,		0,		0}},
+		{{ 0,		+0.03f,	0,		3}},
+		{{ 0,		0,		-0.03f,	0}},
+		{{ 0,		0,		0,		1}}
+	}};
+	const auto result = invert(matrix);
 	for (int i = 0; i < 4; ++i)
 		for (int j = 0; j < 4; ++j)
 			BOOST_CHECK_CLOSE(result[i][j], expected[i][j], 1e-4);
