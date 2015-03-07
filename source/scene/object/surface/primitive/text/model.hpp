@@ -278,22 +278,46 @@ public:
 		_rtree.query(geo::index::intersects(segment) && geo::index::satisfies(test), (value_t*) nullptr);
 
 		return end;
+
+/*
+		// TODO: The correct implementation is much slower the the satisfies-hack above :(
+		const segment_t segment = ray;
+		return std::accumulate
+		(
+			_rtree.qbegin(geo::index::intersects(segment)), _rtree.qend(),
+			end,
+			[this, &ray](const rendering::hits_t::iterator end, const value_t& value)
+			{
+				const glyph_t& glyph = _glyphs[value.second];
+				return glyph.hit(ray, end);
+			}
+		);
+*/
 	}
 
 	bool
 	inside(const vector3_t& point) const
 	{
-		// TODO: use rtree !
-		return boost::algorithm::any_of
+		return std::any_of
 		(
-			_glyphs,
-			std::bind
-			(
-				&glyph_t::inside,
-				std::placeholders::_1,
-				point
-			)
+			_rtree.qbegin(geo::index::intersects(point)), _rtree.qend(),
+			[this, &point](const value_t& value)
+			{
+				const glyph_t& glyph = _glyphs[value.second];
+				return glyph.inside(point);
+			}
 		);
+
+//		return boost::algorithm::any_of
+//		(
+//			_glyphs,
+//			std::bind
+//			(
+//				&glyph_t::inside,
+//				std::placeholders::_1,
+//				point
+//			)
+//		);
 	}
 
 private:
