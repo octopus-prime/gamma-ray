@@ -10,6 +10,16 @@ MetallicRed = Texture
 	reflection = 0.8
 }
 
+SolidRed = Texture
+{
+	pigment = Red
+	ambient = 0.3
+	diffuse = 0.5
+	specular = 0.7
+	shininess = 164.0
+	reflection = 0.0
+}
+
 MetallicGreen = Texture
 {
 	pigment = Green
