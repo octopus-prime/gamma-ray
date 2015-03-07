@@ -8,14 +8,15 @@ text = Object
 {
 	surface = Glyphs
 	{
-		text = "Hallo Mike,?dieses ist ein kleiner Text."
-		font = "/usr/share/fonts/truetype/freefont/FreeSerifBoldItalic.ttf"
+		text = "是本文"
+		font = "/usr/share/fonts/truetype/fonts-japanese-gothic.ttf"
 		extrusion = 1.0
 	}
 	texture = SolidRed
 }
-text.scale(<0.05, 0.1, 0.01>)
-text.translate(-1.7 * X)
+text.scale(<0.2, 0.2, 0.2>)
+text.translate(<-2, -0.5, 0>)
+//text.rotate(< 45, 45, 0>)
 
 scene = Scene
 {
