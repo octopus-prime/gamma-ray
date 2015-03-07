@@ -11,8 +11,6 @@ project gamma-ray
 		<include>ext/gsl_poly
 		<include>ext/rply
 		<define>BOOST_SPIRIT_USE_PHOENIX_V3
-#		<define>BOOST_TEST_DYN_LINK
-#		<define>BOOST_LOG_DYN_LINK
 		<define>BOOST_ALL_DYN_LINK
 	;
 	
@@ -30,6 +28,7 @@ alias sources
 		/site-config//gslcblas
 		/site-config//gsl
 		/site-config//noise
+		/site-config//freetype
 	;
 
 exe gamma-ray
@@ -42,7 +41,6 @@ exe gamma-ray
 		/site-config//jpeg
 		/site-config//png
 		/site-config//tiff
-#		/site-config//freetype
 	;
 
 unit-test gamma-ray-test

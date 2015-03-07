@@ -11,6 +11,7 @@
 #include <scene/object/surface/primitive/quadric/model.hpp>
 #include <scene/object/surface/primitive/torus/model.hpp>
 #include <scene/object/surface/primitive/mesh/model.hpp>
+#include <scene/object/surface/primitive/text/model.hpp>
 #include <boost/iterator/filter_iterator.hpp>
 
 namespace rt {
@@ -69,6 +70,7 @@ template class instance<cube::model>;
 template class instance<quadric::model>;
 template class instance<torus::model>;
 template class instance<mesh::model>;
+template class instance<text::model>;
 
 }
 }
