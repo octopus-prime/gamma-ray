@@ -9,6 +9,7 @@
 #include <scene/object/surface/primitive/text/model.hpp>
 #include <math/transformation.hpp>
 #include <scene/object/surface/primitive/instance.hpp>
+#include <boost/regex/pending/unicode_iterator.hpp>
 #include <boost/log/trivial.hpp>
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -165,6 +166,12 @@ make(const description_t& description)
 {
 	BOOST_LOG_TRIVIAL(debug) << "Make surface text";
 
+	const std::u32string text
+	(
+		boost::u8_to_u32_iterator<std::string::const_iterator>(description->text.cbegin()),
+		boost::u8_to_u32_iterator<std::string::const_iterator>(description->text.cend())
+	);
+
 	const Library library = init_library();
 	const Face face = load_face(library, description->font);
 
@@ -173,9 +180,9 @@ make(const description_t& description)
 	glyphs_t glyphs;
 	rtree_t rtree;
 
-	for (std::size_t i = 0, n = 0; i < description->text.size(); ++i)
+	for (std::size_t i = 0, n = 0; i < text.size(); ++i)
 	{
-		const char32_t ch = description->text[i];
+		const char32_t ch = text[i];
 
 		if (ch != '?')
 		{
