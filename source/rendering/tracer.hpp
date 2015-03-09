@@ -32,7 +32,7 @@ public:
 		const hits_t::const_iterator end = _scene.hit(ray, _hits.begin());
 		if (end == _hits.begin())
 			return {{0,0,0}};
-		const hit_t& hit = _hits.front();
+		const hit_t& hit = *_hits.cbegin();
 
 		const scene::object::texture::instance_t& texture = hit.object->texture();
 		const vector3_t point = hit.point;

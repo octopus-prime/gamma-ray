@@ -13,12 +13,12 @@
 namespace rt {
 namespace rendering {
 
-renderer_t::renderer_t(const scene::instance_t& scene, const AA aa, const std::size_t depth)
+renderer_t::renderer_t(const scene::instance_t& scene, const AA aa, const std::size_t depth, const std::size_t max)
 :
 	_scene(scene),
 	_deltas(DELTAS.at(static_cast<std::size_t>(aa))),
 	_depth(depth),
-	_max(100)//max(_scene.objects()))
+	_max(max)
 {
 }
 

@@ -161,7 +161,7 @@ get_glyph(const Face& face, const char32_t ch, const std::size_t sizeX, const st
 }
 
 
-boost::tuple<surface::instance_t, box_t>
+boost::tuple<surface::instance_t, box_t, std::size_t>
 make(const description_t& description)
 {
 	BOOST_LOG_TRIVIAL(debug) << "Make surface text";
@@ -179,6 +179,7 @@ make(const description_t& description)
 	float yadvance = 0.0f;
 	glyphs_t glyphs;
 	rtree_t rtree;
+	std::size_t hits = 0;
 
 	for (std::size_t i = 0, n = 0; i < text.size(); ++i)
 	{
@@ -207,6 +208,7 @@ make(const description_t& description)
 
 		glyphs.emplace_back(std::move(contours), description->extrusion);
 		rtree.insert(value_t(box, n));
+		hits += 3 * contours.size() + 2;
 		n++;
 		}
 		else
@@ -245,7 +247,8 @@ make(const description_t& description)
 			std::move(rtree),
 			description->extrusion
 		),
-		box
+		box,
+		hits
 	);
 }
 

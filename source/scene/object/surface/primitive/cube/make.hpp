@@ -19,7 +19,7 @@ namespace surface {
 namespace primitive {
 namespace cube {
 
-boost::tuple<surface::instance_t, box_t>
+boost::tuple<surface::instance_t, box_t, std::size_t>
 make(const description_t& description);
 
 }

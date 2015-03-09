@@ -21,7 +21,7 @@ extern template class instance<sphere::model>;
 
 namespace sphere {
 
-boost::tuple<surface::instance_t, box_t>
+boost::tuple<surface::instance_t, box_t, std::size_t>
 make(const description_t& description)
 {
 	BOOST_LOG_TRIVIAL(debug) << "Make surface sphere";
@@ -39,7 +39,8 @@ make(const description_t& description)
 	return boost::make_tuple
 	(
 		primitive::make<model>(transformation * description->transformation),
-		box
+		box,
+		2
 	);
 }
 

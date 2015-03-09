@@ -26,10 +26,10 @@ make(const description_t& description)
 	return std::move(instance);
 }
 */
-boost::tuple<instance_t, box_t>
+boost::tuple<instance_t, box_t, std::size_t>
 make(const description_t& description)
 {
-	const boost::tuple<surface::instance_t, box_t> surface = surface::make(description->surface);
+	const boost::tuple<surface::instance_t, box_t, std::size_t> surface = surface::make(description->surface);
 
 	BOOST_LOG_TRIVIAL(debug) << "Make object";
 
@@ -40,7 +40,8 @@ make(const description_t& description)
 			surface.get<0>(),
 			texture::make(description->texture)
 		),
-		surface.get<1>()
+		surface.get<1>(),
+		surface.get<2>()
 	);
 /*
 	const instance_t instance

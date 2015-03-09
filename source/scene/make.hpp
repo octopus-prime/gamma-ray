@@ -13,7 +13,7 @@
 namespace rt {
 namespace scene {
 
-instance_t
+boost::tuple<instance_t, std::size_t>
 make(const description_t& description);
 
 }

@@ -21,7 +21,7 @@ extern template class instance<difference::model>;
 
 namespace difference {
 
-boost::tuple<surface::instance_t, box_t>
+boost::tuple<surface::instance_t, box_t, std::size_t>
 make(const description_t& description)
 {
 	const auto surface1 = surface::make(description->surface1);
@@ -40,7 +40,8 @@ make(const description_t& description)
 			surface1.get<0>(),
 			surface2.get<0>()
 		),
-		box
+		box,
+		surface1.get<2>() + surface2.get<2>() // TODO: check this
 	);
 }
 

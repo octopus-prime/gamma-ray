@@ -21,7 +21,7 @@ extern template class instance<quadric::model>;
 
 namespace quadric {
 
-boost::tuple<surface::instance_t, box_t>
+boost::tuple<surface::instance_t, box_t, std::size_t>
 make(const description_t& description)
 {
 	BOOST_LOG_TRIVIAL(debug) << "Make surface quadric";
@@ -50,7 +50,8 @@ make(const description_t& description)
 	return boost::make_tuple
 	(
 		primitive::make<model>(description->transformation, std::move(m)),
-		box
+		box,
+		2
 	);
 }
 

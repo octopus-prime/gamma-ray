@@ -57,29 +57,29 @@ configure(const int argc, const char* const argv[])
 	return std::move(configuration);
 }
 
-static rt::scene::instance_t
+static boost::tuple<rt::scene::instance_t, std::size_t>
 preprocess(const std::string& file)
 {
 	BOOST_LOG_NAMED_SCOPE("Preprocessing");
 	BOOST_LOG_TRIVIAL(info) << "Preprocessing start";
 
 	const rt::scene::description_t description = rt::parsing::parse(file);
-	const rt::scene::instance_t instance = rt::scene::make(description);
+	const boost::tuple<rt::scene::instance_t, std::size_t> instance = rt::scene::make(description);
 
-	BOOST_LOG_TRIVIAL(info) << "Created " << instance.lights().size() << " lights";
-	BOOST_LOG_TRIVIAL(info) << "Created " << instance.objects().size() << " objects";
+	BOOST_LOG_TRIVIAL(info) << "Created " << instance.get<0>().lights().size() << " lights";
+	BOOST_LOG_TRIVIAL(info) << "Created " << instance.get<0>().objects().size() << " objects";
 	BOOST_LOG_TRIVIAL(info) << "Preprocessing done" << std::endl;
 
 	return std::move(instance);
 }
 
 static rt::rendering::image_t
-render(const rt::configuration_t& configuration, const rt::scene::instance_t& scene)
+render(const rt::configuration_t& configuration, const boost::tuple<rt::scene::instance_t, std::size_t>& scene)
 {
 	BOOST_LOG_NAMED_SCOPE("Rendering");
 	BOOST_LOG_TRIVIAL(info) << "Rendering start";
 
-	const rt::rendering::renderer_t render(scene, static_cast<rt::rendering::AA>(configuration.aa), configuration.depth);
+	const rt::rendering::renderer_t render(scene.get<0>(), static_cast<rt::rendering::AA>(configuration.aa), configuration.depth, scene.get<1>());
 	rt::rendering::image_t image(configuration.width, configuration.height);
 
 	render(boost::gil::view(image));
@@ -109,7 +109,7 @@ main(int argc, char** argv)
 	{
 		const rt::configuration_t configuration = configure(argc, argv);
 		const rt::rendering::image_writer_t write = rt::rendering::make_writer(configuration.output);
-		const rt::scene::instance_t scene = preprocess(configuration.input);
+		const boost::tuple<rt::scene::instance_t, std::size_t> scene = preprocess(configuration.input);
 		const rt::rendering::image_t image = render(configuration, scene);
 		postprocess(write, image);
 

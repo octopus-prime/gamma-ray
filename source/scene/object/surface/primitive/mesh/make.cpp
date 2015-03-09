@@ -23,7 +23,7 @@ extern template class instance<mesh::model>;
 
 namespace mesh {
 
-boost::tuple<surface::instance_t, box_t>
+boost::tuple<surface::instance_t, box_t, std::size_t>
 make(const description_t& description)
 {
 	BOOST_LOG_TRIVIAL(debug) << "Make surface mesh";
@@ -110,7 +110,10 @@ make(const description_t& description)
 			std::move(triangles),
 			std::move(rtree)
 		),
-		box
+		box,
+		6
+		// TODO: Don't know :( triangles intersect with segment max 3 times (the connection point of 3 triangles).
+		// TODO: in and out should give 6 hits. but triangles in mesh could be behind each other
 	);
 }
 

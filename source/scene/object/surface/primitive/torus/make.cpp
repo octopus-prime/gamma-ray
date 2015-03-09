@@ -20,7 +20,7 @@ extern template class instance<torus::model>;
 
 namespace torus {
 
-boost::tuple<surface::instance_t, box_t>
+boost::tuple<surface::instance_t, box_t, std::size_t>
 make(const description_t& description)
 {
 	BOOST_LOG_TRIVIAL(debug) << "Make surface torus";
@@ -40,7 +40,8 @@ make(const description_t& description)
 			description->major,
 			description->minor
 		),
-		box
+		box,
+		4
 	);
 }
 

@@ -29,7 +29,7 @@ enum class AA
 class renderer_t
 {
 public:
-	renderer_t(const scene::instance_t& scene, const AA aa, const std::size_t depth);
+	renderer_t(const scene::instance_t& scene, const AA aa, const std::size_t depth, const std::size_t max);
 	void operator()(view_t view) const;
 
 protected:

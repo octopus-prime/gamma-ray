@@ -15,7 +15,7 @@
 namespace rt {
 namespace scene {
 
-instance_t
+boost::tuple<instance_t, std::size_t>
 make(const description_t& description)
 {
 	camera::instance_t camera = camera::make(description->camera);
@@ -38,12 +38,14 @@ make(const description_t& description)
 */
 	object::instances_t objects;
 	rtree_t rtree;
+	std::size_t hits = 0;
 	for (std::size_t i = 0; i < description->objects.size(); ++i)
 	{
 		const auto& d = description->objects[i];
 		const auto o = object::make(d);
 		objects.push_back(o.get<0>());
 		rtree.insert(value_t(o.get<1>(), i));
+		hits += o.get<2>();
 	}
 
 	const box_t box// TODO: puke =>
@@ -70,7 +72,7 @@ make(const description_t& description)
 		std::move(objects),
 		std::move(rtree)
 	);
-	return std::move(instance);
+	return boost::make_tuple(std::move(instance), hits);
 }
 
 }

@@ -36,7 +36,51 @@ struct hit_t
 	}
 };
 
-typedef std::vector<hit_t> hits_t;
+template <typename T>
+class temporary_buffer
+{
+public:
+	typedef T* iterator;
+	typedef const T* const const_iterator;
+
+	temporary_buffer(const std::size_t size)
+	:
+		_buffer(std::get_temporary_buffer<T>(size))
+	{
+	}
+
+	~temporary_buffer() noexcept
+	{
+		std::return_temporary_buffer(_buffer.first);
+	}
+
+	iterator begin()
+	{
+		return _buffer.first;
+	}
+
+	const_iterator cbegin() const
+	{
+		return _buffer.first;
+	}
+
+	iterator end()
+	{
+		return _buffer.first + _buffer.second;
+	}
+
+	const_iterator cend() const
+	{
+		return _buffer.first + _buffer.second;
+	}
+
+private:
+	std::pair<T*, std::ptrdiff_t> _buffer;
+};
+
+typedef temporary_buffer<hit_t> hits_t;
+
+//typedef std::vector<hit_t> hits_t;
 
 class distance_iterator
 :

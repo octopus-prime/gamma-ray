@@ -18,7 +18,7 @@ namespace object {
 //instance_t
 //make(const description_t& description);
 
-boost::tuple<instance_t, box_t>
+boost::tuple<instance_t, box_t, std::size_t>
 make(const description_t& description);
 
 }
