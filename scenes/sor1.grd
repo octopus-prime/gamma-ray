@@ -12,13 +12,13 @@ sor = Object
 	}
 	texture = MetallicRed
 }
-sor.translate(-4 * Y)
+sor.translate(<0, -4, +5>)
 
 scene = Scene
 {
 	camera = Camera
 	{
-		origin = -10 * Z
+		origin = -5 * Z
 		direction = Z
 	}
 
