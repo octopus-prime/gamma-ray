@@ -14,6 +14,7 @@
 #include <scene/object/surface/primitive/quadric/parser.hpp>
 #include <scene/object/surface/primitive/torus/parser.hpp>
 #include <scene/object/surface/primitive/text/parser.hpp>
+#include <scene/object/surface/primitive/plane/parser.hpp>
 #include <boost/spirit/include/qi_grammar.hpp>
 
 namespace qi = boost::spirit::qi;
@@ -40,6 +41,7 @@ private:
 	quadric::parser<Iterator, Skipper> _quadric;
 	torus::parser<Iterator, Skipper> _torus;
 	text::parser<Iterator, Skipper> _text;
+	plane::parser<Iterator, Skipper> _plane;
 };
 
 }

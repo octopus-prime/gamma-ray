@@ -13,3 +13,4 @@
 #include <scene/object/surface/primitive/quadric/description.hpp>
 #include <scene/object/surface/primitive/torus/description.hpp>
 #include <scene/object/surface/primitive/text/description.hpp>
+#include <scene/object/surface/primitive/plane/description.hpp>

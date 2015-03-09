@@ -45,6 +45,13 @@ right2 = Object
 }
 right2.translate(<+3.5 , -2, 0>)
 
+plane = Object
+{
+	surface = Plane { }
+	texture = SolidRed
+}
+plane.translate(<0, -3, 0>)
+
 scene = Scene
 {
 	camera = Camera
@@ -74,7 +81,8 @@ scene = Scene
 		left1,
 		right1,
 		left2,
-		right2
+		right2,
+		plane
 	]
 }
 

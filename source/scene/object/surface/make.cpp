@@ -12,6 +12,7 @@
 #include <scene/object/surface/primitive/torus/make.hpp>
 #include <scene/object/surface/primitive/mesh/make.hpp>
 #include <scene/object/surface/primitive/text/make.hpp>
+#include <scene/object/surface/primitive/plane/make.hpp>
 #include <scene/object/surface/csg/difference/make.hpp>
 #include <scene/object/surface/csg/intersection/make.hpp>
 #include <scene/object/surface/csg/union/make.hpp>
@@ -75,6 +76,11 @@ public:
 	result_type operator()(const primitive::text::description_t& description) const
 	{
 		return primitive::text::make(description);
+	}
+
+	result_type operator()(const primitive::plane::description_t& description) const
+	{
+		return primitive::plane::make(description);
 	}
 };
 
