@@ -11,6 +11,7 @@
 #include <gsl/gsl_poly.h>
 #include "solve_quartic.h"
 #include <functional>
+#include <complex>
 
 namespace rt {
 
@@ -175,6 +176,17 @@ solve(const basic_polynomial_t<N>& polynomial, Iterator iterator)
 
 		iterator = solve(q, iterator);
 		iterator = solve(r, iterator);
+	}
+	else
+	{
+		constexpr std::size_t M = N - 1;
+		boost::array<std::complex<double>, M> roots;
+		boost::array<double, M * M> matrix;
+		gsl_poly_complex_workspace workspace {M, matrix.data()};
+		if (gsl_poly_complex_solve(polynomial.data(), N, &workspace, reinterpret_cast<double*>(roots.data())) == 0)
+			for (const std::complex<double>& root : roots)
+				if (std::imag(root) == 0.0)
+					*iterator++ = std::real(root);
 	}
 
 	return iterator;

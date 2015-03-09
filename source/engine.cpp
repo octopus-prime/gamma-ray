@@ -16,6 +16,7 @@
 #include <iostream>
 #include <boost/log/trivial.hpp>
 #include <boost/log/attributes/named_scope.hpp>
+#include <gsl/gsl_errno.h>
 
 /*
 //#include <scene/object/texture/noise/make.hpp>
@@ -105,6 +106,7 @@ main(int argc, char** argv)
 {
 	std::cout << std::endl << "γ-ray version 0.1" << std::endl << std::endl;
 
+	gsl_set_error_handler_off();
 	try
 	{
 		const rt::configuration_t configuration = configure(argc, argv);
