@@ -1,0 +1,45 @@
+// SoR example
+
+include "includes/constants.gri"
+include "includes/surfaces.gri"
+include "includes/textures.gri"
+
+sor = Object
+{
+	surface = SoR
+	{
+		points = [ <1, 3>, <2, 5>, <3, 4>, <4, 2>, <5, 4>, <6, 4>, <7, 3> ]
+	}
+	texture = MetallicRed
+}
+sor.translate(-4 * Y)
+
+scene = Scene
+{
+	camera = Camera
+	{
+		origin = -10 * Z
+		direction = Z
+	}
+
+	lights =
+	[
+		Light
+		{
+			origin = <+5, +5, -5>
+			color = White * 5
+		},
+		Light
+		{
+			origin = <-5, +5, -5>
+			color = White * 5
+		}
+	]
+
+	objects =
+	[
+		sor
+	]
+}
+
+render(scene)
