@@ -14,3 +14,4 @@
 #include <scene/object/surface/primitive/torus/description.hpp>
 #include <scene/object/surface/primitive/text/description.hpp>
 #include <scene/object/surface/primitive/plane/description.hpp>
+#include <scene/object/surface/primitive/sor/description.hpp>

@@ -12,8 +12,6 @@
 #include <geo/box.hpp>
 #include <boost/geometry/index/rtree.hpp>
 
-namespace geo = boost::geometry;
-
 namespace rt {
 namespace scene {
 namespace object {
