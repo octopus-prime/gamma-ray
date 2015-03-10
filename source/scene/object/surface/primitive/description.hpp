@@ -15,3 +15,4 @@
 #include <scene/object/surface/primitive/text/description.hpp>
 #include <scene/object/surface/primitive/plane/description.hpp>
 #include <scene/object/surface/primitive/sor/description.hpp>
+#include <scene/object/surface/primitive/superellipsoid/description.hpp>

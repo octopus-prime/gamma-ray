@@ -14,6 +14,7 @@
 #include <scene/object/surface/primitive/text/make.hpp>
 #include <scene/object/surface/primitive/plane/make.hpp>
 #include <scene/object/surface/primitive/sor/make.hpp>
+#include <scene/object/surface/primitive/superellipsoid/make.hpp>
 #include <scene/object/surface/csg/difference/make.hpp>
 #include <scene/object/surface/csg/intersection/make.hpp>
 #include <scene/object/surface/csg/union/make.hpp>
@@ -87,6 +88,11 @@ public:
 	result_type operator()(const primitive::sor::description_t& description) const
 	{
 		return primitive::sor::make(description);
+	}
+
+	result_type operator()(const primitive::superellipsoid::description_t& description) const
+	{
+		return primitive::superellipsoid::make(description);
 	}
 };
 

@@ -1,0 +1,79 @@
+// Superellipsoid example
+
+include "includes/constants.gri"
+include "includes/surfaces.gri"
+include "includes/textures.gri"
+
+superellipsoid = Object
+{
+	surface = Superellipsoid
+	{
+		e = 1
+		n = 1
+	}
+	texture = MetallicRed
+}
+superellipsoid.scale(<2, 2, 2>)
+superellipsoid.rotate(<30,30,30>)
+
+left1 = Object
+{
+	surface = Sphere { }
+	texture = MetallicGreen
+}
+left1.translate(<-3.5, +2, 0>)
+
+left2 = Object
+{
+	surface = Sphere { }
+	texture = MetallicCyan
+}
+left2.translate(<-3.5, -2, 0>)
+
+right1 = Object
+{
+	surface = Sphere { }
+	texture = MetallicBlue
+}
+right1.translate(<+3.5 , +2, 0>)
+
+right2 = Object
+{
+	surface = Sphere { }
+	texture = MetallicYellow
+}
+right2.translate(<+3.5 , -2, 0>)
+
+scene = Scene
+{
+	camera = Camera
+	{
+		origin = -5 * Z
+		direction = Z
+	}
+
+	lights =
+	[
+		Light
+		{
+			origin = <+5, +5, -5>
+			color = White * 5
+		},
+		Light
+		{
+			origin = <-5, +5, -5>
+			color = White * 5
+		}
+	]
+
+	objects =
+	[
+		superellipsoid,
+		left1,
+		right1,
+		left2,
+		right2
+	]
+}
+
+render(scene)

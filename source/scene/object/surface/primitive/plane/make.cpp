@@ -40,7 +40,7 @@ make(const description_t& description)
 
 	return boost::make_tuple
 	(
-		primitive::make<model>(description->transformation),
+		primitive::make<model>(description->transformation, vector3_t {{0,1,0}}),
 		box,
 		1
 	);

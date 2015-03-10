@@ -14,6 +14,7 @@
 #include <scene/object/surface/primitive/text/model.hpp>
 #include <scene/object/surface/primitive/plane/model.hpp>
 #include <scene/object/surface/primitive/sor/model.hpp>
+#include <scene/object/surface/primitive/superellipsoid/model.hpp>
 #include <boost/iterator/filter_iterator.hpp>
 
 namespace rt {
@@ -75,6 +76,7 @@ template class instance<mesh::model>;
 template class instance<text::model>;
 template class instance<plane::model>;
 template class instance<sor::model>;
+template class instance<superellipsoid::model>;
 
 }
 }

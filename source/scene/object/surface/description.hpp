@@ -27,6 +27,7 @@ typedef boost::variant
 	primitive::text::description_t,
 	primitive::plane::description_t,
 	primitive::sor::description_t,
+	primitive::superellipsoid::description_t,
 	// TODO: more surface types here...
 	boost::recursive_wrapper<csg::description_t<csg::union_tag>>,
 	boost::recursive_wrapper<csg::description_t<csg::intersection_tag>>,

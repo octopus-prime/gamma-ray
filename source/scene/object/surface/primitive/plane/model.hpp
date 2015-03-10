@@ -19,15 +19,19 @@ namespace plane {
 class model
 {
 public:
+	model(vector3_t&& normal)
+	:
+		_normal(std::forward<vector3_t>(normal))
+	{
+	}
+
 	rendering::hits_t::iterator
 	hit(const rendering::ray_t& ray, const rendering::hits_t::iterator hits) const
 	{
-		static constexpr vector3_t normal {{0,1,0}};
-
 		const polynomial1_t polynomial
 		{{
-			normal * ray.origin(),
-			normal * ray.direction()
+			_normal * ray.origin(),
+			_normal * ray.direction()
 		}};
 
 		const rendering::distance_iterator begin(hits);
@@ -38,7 +42,7 @@ public:
 			hits, hits + std::distance(begin, end),
 			[this, &ray](rendering::hit_t& hit)
 			{
-				hit.normal = normal;
+				hit.normal = _normal;
 			}
 		);
 
@@ -51,6 +55,8 @@ public:
 		return false; // TODO
 	}
 
+private:
+	vector3_t _normal;
 };
 
 }
