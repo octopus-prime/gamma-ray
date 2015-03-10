@@ -23,11 +23,14 @@ torusY = Torus
 	minor = 0.5
 }
 torusY.rotate(90 * X)
-
+/*
 sphere = Sphere
 {
 	radius = 2.0
 }
+*/
+sphere = aSphere
+sphere.scale(<2,2,2>)
 
 csg = Object
 {
