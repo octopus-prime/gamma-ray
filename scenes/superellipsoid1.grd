@@ -8,8 +8,8 @@ superellipsoid = Object
 {
 	surface = Superellipsoid
 	{
-		e = 1
-		n = 1
+		e = 1.5
+		n = 3
 	}
 	texture = MetallicRed
 }

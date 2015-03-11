@@ -9,7 +9,9 @@
 
 #include <scene/object/surface/primitive/plane/model.hpp>
 #include <scene/object/surface/primitive/cube/model.hpp>
-#include <boost/math/tools/roots.hpp>
+#include <math/interval.hpp>
+//#include <boost/container/static_vector.hpp>
+//#include <boost/math/tools/roots.hpp>
 
 namespace rt {
 namespace scene {
@@ -64,13 +66,90 @@ private:
 	const rendering::ray_t& _ray;
 };
 
+class superellipsoid
+{
+public:
+	constexpr
+	superellipsoid(const interval_t::base_type e, const interval_t::base_type n, const rendering::ray_t& ray)
+	:
+		_e(e),
+		_n(n),
+		_ray(ray)
+	{
+	}
+
+	template <typename Value>
+	boost::math::tuple<Value, Value>
+	operator()(const Value& t) const
+	{
+		constexpr interval_t::base_type h = 1e-3;
+		return boost::math::make_tuple
+		(
+			function(t),
+			(function(t + h) - function(t - h)) / (2 * h)
+//			(function(t - Value(2) * h) - Value(8) * function(t - h) + Value(8) * function(t + h) - function(t + Value(2) * h)) / (Value(12) * h)
+		);
+	}
+
+protected:
+	/*
+	template <typename Value>
+	Value
+	function(const Value& t) const
+	{
+		const Value x = Value(_ray.origin()[X] + _ray.direction()[X] * t);
+		const Value y = Value(_ray.origin()[Y] + _ray.direction()[Y] * t);
+		const Value z = Value(_ray.origin()[Z] + _ray.direction()[Z] * t);
+
+		return power(power(x * x, _e) + power(z * z, _e), _n/_e) + power(y * y, _n) - Value(1);
+	}
+	*/
+
+	float
+	function(const float t) const
+	{
+		const vector3_t p = _ray(t);
+		const vector3_t s = p & p;
+
+		return std::pow(std::pow(s[X], _e) + std::pow(s[Z], _e), _n/_e) + std::pow(s[Y], _n) - 1.f;
+	}
+
+	template <typename Value>
+	Value
+	function(const Value& t) const
+	{
+		const Value x = Value(_ray.origin()[X] + _ray.direction()[X] * t);
+		const Value y = Value(_ray.origin()[Y] + _ray.direction()[Y] * t);
+		const Value z = Value(_ray.origin()[Z] + _ray.direction()[Z] * t);
+
+		return power(power(x * x, _e) + power(z * z, _e), _n/_e) + power(y * y, _n) - Value(1);
+	}
+/*
+	float
+	power(const float x, const float y) const
+	{
+		return std::pow(x, y);
+	}
+*/
+	interval_t
+	power(const interval_t x, const float y) const
+	{
+		return interval_t(std::pow(x.lower(), y), std::pow(x.upper(), y));
+	}
+
+private:
+	interval_t::base_type _e;
+	interval_t::base_type _n;
+	const rendering::ray_t& _ray;
+};
+
 class model
 {
 public:
 	model(const float e, const float n)
 	:
-		_e(2.f / e),
-		_n(2.f / n),
+		_e(1.f / e),
+		_n(1.f / n),
 		_function(_e, _n),
 		_cube(),
 		_planes
@@ -107,7 +186,8 @@ public:
 
 		std::sort(distance_begin, distance_end);
 
-		const distance_function_t function(_function, ray);
+//		const distance_function_t function(_function, ray);
+		const solver_t<superellipsoid> find(superellipsoid(_e, _n, ray), 1e-5);
 
 		end = hits;
 		for (auto distance = distance_begin; distance != distance_end - 1; ++distance)
@@ -115,9 +195,9 @@ public:
 			const float x0 = distance[0];// - std::numeric_limits<float>::epsilon();
 			const float x1 = distance[1];// + std::numeric_limits<float>::epsilon();
 
-//			if (min > x0 || x0 > max || min > x1 || x1 > max)
-//				continue;
-
+			if (min > x0 || x0 > max || min > x1 || x1 > max)
+				continue;
+/*
 			const float f0 = function(x0);
 			const float f1 = function(x1);
 
@@ -147,7 +227,41 @@ public:
 			{
 				std::cout << '.';
 			}
+*/
+			boost::array<float, 10> roots;
+			auto distance_begin(roots.begin());
+			auto distance_end = find(interval_t(x0, x1), distance_begin, solver_lowest());
+
+			if (distance_begin != distance_end)
+			{
+				if (ray[*distance_begin])
+				{
+					end->distance = *distance_begin;
+					end->normal = normal(ray(*distance_begin));
+					++end;
+					return end;
+				}
+			}
 		}
+/*
+		const solver_t<superellipsoid> find(superellipsoid(_e, _n, ray), 1e-5);
+//		const rendering::distance_iterator distance_begin(hits);
+//		rendering::distance_iterator distance_end = find(interval_t(min, max), distance_begin);
+		boost::array<float, 10> roots;
+		auto distance_begin(roots.begin());
+		auto distance_end = find(interval_t(min, max), distance_begin, solver_lowest());
+
+		end = hits;
+		for (auto distance = distance_begin; distance != distance_end; ++distance)
+		{
+			if (ray[*distance])
+			{
+				end->distance = *distance;
+				end->normal = normal(ray(*distance));
+				++end;
+			}
+		}
+*/
 		return end;
 	}
 
@@ -161,24 +275,26 @@ protected:
 	vector3_t
 	normal(const vector3_t& point) const
 	{
-		return point; // test for e = n = 1
-/*
-		const float p = std::pow(std::abs(point[Y]), _n);
+//		return point; // test for e = n = 1
+
+		const float p = std::pow(point[Y] * point[Y], _n);
 		vector3_t result {{1 - p, p, 1 - p}};
 
-		if (std::abs(point[X]) > std::abs(point[Z]))
+		const float x2 = point[X] * point[X];
+		const float z2 = point[Z] * point[Z];
+		if (x2 > z2)
 		{
-			const float q = std::pow(std::abs(point[Z] / point[X]), _e);
+			const float q = std::pow(z2 / x2, _e);
 			result &= {{1, 1 + q, q}};
 		}
 		else
 		{
-			const float q = std::pow(std::abs(point[X] / point[Z]), _e);
+			const float q = std::pow(x2 / z2, _e);
 			result &= {{q, 1 + q, 1}};
 		}
 
 		return result | point;
-*/
+
 	}
 
 private:

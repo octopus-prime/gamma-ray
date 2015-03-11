@@ -28,21 +28,23 @@ using basic_interval_t = boost::numeric::interval
 
 typedef basic_interval_t<float> interval_t;	// Change to double for exacter results...
 
+struct solver_lowest {};
+struct solver_all {};
+
 template <typename Function>
 class solver_t
 {
 public:
-	template<typename... Args>
-	constexpr
-	solver_t(Args&&... args)
+	solver_t(const Function& function, const interval_t::base_type eps = std::numeric_limits<interval_t::base_type>::epsilon())
 	:
-		_function(std::forward<Args>(args)...)
+		_function(function),
+		_eps(eps)
 	{
 	}
 
 	template <typename Iterator>
 	Iterator
-	operator()(const interval_t& interval, Iterator iterator) const
+	operator()(const interval_t& interval, Iterator iterator, solver_all) const
 	{
 		const auto result = _function(interval);
 
@@ -56,14 +58,42 @@ public:
 			return iterator;
 		}
 
-		if (std::abs(interval.lower() - interval.upper()) <= std::numeric_limits<interval_t::base_type>::epsilon())
+		if (boost::numeric::width(interval) <= _eps)
 			return iterator;
 
-		const auto middle = interval_t::base_type(0.5) * (interval.lower() + interval.upper());
-		iterator = (*this)(interval_t(interval.lower(), middle), iterator);
-		iterator = (*this)(interval_t(middle, interval.upper()), iterator);
+		const auto median = boost::numeric::median(interval);
+		iterator = (*this)(interval_t(interval.lower(), median), iterator, solver_all());
+		iterator = (*this)(interval_t(median, interval.upper()), iterator, solver_all());
 
 		return iterator;
+	}
+
+	template <typename Iterator>
+	Iterator
+	operator()(const interval_t& interval, Iterator iterator, solver_lowest) const
+	{
+		const auto result = _function(interval);
+
+		if (boost::math::get<0>(result).lower() * boost::math::get<0>(result).upper() > 0)
+			return iterator;
+
+		if (boost::math::get<1>(result).lower() * boost::math::get<1>(result).upper() > 0)
+		{
+			if (boost::math::get<0>(_function(interval.lower())) * boost::math::get<0>(_function(interval.upper())) <= 0)
+				*iterator++ = solve(interval);
+			return iterator;
+		}
+
+		if (boost::numeric::width(interval) <= _eps)
+			return iterator;
+
+		const auto median = boost::numeric::median(interval);
+		Iterator end = (*this)(interval_t(interval.lower(), median), iterator, solver_lowest());
+		if (iterator != end)
+			return end;
+		end = (*this)(interval_t(median, interval.upper()), end, solver_lowest());
+
+		return end;
 	}
 
 protected:
@@ -73,7 +103,7 @@ protected:
 		return boost::math::tools::newton_raphson_iterate
 		(
 			_function,
-			interval_t::base_type(0.5) * (interval.lower() + interval.upper()),
+			boost::numeric::median(interval),
 			interval.lower(),
 			interval.upper(),
 			std::numeric_limits<interval_t::base_type>::digits
@@ -81,7 +111,8 @@ protected:
 	}
 
 private:
-	Function _function;
+	const Function& _function;
+	interval_t::base_type _eps;
 };
 
 }
