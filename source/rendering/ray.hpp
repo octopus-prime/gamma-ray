@@ -58,7 +58,7 @@ public:
 
 	bool operator[](const float distance) const noexcept
 	{
-		return _min < distance && distance < _max;
+		return _min <= distance && distance <= _max;
 	}
 
 	ray_t operator()(const matrix44_t& transformation) const noexcept
