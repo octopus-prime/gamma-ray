@@ -52,7 +52,7 @@ public:
 	{
 	}
 
-	boost::math::tuple<float, float>
+	boost::math::tuple<float, float>//, float>
 	operator()(const float t) const
 	{
 		constexpr float h = 1e-4;
@@ -60,6 +60,7 @@ public:
 		(
 			function(t),
 			(function(t + h) - function(t - h)) / (2 * h)
+//			(function(t + h) - 2 * function(t) + function(t - h)) / (h * h)
 		);
 	}
 
@@ -130,7 +131,7 @@ public:
 			if (min > x0 || x0 > max || min > x1 || x1 > max)
 				continue;
 
-			boost::uintmax_t max = 1000;
+			boost::uintmax_t max = 100;
 			const float t = boost::math::tools::newton_raphson_iterate
 			(
 				function,
