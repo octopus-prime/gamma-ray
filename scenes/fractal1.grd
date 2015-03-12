@@ -1,0 +1,77 @@
+// Fractal example
+
+include "includes/constants.gri"
+include "includes/surfaces.gri"
+include "includes/textures.gri"
+
+fractal = Object
+{
+	surface = Fractal
+	{
+	}
+	texture = MetallicRed
+}
+//fractal.scale(<5, 5, 5>)
+//fractal.rotate(<-15,15,0>)
+
+left1 = Object
+{
+	surface = Sphere { }
+	texture = MetallicGreen
+}
+left1.translate(<-3.5, +2, 0>)
+
+left2 = Object
+{
+	surface = Sphere { }
+	texture = MetallicCyan
+}
+left2.translate(<-3.5, -2, 0>)
+
+right1 = Object
+{
+	surface = Sphere { }
+	texture = MetallicBlue
+}
+right1.translate(<+3.5 , +2, 0>)
+
+right2 = Object
+{
+	surface = Sphere { }
+	texture = MetallicYellow
+}
+right2.translate(<+3.5 , -2, 0>)
+
+scene = Scene
+{
+	camera = Camera
+	{
+		origin = -5 * Z
+		direction = Z
+	}
+
+	lights =
+	[
+		Light
+		{
+			origin = <+5, +5, -5>
+			color = White * 5
+		},
+		Light
+		{
+			origin = <-5, +5, -5>
+			color = White * 5
+		}
+	]
+
+	objects =
+	[
+		fractal,
+		left1,
+		right1,
+		left2,
+		right2
+	]
+}
+
+render(scene)

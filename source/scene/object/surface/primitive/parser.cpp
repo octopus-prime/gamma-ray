@@ -34,6 +34,7 @@ extern template class text::parser<parsing::iterator_t, parsing::skipper::parser
 extern template class plane::parser<parsing::iterator_t, parsing::skipper::parser<parsing::iterator_t>>;
 extern template class sor::parser<parsing::iterator_t, parsing::skipper::parser<parsing::iterator_t>>;
 extern template class superellipsoid::parser<parsing::iterator_t, parsing::skipper::parser<parsing::iterator_t>>;
+extern template class fractal::parser<parsing::iterator_t, parsing::skipper::parser<parsing::iterator_t>>;
 
 static const std::string NAME("Primitive");
 
@@ -49,7 +50,8 @@ parser<Iterator, Skipper>::parser(const parsing::variable::descriptions_t& descr
 	_text(),
 	_plane(),
 	_sor(descriptions),
-	_superellipsoid(descriptions)
+	_superellipsoid(descriptions),
+	_fractal()
 {
 	_description =
 			_sphere
@@ -68,7 +70,9 @@ parser<Iterator, Skipper>::parser(const parsing::variable::descriptions_t& descr
 			|
 			_sor
 			|
-			_superellipsoid;
+			_superellipsoid
+			|
+			_fractal
 	;
 }
 
