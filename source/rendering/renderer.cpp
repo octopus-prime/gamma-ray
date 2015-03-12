@@ -5,6 +5,7 @@
  *      Author: mike_gresens
  */
 
+#include "progress.hpp"
 #include <rendering/renderer.hpp>
 #include <rendering/tracer.hpp>
 #include <tbb/blocked_range2d.h>
@@ -25,12 +26,14 @@ renderer_t::renderer_t(const scene::instance_t& scene, const AA aa, const std::s
 void
 renderer_t::operator()(view_t view) const
 {
+	progress_t progress(view.width() * view.height());
+
 	const float factor = float(view.width()) / float(view.height());
 	const vector2_t increment {{factor / view.width(), 1.0f / view.height() }};
 	tbb::parallel_for
 	(
 		tbb::blocked_range2d<coord_t>(0, view.height(), 0, view.width()),
-		[&view, this, &increment, factor](const tbb::blocked_range2d<coord_t>& range)
+		[&view, this, &increment, factor, &progress](const tbb::blocked_range2d<coord_t>& range)
 		{
 			const tracer_t trace(_scene, _max);
 			for (coord_t y = range.rows().begin(); y != range.rows().end(); ++y)
@@ -39,6 +42,7 @@ renderer_t::operator()(view_t view) const
 				{
 					const vector2_t point{{float(x) * increment[X] - 0.5f * factor, float(y) * increment[Y] - 0.5f}};
 					view(view.width() - x - 1, view.height() - y - 1) = to_pixel(render(point, increment, trace));
+					++progress.done();
 				}
 			}
 		}
