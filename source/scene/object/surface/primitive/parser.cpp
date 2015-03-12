@@ -51,7 +51,7 @@ parser<Iterator, Skipper>::parser(const parsing::variable::descriptions_t& descr
 	_plane(),
 	_sor(descriptions),
 	_superellipsoid(descriptions),
-	_fractal()
+	_fractal(descriptions)
 {
 	_description =
 			_sphere

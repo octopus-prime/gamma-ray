@@ -7,7 +7,10 @@
 
 #pragma once
 
+#include <geo/segment.hpp>
+#include <geo/box.hpp>
 #include <boost/math/quaternion.hpp>
+#include <boost/geometry/index/rtree.hpp>
 
 namespace rt {
 namespace scene {
@@ -16,68 +19,48 @@ namespace surface {
 namespace primitive {
 namespace fractal {
 
+typedef boost::math::quaternion<float> quaternion_t;
+typedef boost::function<float (vector3_t)> estimation_t;
+
+typedef std::pair<box_t, bool> value_t;
+typedef geo::index::rtree<value_t, geo::index::rstar<16>> rtree_t; // TODO: parse parameter
+
 class model
 {
-	typedef boost::math::quaternion<float> Q;
-
-	class julia_t
-	{
-	public:
-		Q operator()(const Q& z) const
-		{
-			return z * z + _c;
-		};
-
-		float operator()(const vector3_t& point) const
-		{
-			Q q(point[X], point[Y], point[Z], (_d - _s * point) / _t);
-			Q r = _c;
-
-			for (std::size_t i = 0; i < _n; ++i)
-			{
-				if (boost::math::abs(q) > _e)
-					break;
-				r = 2.0f * q * r;
-				q = (*this)(q);
-			}
-
-			const float R = boost::math::l1(r);
-			const float Q = boost::math::l1(q);
-
-			return 0.5f * std::log(Q) * Q / R;
-		}
-
-	private:
-		Q _c = Q(-0.08, 0.0, -0.8, -0.03);
-		std::size_t _n = 20;
-		rt::vector3_t _s = {{0,0,0}};
-		float _t = 1;
-		float _d = 0;
-		float _e = 4;
-	};
-
 public:
+	model(estimation_t&& estimate, const float precision, rtree_t&& rtree)
+	:
+		_estimate(std::forward<estimation_t>(estimate)),
+		_precision(precision),
+		_rtree(std::forward<rtree_t>(rtree))
+	{
+	}
+
 	rendering::hits_t::iterator
 	hit(const rendering::ray_t& ray, const rendering::hits_t::iterator hits) const
 	{
-		float t = ray.min();
+		const segment_t segment = ray;
+		value_t value(box_t(), false);
+		_rtree.query(geo::index::intersects(segment) && geo::index::nearest(segment.first, 1), &value);
+		if (!value.second)
+			return hits;
 
-		for (int i = 0; i < 100; ++i)
+		for (float distance = ray.min();;)
 		{
-			const vector3_t p = ray(t);
-			const float e = _julia(p);
+			const vector3_t point = ray(distance);
+			const float estimation = _estimate(point);
 
-//			if (!ray[t])
-//				return hits;
+			if (!ray[distance])
+				return hits;
 
-			if (e < 1e-4)
+			if (estimation < _precision)
 			{
-				hits->distance = t;
-				hits->normal = p;	// TODO
+				hits->distance = distance;
+				hits->normal = normal(point);
 				return hits + 1;
 			}
 
-			t += e;
+			distance += estimation;
 		}
 
 		return hits;
@@ -90,8 +73,26 @@ public:
 	}
 
 protected:
+	vector3_t
+	normal(const vector3_t& point) const
+	{
+		constexpr float D = 1e-4;
+		constexpr vector3_t X {{D, 0, 0}};
+		constexpr vector3_t Y {{0, D, 0}};
+		constexpr vector3_t Z {{0, 0, D}};
+
+		return vector3_t
+		{{
+			_estimate(point + X) - _estimate(point - X),
+			_estimate(point + Y) - _estimate(point - Y),
+			_estimate(point + Z) - _estimate(point - Z)
+		}};
+	}
+
 private:
-	julia_t _julia;
+	estimation_t _estimate;
+	float _precision;
+	rtree_t _rtree;
 };
 
 }

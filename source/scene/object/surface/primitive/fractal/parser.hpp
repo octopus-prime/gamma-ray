@@ -8,6 +8,8 @@
 #pragma once
 
 #include <scene/object/surface/primitive/fractal/description.hpp>
+#include <parsing/variable/description.hpp>
+#include <parsing/vector/parser.hpp>
 #include <boost/spirit/include/qi_grammar.hpp>
 
 namespace qi = boost::spirit::qi;
@@ -25,11 +27,12 @@ class parser
 	public qi::grammar<Iterator, Skipper, description_t()>
 {
 public:
-	parser();
+	parser(const parsing::variable::descriptions_t& descriptions);
 
 private:
 	qi::rule<Iterator, Skipper, description_t()> _description;
 	qi::rule<Iterator, Skipper, basic_description_t()> _basic_description;
+	parsing::vector::parser<Iterator, Skipper, 4> _vector4;
 };
 
 }

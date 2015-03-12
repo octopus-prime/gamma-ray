@@ -24,7 +24,9 @@ namespace variable {
 
 typedef boost::variant
 <
+	vector2_t,
 	vector3_t,
+	vector4_t,
 	scene::description_t,
 	scene::camera::description_t,
 	scene::light::description_t,

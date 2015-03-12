@@ -66,6 +66,33 @@ parser<parsing::iterator_t, parsing::skipper::parser<parsing::iterator_t>, 3>::e
 	;
 }
 
+template <>
+parser<parsing::iterator_t, parsing::skipper::parser<parsing::iterator_t>, 4>::elements::elements()
+:
+	elements::base_type(_elements),
+	_elements()
+{
+	_elements =
+			qi::lit('<')
+			>
+			qi::float_ [px::at(qi::_val, 0) = qi::_1]
+			>
+			qi::lit(',')
+			>
+			qi::float_ [px::at(qi::_val, 1) = qi::_1]
+			>
+			qi::lit(',')
+			>
+			qi::float_ [px::at(qi::_val, 2) = qi::_1]
+			>
+			qi::lit(',')
+			>
+			qi::float_ [px::at(qi::_val, 3) = qi::_1]
+			>
+			qi::lit('>')
+	;
+}
+
 template <typename Iterator, typename Skipper, std::size_t N>
 parser<Iterator, Skipper, N>::parser(const variable::descriptions_t& descriptions)
 :
@@ -119,6 +146,7 @@ parser<Iterator, Skipper, N>::parser(const variable::descriptions_t& description
 
 template class parser<iterator_t, skipper::parser<iterator_t>, 2>;
 template class parser<iterator_t, skipper::parser<iterator_t>, 3>;
+template class parser<iterator_t, skipper::parser<iterator_t>, 4>;
 
 }
 }

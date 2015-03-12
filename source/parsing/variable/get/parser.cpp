@@ -50,6 +50,7 @@ parser<Iterator, Skipper, Variable>::parser(const descriptions_t& descriptions)
 
 template class parser<iterator_t, skipper::parser<iterator_t>, vector2_t>;
 template class parser<iterator_t, skipper::parser<iterator_t>, vector3_t>;
+template class parser<iterator_t, skipper::parser<iterator_t>, vector4_t>;
 template class parser<iterator_t, skipper::parser<iterator_t>, scene::description_t>;
 template class parser<iterator_t, skipper::parser<iterator_t>, scene::camera::description_t>;
 template class parser<iterator_t, skipper::parser<iterator_t>, scene::light::description_t>;

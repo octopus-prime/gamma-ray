@@ -8,10 +8,17 @@ fractal = Object
 {
 	surface = Fractal
 	{
+		constant = <-0.08, 0.0, -0.8, -0.03>
+		iterations = 20
+		precision = 1e-3
+		slice = <0,0,0,1>
+		distance = 0
 	}
+//	texture = SolidRed
 	texture = MetallicRed
 }
-//fractal.scale(<5, 5, 5>)
+fractal.scale(<2, 2, 2>)
+fractal.translate(X)
 //fractal.rotate(<-15,15,0>)
 
 left1 = Object
