@@ -31,11 +31,12 @@ void
 progress_t::run() const
 {
 	BOOST_LOG_NAMED_SCOPE("Rendering");
-	while (_done < _todo)
+	for (;;)
 	{
-		const clock_t::time_point until = clock_t::now() + _wait;
-		while (_done < _todo && clock_t::now() < until)
-			std::this_thread::sleep_for(std::chrono::milliseconds(10));
+		std::this_thread::sleep_for(_wait);
+
+		if (_done >= _todo)
+			break;
 
 		const std::size_t progress = 100 * _done / _todo;
 		BOOST_LOG_TRIVIAL(info) << boost::format("%3.d") % progress << "% done";
