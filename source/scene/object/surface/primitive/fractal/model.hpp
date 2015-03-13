@@ -45,13 +45,12 @@ public:
 		if (!value.second)
 			return hits;
 
-		for (float distance = ray.min();;)
+		const float start = length(0.5f * (value.first.min_corner() + value.first.max_corner()));
+
+		for (float distance = start; ray[distance]; )
 		{
 			const vector3_t point = ray(distance);
 			const float estimation = _estimate(point);
-
-			if (!ray[distance])
-				return hits;
 
 			if (estimation < _precision)
 			{
@@ -76,7 +75,7 @@ protected:
 	vector3_t
 	normal(const vector3_t& point) const
 	{
-		constexpr float D = 1e-4;
+		constexpr float D = 1e-1;
 		constexpr vector3_t X {{D, 0, 0}};
 		constexpr vector3_t Y {{0, D, 0}};
 		constexpr vector3_t Z {{0, 0, D}};
