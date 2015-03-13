@@ -74,8 +74,8 @@ make(const description_t& description)
 	};
 
 	// Build rtree
-	constexpr vector3_t MIN {{-1.3, -1.0, -1.0}};
-	constexpr vector3_t MAX {{+1.0, +1.0, +1.0}};
+	constexpr vector3_t MIN {{-2, -2, -2}};
+	constexpr vector3_t MAX {{+2, +2, +2}};
 	constexpr std::size_t N = 100;
 	const vector3_t DELTA = (MAX - MIN) / N;
 	const float RADIUS = 0.5f * rt::length(DELTA);

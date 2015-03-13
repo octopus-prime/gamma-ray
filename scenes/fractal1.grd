@@ -19,7 +19,9 @@ fractal = Object
 }
 fractal.scale(<2, 2, 2>)
 fractal.translate(X)
-//fractal.rotate(<-15,15,0>)
+fractal.rotate(45 * Y)
+fractal.translate(Z)
+fractal.translate(-X)
 
 left1 = Object
 {
