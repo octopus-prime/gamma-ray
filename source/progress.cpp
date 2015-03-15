@@ -20,11 +20,7 @@ progress_t::progress_t(const std::size_t todo, const clock_t::duration wait)
 	_time(clock_t::now()),
 	_thread(std::bind(&progress_t::run, this))
 {
-}
-
-progress_t::~progress_t()
-{
-	_thread.join();
+	_thread.detach();
 }
 
 void

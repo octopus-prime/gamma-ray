@@ -19,7 +19,6 @@ class progress_t
 
 public:
 	progress_t(const std::size_t todo, const clock_t::duration wait = std::chrono::seconds(5));
-	~progress_t();
 
 	std::atomic_size_t&
 	done()
