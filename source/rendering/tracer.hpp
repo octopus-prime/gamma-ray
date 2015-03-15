@@ -49,7 +49,7 @@ public:
 				const vector3_t LP = light.origin() - point;
 				const float LPl = length(LP);
 				const vector3_t L = LP / LPl;
-				if (depth > 0 && _scene.hit(ray_t(point, L, 0, LPl), _hits.begin()) == _hits.begin()) // shadow test
+				if (depth > 0 && _scene.hit(ray_t(point, L, 0, LPl), _hits.begin()) != _hits.begin()) // shadow test
 					return I;
 				const vector3_t H = normalize(L - ray.direction());
 				const vector3_t d = std::max(0.0f, L * N) * texture.diffuse(point) * color;
