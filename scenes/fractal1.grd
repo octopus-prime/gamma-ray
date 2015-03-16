@@ -9,7 +9,7 @@ fractal = Object
 	surface = Fractal
 	{
 		constant = <-0.08, 0.0, -0.8, -0.03>
-		iterations = 20
+		iterations = 50
 		precision = 1e-3
 		slice = <0,0,0,1>
 		distance = 0

@@ -81,7 +81,7 @@ scene = Scene
 		Light
 		{
 			origin = <+5, +5, -5>
-			color = White * 4
+			color = White * 5
 		},
 		Light
 		{

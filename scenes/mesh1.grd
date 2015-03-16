@@ -48,7 +48,7 @@ right2.translate(<+3.5 , -2, 0>)
 plane = Object
 {
 	surface = Plane { }
-	texture = SolidRed
+	texture = MetallicRed
 }
 plane.translate(<0, -3, 0>)
 
