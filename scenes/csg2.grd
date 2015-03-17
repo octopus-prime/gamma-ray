@@ -4,35 +4,32 @@ include "includes/constants.gri"
 include "includes/surfaces.gri"
 include "includes/textures.gri"
 
-torusZ = Torus
+Surface torusZ = Torus
 {
 	major = 2.0
 	minor = 0.5
 }
 
-torusX = Torus
+Surface torusX = Torus
 {
 	major = 2.0
 	minor = 0.5
 }
 torusX.rotate(90 * Y)
 
-torusY = Torus
+Surface torusY = Torus
 {
 	major = 2.0
 	minor = 0.5
 }
 torusY.rotate(90 * X)
-/*
-sphere = Sphere
+
+Surface sphere = Sphere
 {
 	radius = 2.0
 }
-*/
-sphere = aSphere
-sphere.scale(<2,2,2>)
 
-csg = Object
+Object csg = Object
 {
 	surface = sphere - torusX - torusY - torusZ
 	texture = MetallicRed
@@ -68,7 +65,7 @@ Object right2 = Object
 }
 right2.translate(<+3.5 , -2, 0>)
 
-scene = Scene
+Scene scene = Scene
 {
 	camera = Camera
 	{
