@@ -1,7 +1,7 @@
 // Surfaces
 
 
-aSphere = Quadric
+Surface aSphere = Quadric
 {
 	square =	<+1, +1, +1>
 	mixed =		< 0,  0,  0>
@@ -10,7 +10,7 @@ aSphere = Quadric
 }
 
 
-CylinderX = Quadric
+Surface CylinderX = Quadric
 {
 	square =	< 0, +1, +1>
 	mixed =		< 0,  0,  0>
@@ -18,7 +18,7 @@ CylinderX = Quadric
 	constant =	-1
 }
 
-CylinderY = Quadric
+Surface CylinderY = Quadric
 {
 	square =	<+1,  0, +1>
 	mixed =		< 0,  0,  0>
@@ -26,7 +26,7 @@ CylinderY = Quadric
 	constant =	-1
 }
 
-CylinderZ = Quadric
+Surface CylinderZ = Quadric
 {
 	square =	<+1, +1,  0>
 	mixed =		< 0,  0,  0>
@@ -34,7 +34,7 @@ CylinderZ = Quadric
 	constant =	-1
 }
 
-ConeX = Quadric
+Surface ConeX = Quadric
 {
 	square =	<-1, +1, +1>
 	mixed =		< 0,  0,  0>
@@ -42,7 +42,7 @@ ConeX = Quadric
 	constant =	0
 }
 
-ConeY = Quadric
+Surface ConeY = Quadric
 {
 	square =	<+1, -1, +1>
 	mixed =		< 0,  0,  0>
@@ -50,7 +50,7 @@ ConeY = Quadric
 	constant =	0
 }
 
-ConeZ = Quadric
+Surface ConeZ = Quadric
 {
 	square =	<+1, +1, -1>
 	mixed =		< 0,  0,  0>
@@ -58,7 +58,7 @@ ConeZ = Quadric
 	constant =	0
 }
 
-ParaboloidX = Quadric
+Surface ParaboloidX = Quadric
 {
 	square =	< 0, +1, +1>
 	mixed =		< 0,  0,  0>
@@ -66,7 +66,7 @@ ParaboloidX = Quadric
 	constant =	0
 }
 
-ParaboloidY = Quadric
+Surface ParaboloidY = Quadric
 {
 	square =	<+1,  0, +1>
 	mixed =		< 0,  0,  0>
@@ -74,7 +74,7 @@ ParaboloidY = Quadric
 	constant =	0
 }
 
-ParaboloidZ = Quadric
+Surface ParaboloidZ = Quadric
 {
 	square =	<+1, +1,  0>
 	mixed =		< 0,  0,  0>

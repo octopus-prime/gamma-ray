@@ -1,6 +1,6 @@
 // Textures
 
-MetallicRed = Texture
+Texture MetallicRed = Texture
 {
 	pigment = Red
 	ambient = Perlin {}
@@ -10,7 +10,7 @@ MetallicRed = Texture
 	reflection = 0.8
 }
 
-SolidRed = Texture
+Texture SolidRed = Texture
 {
 	pigment = Red
 	ambient = 0.3
@@ -20,7 +20,7 @@ SolidRed = Texture
 	reflection = 0.0
 }
 
-MetallicGreen = Texture
+Texture MetallicGreen = Texture
 {
 	pigment = Green
 	ambient = Perlin {}
@@ -30,7 +30,7 @@ MetallicGreen = Texture
 	reflection = 0.8
 }
 
-MetallicBlue = Texture
+Texture MetallicBlue = Texture
 {
 	pigment = Blue
 	ambient = Perlin {}
@@ -40,7 +40,7 @@ MetallicBlue = Texture
 	reflection = 0.8
 }
 
-MetallicYellow = Texture
+Texture MetallicYellow = Texture
 {
 	pigment = Yellow
 	ambient = Perlin {}
@@ -50,7 +50,7 @@ MetallicYellow = Texture
 	reflection = 0.8
 }
 
-MetallicCyan = Texture
+Texture MetallicCyan = Texture
 {
 	pigment = Cyan
 	ambient = Perlin {}
@@ -60,7 +60,7 @@ MetallicCyan = Texture
 	reflection = 0.8
 }
 
-MetallicMagenta = Texture
+Texture MetallicMagenta = Texture
 {
 	pigment = Magenta
 	ambient = Perlin {}
@@ -70,12 +70,12 @@ MetallicMagenta = Texture
 	reflection = 0.8
 }
 
-baseWood = Cylinders
+Noise baseWood = Cylinders
 {
 	frequency = 16.0
 }
 
-woodGrainNoise = Perlin
+Noise woodGrainNoise = Perlin
 {
 	seed = 0
 	frequency = 48.0
@@ -85,9 +85,9 @@ woodGrainNoise = Perlin
 }
 woodGrainNoise.scale(0.25 * Y)
 
-woodGrain = woodGrainNoise * 0.25 + 0.125
+Noise woodGrain = woodGrainNoise * 0.25 + 0.125
 
-combinedWood = baseWood + woodGrain
+Noise combinedWood = baseWood + woodGrain
 /*
 perturbedWood = Turbulence
 {

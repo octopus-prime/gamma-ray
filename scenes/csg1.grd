@@ -4,51 +4,58 @@ include "includes/constants.gri"
 include "includes/surfaces.gri"
 include "includes/textures.gri"
 
-sphere = aSphere //{}
+Surface sphere = aSphere //{}
 
-cube = Cube {}
+Surface cube = Cube {}
 cube.scale(<0.75, 0.75, 0.75>)
 
-cross = CylinderX + CylinderY + CylinderZ
+Surface cross = CylinderX + CylinderY + CylinderZ
 cross.scale(<0.5, 0.5, 0.5>)
 
-csg = Object
+Object csg = Object
 {
 	surface = (sphere & cube) - cross
 	texture = MetallicRed
 }
-csg.scale(<2, 2, 2>)
-csg.rotate(< 45, 45, 0>)
+//csg.rotate(< 45, 45, 0>)
 
-left1 = Object
+Object csg2 = csg
+csg2.translate(-3.5 * X)
+
+Object csg3 = csg
+csg3.translate(+3.5 * X)
+
+csg.scale(<2, 2, 2>)
+
+Object left1 = Object
 {
 	surface = Sphere { }
 	texture = MetallicGreen
 }
 left1.translate(<-3.5, +2, 0>)
 
-left2 = Object
+Object left2 = Object
 {
 	surface = Sphere { }
 	texture = MetallicCyan
 }
 left2.translate(<-3.5, -2, 0>)
 
-right1 = Object
+Object right1 = Object
 {
 	surface = Sphere { }
 	texture = MetallicBlue
 }
 right1.translate(<+3.5 , +2, 0>)
 
-right2 = Object
+Object right2 = Object
 {
 	surface = Sphere { }
 	texture = MetallicYellow
 }
 right2.translate(<+3.5 , -2, 0>)
 
-scene = Scene
+Scene scene = Scene
 {
 	camera = Camera
 	{
@@ -73,6 +80,8 @@ scene = Scene
 	objects =
 	[
 		csg,
+		csg2,
+		csg3,
 		left1,
 		right1,
 		left2,

@@ -24,6 +24,9 @@ namespace variable {
 
 typedef boost::variant
 <
+	int,
+	float,
+	std::string,
 	vector2_t,
 	vector3_t,
 	vector4_t,

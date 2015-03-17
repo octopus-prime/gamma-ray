@@ -1,15 +1,15 @@
 // Constants
 
-N = <0,0,0>
-X = <1,0,0>
-Y = <0,1,0>
-Z = <0,0,1>
+Vector3 N = <0,0,0>
+Vector3 X = <1,0,0>
+Vector3 Y = <0,1,0>
+Vector3 Z = <0,0,1>
 
-White = <1,1,1>
-Black = <0,0,0>
-Red = <1,0,0>
-Green = <0,1,0>
-Blue = <0,0,1>
-Yellow = <1,1,0>
-Cyan = <0,1,1>
-Magenta	= <1,0,1>
+Vector3 White = <1,1,1>
+Vector3 Black = <0,0,0>
+Vector3 Red = <1,0,0>
+Vector3 Green = <0,1,0>
+Vector3 Blue = <0,0,1>
+Vector3 Yellow = <1,1,0>
+Vector3 Cyan = <0,1,1>
+Vector3 Magenta	= <1,0,1>

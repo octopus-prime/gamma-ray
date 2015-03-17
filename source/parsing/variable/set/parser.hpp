@@ -10,6 +10,7 @@
 #include <parsing/variable/description.hpp>
 #include <parsing/identifier/parser.hpp>
 #include <parsing/vector/parser.hpp>
+#include <parsing/string/parser.hpp>
 #include <scene/parser.hpp>
 #include <scene/camera/parser.hpp>
 #include <scene/light/parser.hpp>
@@ -29,17 +30,21 @@ namespace set {
 template <typename Iterator, typename Skipper>
 class parser
 :
-	public qi::grammar<Iterator, Skipper, qi::locals<std::string>>
+	public qi::grammar<Iterator, Skipper, qi::locals<qi::rule<Iterator, Skipper, description_t()>*, std::string>>
 {
 public:
 	parser(descriptions_t& descriptions);
 
 private:
-	qi::rule<Iterator, Skipper, qi::locals<std::string>> _definition;
-	qi::rule<Iterator, Skipper, void(std::string)> _check;
-	qi::rule<Iterator, Skipper, description_t()> _variable;
+	qi::rule<Iterator, Skipper, qi::locals<qi::rule<Iterator, Skipper, description_t()>*, std::string>> _definition;
+	qi::symbols<char, qi::rule<Iterator, Skipper, description_t()>* > _keyword;
 	identifier::parser<Iterator, Skipper> _identifier;
+	qi::rule<Iterator, Skipper, void(std::string)> _check;
+
+	string::parser<Iterator, Skipper> _string;
+	vector::parser<Iterator, Skipper, 2> _vector2;
 	vector::parser<Iterator, Skipper, 3> _vector3;
+	vector::parser<Iterator, Skipper, 4> _vector4;
 	scene::parser<Iterator, Skipper> _scene;
 	scene::camera::parser<Iterator, Skipper> _camera;
 	scene::light::parser<Iterator, Skipper> _light;
@@ -47,6 +52,8 @@ private:
 	scene::object::surface::parser<Iterator, Skipper> _surface;
 	scene::object::texture::parser<Iterator, Skipper> _texture;
 	scene::object::texture::noise::parser<Iterator, Skipper> _noise;
+
+	boost::array<qi::rule<Iterator, Skipper, description_t()>, 13> _variable;
 };
 
 }
