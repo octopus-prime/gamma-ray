@@ -4,7 +4,7 @@ include "includes/constants.gri"
 include "includes/surfaces.gri"
 include "includes/textures.gri"
 
-fractal = Object
+Object fractal = Object
 {
 	surface = Fractal
 	{
@@ -23,35 +23,35 @@ fractal.rotate(45 * Y)
 fractal.translate(Z)
 fractal.translate(-X)
 
-left1 = Object
+Object left1 = Object
 {
 	surface = Sphere { }
 	texture = MetallicGreen
 }
 left1.translate(<-3.5, +2, 0>)
 
-left2 = Object
+Object left2 = Object
 {
 	surface = Sphere { }
 	texture = MetallicCyan
 }
 left2.translate(<-3.5, -2, 0>)
 
-right1 = Object
+Object right1 = Object
 {
 	surface = Sphere { }
 	texture = MetallicBlue
 }
 right1.translate(<+3.5 , +2, 0>)
 
-right2 = Object
+Object right2 = Object
 {
 	surface = Sphere { }
 	texture = MetallicYellow
 }
 right2.translate(<+3.5 , -2, 0>)
 
-scene = Scene
+Scene scene = Scene
 {
 	camera = Camera
 	{

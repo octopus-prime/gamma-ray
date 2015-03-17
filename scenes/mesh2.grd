@@ -4,61 +4,60 @@ include "includes/constants.gri"
 include "includes/surfaces.gri"
 include "includes/textures.gri"
 
-skull1 = Mesh
+Surface skull1 = Mesh
 {
 	file = "mesh/skull.ply"
 }
-skull1.rotate(-90 * X)
 
-mesh1 = Object
+Object mesh1 = Object
 {
 	surface = skull1
 	texture = MetallicMagenta
 }
 
-skull2 = Mesh
-{
-	file = "mesh/skull.ply"
-}
+Surface skull2 = skull1
+
+skull1.rotate(-90 * X)
+
 skull2.scale(<0.03, 0.03, 0.03>)
 skull2.rotate(+180 * Y)
 skull2.translate(2.5 * Y)
 
-mesh2 = Object
+Object mesh2 = Object
 {
 	surface = skull2
 	texture = MetallicRed
 }
 
-left1 = Object
+Object left1 = Object
 {
 	surface = Sphere { }
 	texture = MetallicGreen
 }
 left1.translate(<-3.5, +2, 0>)
 
-left2 = Object
+Object left2 = Object
 {
 	surface = Sphere { }
 	texture = MetallicCyan
 }
 left2.translate(<-3.5, -2, 0>)
 
-right1 = Object
+Object right1 = Object
 {
 	surface = Sphere { }
 	texture = MetallicBlue
 }
 right1.translate(<+3.5 , +2, 0>)
 
-right2 = Object
+Object right2 = Object
 {
 	surface = Sphere { }
 	texture = MetallicYellow
 }
 right2.translate(<+3.5 , -2, 0>)
 
-scene = Scene
+Scene scene = Scene
 {
 	camera = Camera
 	{

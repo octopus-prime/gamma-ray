@@ -4,24 +4,52 @@ include "includes/constants.gri"
 include "includes/surfaces.gri"
 include "includes/textures.gri"
 
-text = Object
+Object text = Object
 {
-	surface = Glyphs
+	surface = Text
 	{
 		text = "Hallo Mike,?dieses ist ein kleiner Text."
 		font = "/usr/share/fonts/truetype/freefont/FreeSerifBoldItalic.ttf"
 		extrusion = 1.0
 	}
-	texture = SolidRed
+	texture = MetallicRed
 }
-text.scale(<0.05, 0.1, 0.01>)
-text.translate(-1.7 * X)
+text.scale(<0.13, 0.4, 0.2>)
+text.translate(<-4.4, +0.5, +1.5>)
 
-scene = Scene
+Object left1 = Object
+{
+	surface = Sphere { }
+	texture = MetallicGreen
+}
+left1.translate(<-3.5, +2, 0>)
+
+Object left2 = Object
+{
+	surface = Sphere { }
+	texture = MetallicCyan
+}
+left2.translate(<-3.5, -2, 0>)
+
+Object right1 = Object
+{
+	surface = Sphere { }
+	texture = MetallicBlue
+}
+right1.translate(<+3.5 , +2, 0>)
+
+Object right2 = Object
+{
+	surface = Sphere { }
+	texture = MetallicYellow
+}
+right2.translate(<+3.5 , -2, 0>)
+
+Scene scene = Scene
 {
 	camera = Camera
 	{
-		origin = -2.5 * Z
+		origin = -5 * Z
 		direction = Z
 	}
 
@@ -41,7 +69,11 @@ scene = Scene
 
 	objects =
 	[
-		text
+		text,
+		left1,
+		right1,
+		left2,
+		right2
 	]
 }
 
