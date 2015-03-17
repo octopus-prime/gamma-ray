@@ -40,7 +40,7 @@ namespace surface {
 namespace primitive {
 namespace text {
 
-static const std::string NAME("Glyphs");
+static const std::string NAME("Text");
 
 template <typename Iterator, typename Skipper>
 parser<Iterator, Skipper>::parser()
