@@ -5,6 +5,7 @@
  *      Author: mgresens
  */
 
+#include <parsing/keywords.hpp>
 #include <parsing/variable/set/parser.hpp>
 #include <boost/spirit/include/qi.hpp>
 #include <boost/spirit/include/phoenix.hpp>
@@ -77,7 +78,7 @@ copy_visitor::operator()(const scene::description_t& description) const
 {
 	return scene::copy(description);
 }
-
+/*
 static const boost::array<std::string, 13> TYPES
 {{
 	"Int",
@@ -94,7 +95,7 @@ static const boost::array<std::string, 13> TYPES
 	"Texture",
 	"Noise"
 }};
-
+*/
 template <typename Iterator, typename Skipper>
 parser<Iterator, Skipper>::parser(descriptions_t& descriptions)
 :
@@ -155,7 +156,7 @@ parser<Iterator, Skipper>::parser(descriptions_t& descriptions)
 
 	for (std::size_t i = 0; i < 13; ++i)
 	{
-		auto& type = TYPES.at(i);
+		auto& type = keywords.at(i);
 		auto& rule = _variable.at(i);
 
 		rule.name(type);

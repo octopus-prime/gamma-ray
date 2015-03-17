@@ -6,6 +6,7 @@
  */
 
 #include <parsing/identifier/parser.hpp>
+#include <parsing/keywords.hpp>
 #include <boost/spirit/include/qi.hpp>
 
 #include <parsing/iterator.hpp>
@@ -35,14 +36,10 @@ parser<Iterator, Skipper>::parser()
 	_keywords.add
 			("include")
 			("render")
-			("Camera")
-			("Light")
-			("Scene")
-			("Object")
-			("Sphere")
-			("Cube")
-			("Mesh")
 	;
+
+	for (const auto& keyword : keywords)
+		_keywords.add(keyword);
 }
 
 template class parser<iterator_t, skipper::parser<iterator_t>>;
