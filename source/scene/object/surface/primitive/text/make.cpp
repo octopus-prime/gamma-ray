@@ -208,7 +208,7 @@ make(const description_t& description)
 
 		glyphs.emplace_back(std::move(contours), description->extrusion);
 		rtree.insert(value_t(box, n));
-		hits += 3 * contours.size() + 2;
+		hits += (3 * contours.size() + 2);
 		n++;
 		}
 		else
