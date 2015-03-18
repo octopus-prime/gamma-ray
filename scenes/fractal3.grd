@@ -4,19 +4,76 @@ include "includes/constants.gri"
 include "includes/surfaces.gri"
 include "includes/textures.gri"
 
+/*
+#declare VP = <-2,1.5,1.5>;
+#declare VU = <0,1,0>;
+#declare VD = vnormalize(<0,0,0> - VP);
+#declare VR = vcross(VU,VD);
+#declare ConstC = <-0.08,0.0,-0.83,-0.025>;
+#declare SLICEDIST = 0.1;
+
+camera {
+   location VP
+   up y
+   right x
+   angle 60
+   sky VU
+   look_at VD
+}
+
+global_settings {
+   ambient_light
+   rgb <1,1,1>
+}
+
+background {
+   color rgb <1,1,1>
+}
+
+light_source {
+   VP + VU + 2*VR
+   color rgb <1,1,1>
+}
+light_source {
+   VP - VR
+   color rgb <1,1,1>
+}
+
+julia_fractal {
+   ConstC
+   quaternion
+   sqr
+   max_iteration 50
+   precision 200
+   slice <0,0,0,1> SLICEDIST
+   texture { T_Brass_5C }
+}
+
+*/
+
 Object fractal = Object
 {
 	surface = Fractal
 	{
-		power = 2
-		constant = <-0.08, 0.0, -0.8, -0.03>
+		power = 3
+		constant = <-0.08,0.0,-0.83,-0.025>
 		iterations = 50
-		precision = 1e-3
+		precision = 5e-3
 		slice = <0,0,0,1>
-		distance = 0
+		distance = 0.1
 	}
 //	texture = SolidRed
-	texture = MetallicRed
+//	texture = MetallicRed
+	texture = Texture
+	{
+		pigment = Red
+		ambient = 0.3
+		diffuse = 0.5
+		specular = 0.7
+		shininess = 164.0
+		reflection = 0.7
+	}
+
 }
 fractal.scale(<2, 2, 2>)
 fractal.translate(X)

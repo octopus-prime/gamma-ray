@@ -25,6 +25,8 @@ make(const description_t& description)
 {
 	BOOST_LOG_TRIVIAL(debug) << "Make surface fractal";
 
+	const std::size_t power = description->power;
+
 	const quaternion_t constant
 	(
 		description->constant[0],
@@ -45,7 +47,61 @@ make(const description_t& description)
 	const float length = description->slice[W];
 	const float distance = description->distance;
 
-	// The distance-estimation function
+	estimation_t estimate = [power, constant, iterations, slice, length, distance](const vector3_t& point) -> float
+	{
+		constexpr float exit = 2;
+
+		const auto function = [power, constant](const quaternion_t& value)
+		{
+			return boost::math::pow(value, power) + constant;
+		};
+
+		quaternion_t value(point[X], point[Y], point[Z], (distance - slice * point) / length);
+		quaternion_t derivation = constant;
+
+		for (std::size_t iteration = 0; iteration < iterations; ++iteration)
+		{
+			if (boost::math::abs(value) > exit)
+				break;
+
+			derivation = float(power) * boost::math::pow(value, power - 1) * derivation;
+			value = function(value);
+		}
+
+		const float derivation_norm = boost::math::l1(derivation);
+		const float value_norm = boost::math::l1(value);
+
+		return 0.5f * std::log(value_norm) * value_norm / derivation_norm;
+	};
+/*
+	estimation_t estimate = [constant, iterations, slice, length, distance](const vector3_t& point) -> float
+	{
+		constexpr float exit = 4;
+
+		const auto function = [constant](const quaternion_t& value)
+		{
+			return value * value * value + constant;
+		};
+
+		quaternion_t value(point[X], point[Y], point[Z], (distance - slice * point) / length);
+		quaternion_t derivation = constant;
+
+		for (std::size_t iteration = 0; iteration < iterations; ++iteration)
+		{
+			if (boost::math::abs(value) > exit)
+				break;
+
+			derivation = 3.0f * value * value * derivation;
+			value = function(value);
+		}
+
+		const float derivation_norm = boost::math::l1(derivation);
+		const float value_norm = boost::math::l1(value);
+
+		return 0.5f * std::log(value_norm) * value_norm / derivation_norm;
+	};
+*/
+/*
 	estimation_t estimate = [constant, iterations, slice, length, distance](const vector3_t& point) -> float
 	{
 		constexpr float exit = 4;
@@ -72,7 +128,7 @@ make(const description_t& description)
 
 		return 0.5f * std::log(value_norm) * value_norm / derivation_norm;
 	};
-
+*/
 	// Build rtree
 	constexpr vector3_t MIN {{-2, -2, -2}};
 	constexpr vector3_t MAX {{+2, +2, +2}};

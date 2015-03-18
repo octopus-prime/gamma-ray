@@ -19,6 +19,7 @@ namespace px = boost::phoenix;
 BOOST_FUSION_ADAPT_STRUCT
 (
     rt::scene::object::surface::primitive::fractal::basic_description_t,
+	(std::size_t, power)
 	(rt::vector4_t, constant)
 	(std::size_t, iterations)
 	(float, precision)
@@ -62,6 +63,8 @@ parser<Iterator, Skipper>::parser(const parsing::variable::descriptions_t& descr
 
 	_basic_description =
 			qi::lit(NAME) > qi::lit('{')
+			>
+			qi::lit("power") > qi ::lit('=') > qi::uint_
 			>
 			qi::lit("constant") > qi ::lit('=') > _vector4
 			>

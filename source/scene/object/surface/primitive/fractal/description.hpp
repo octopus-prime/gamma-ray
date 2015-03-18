@@ -18,6 +18,7 @@ namespace fractal {
 
 struct basic_description_t
 {
+	std::size_t power;
 	vector4_t constant;
 	std::size_t iterations;
 	float precision;
