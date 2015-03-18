@@ -9,7 +9,6 @@
 
 #include <math/vector.hpp>
 #include <scene/instance.hpp>
-#include <boost/optional.hpp>
 
 namespace rt {
 namespace rendering {
@@ -20,7 +19,7 @@ public:
 	tracer_t(const scene::instance_t& scene, const std::size_t max_hits)
 	:
 		_scene(scene),
-		_hits(max_hits)
+		_hits(10 * max_hits)
 	{
 	}
 
@@ -67,92 +66,44 @@ public:
 				const vector3_t R = ray.direction() - 2.0f * (ray.direction() * N) * N;
 				I += (*this)(ray_t(point, R), depth - 1) * r;
 			}
-/*
-			const float t = texture->transparency(point);
+
 			if (t > 0.0f)
 			{
-				const float DN = direction * N;
+				const float DN = ray.direction() * N;
+				const vector3_t R = ray.direction() - 2.0f * DN * N;
+				const float n = texture.refraction(point);
 				if (DN < 0)	// in
 				{
-					const float r = 1.0f / texture->refraction(point);
-					const float c = std::sqrt(1.f - r * r * (1.f - DN * DN));
-					if (c >= 0)
-					{
-						const vector3_t T = r * direction - (r * DN + c) * N;
-						I += (*this)(point, T, depth - 1) * t;
-					}
+					const float D = 1 - (1 - DN * DN) / (n * n);
+					const vector3_t T = (ray.direction() - N * DN) / n - N * std::sqrt(D);
+					I += (*this)(point, R, T, n, -DN, t, depth - 1);
 				}
 				else // out
 				{
-					const float r = texture->refraction(point);
-					const float c = std::sqrt(1.f - r * r * (1.f - DN * DN));
-					if (c >= 0)
+					const float D = 1 - (1 - DN * DN) * (n * n);
+					if (D > 0)
 					{
-						const vector3_t T = r * direction - (r * DN - c) * N;
-						I += (*this)(point, T, depth - 1) * t;
+						static const float a = -std::log(0.9f);
+						const vector3_t T = (ray.direction() - N * DN) * n + N * std::sqrt(D);
+						const float k = std::exp(a * static_cast<float>(hit.distance)) * t;
+						I += (*this)(point, R, T, n, T * N, k, depth - 1);
 					}
+					else
+						I += (*this)(ray_t(point, R), depth - 1) * t;
 				}
 			}
-*/
-//			if (t > 0.0f)
-//			{
-//				const float DN = direction * N;
-//				const vector3_t R = direction - 2.0f * DN * N;
-//				const float n = texture->refraction(point);
-//				if (DN < 0)	// in
-//				{
-//					const auto T = refract(-direction, N, 1 / n);
-//					if (!!T)
-//					{
-//					const float c = -DN;
-//					const float R0 = ((n - 1) * (n - 1)) / ((n + 1) * (n + 1));
-//					const float R1 = R0 + (1 - R0) * std::pow(1 - c, 5);
-//					I += ((*this)(point, R, depth - 1) * R1 + (*this)(point, T.get(), depth - 1) * (1 - R1))*t;
-//					}
-//					else
-//					{
-//						I += (*this)(point, R, depth - 1)*t;
-//					}
-//				}
-//				else // out
-//				{
-//					const auto T = refract(-direction, -N, 1);
-//					if (!T)
-//					{
-//						I += (*this)(point, R, depth - 1) *t;
-//					}
-//					else
-//					{
-//						static const scene::color_t a {{std::log(0.91f), std::log(0.90f), std::log(0.89f)}};
-//						const scene::color_t k
-//						{{
-//							std::exp(-a[X] * static_cast<float>(hit->distance)),
-//							std::exp(-a[Y] * static_cast<float>(hit->distance)),
-//							std::exp(-a[Z] * static_cast<float>(hit->distance))
-//						}};
-//						const float c = T.get() * N;
-//						const float R0 = ((n - 1) * (n - 1)) / ((n + 1) * (n + 1));
-//						const float R1 = R0 + (1 - R0) * std::pow(1 - c, 5);
-//						I += (((*this)(point, R, depth - 1) * R1 + (*this)(point, T.get(), depth - 1) * (1 - R1)) & k) * t;
-//					}
-//				}
-//			}
 		}
 
 		return I;
 	}
 
 protected:
-	boost::optional<vector3_t>
-	refract(const vector3_t& direction, const vector3_t& normal, const float n) const
+	vector3_t
+	operator()(const vector3_t& point, const vector3_t& R, const vector3_t& T, const float n, const float c, const float k, const std::size_t depth) const
 	{
-		const float DN = direction * normal;
-		const float D = 1 - n * n * (1 - DN * DN);
-
-		if (D <= 0)
-			return boost::none;
-
-		return n * (direction - normal * DN) - normal * std::sqrt(D);
+		const float R0 = ((n - 1) * (n - 1)) / ((n + 1) * (n + 1));
+		const float R1 = R0 + (1 - R0) * std::pow(1 - c, 5);
+		return ((*this)(ray_t(point, R), depth) * R1 + (*this)(ray_t(point, T), depth) * (1 - R1)) * k;
 	}
 
 private:
