@@ -77,7 +77,7 @@ public:
 
 			const float f = std::abs(function1(t));
 
-			if (f < 1e-6)
+			if (f < 1e-4)
 			{
 				end->distance = t;
 				end->normal = normal(ray(t));
@@ -88,7 +88,7 @@ public:
 		};
 
 		const segment_t segment = ray;
-		_rtree.query(geo::index::intersects(segment) && geo::index::satisfies(test)/* && geo::index::nearest(segment.first, 1)*/, (value_t*) nullptr);
+		_rtree.query(geo::index::intersects(segment) && geo::index::satisfies(test) /*&& geo::index::nearest(segment.first, 1)*/, (value_t*) nullptr);
 
 		return end;
 //		if (end == hits)
@@ -150,7 +150,7 @@ protected:
 			{
 				const vector3_t vector = point - carrier.first;
 				const float radius2 = vector * vector;
-				return normal + carrier.second * vector / (radius2 * radius2);
+				return normal + (carrier.second / (radius2 * radius2)) * vector;
 			}
 		);
 	}
