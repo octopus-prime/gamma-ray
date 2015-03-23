@@ -1,0 +1,86 @@
+// Blob example
+
+include "includes/constants.gri"
+include "includes/surfaces.gri"
+include "includes/textures.gri"
+
+Surface blob = Blob
+{
+	carriers =
+	[
+		{<-1.5, -1.0, +1.0>, 1.0},
+		{< 0.0, +1.0,  0.0>, 1.5},
+		{<+1.5, -1.0, -1.0>, 1.2}
+	]
+	threshold = 1.1
+}
+blob.translate(<-0.5, +0.5, +1.0>)
+
+Object obj = Object
+{
+	surface = blob
+	texture = MetallicRed
+}
+//obj.rotate(< 45, 45, 0>)
+
+Object left1 = Object
+{
+	surface = Sphere { }
+	texture = MetallicGreen
+}
+left1.translate(<-3.5, +2, 0>)
+
+Object left2 = Object
+{
+	surface = Sphere { }
+	texture = MetallicCyan
+}
+left2.translate(<-3.5, -2, 0>)
+
+Object right1 = Object
+{
+	surface = Sphere { }
+	texture = MetallicBlue
+}
+right1.translate(<+3.5 , +2, 0>)
+
+Object right2 = Object
+{
+	surface = Sphere { }
+	texture = MetallicYellow
+}
+right2.translate(<+3.5 , -2, 0>)
+
+Scene scene = Scene
+{
+	camera = Camera
+	{
+		origin = -5 * Z
+		direction = Z
+	}
+
+	lights =
+	[
+		Light
+		{
+			origin = <+5, +5, -5>
+			color = White * 5
+		},
+		Light
+		{
+			origin = <-5, +5, -5>
+			color = White * 5
+		}
+	]
+
+	objects =
+	[
+		obj,
+		left1,
+		right1,
+		left2,
+		right2
+	]
+}
+
+render(scene)

@@ -18,6 +18,7 @@
 #include <scene/object/surface/primitive/sor/parser.hpp>
 #include <scene/object/surface/primitive/superellipsoid/parser.hpp>
 #include <scene/object/surface/primitive/fractal/parser.hpp>
+#include <scene/object/surface/primitive/blob/parser.hpp>
 #include <boost/spirit/include/qi_grammar.hpp>
 
 namespace qi = boost::spirit::qi;
@@ -48,7 +49,7 @@ private:
 	sor::parser<Iterator, Skipper> _sor;
 	superellipsoid::parser<Iterator, Skipper> _superellipsoid;
 	fractal::parser<Iterator, Skipper> _fractal;
-
+	blob::parser<Iterator, Skipper> _blob;
 };
 
 }

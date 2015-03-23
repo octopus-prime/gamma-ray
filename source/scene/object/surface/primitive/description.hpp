@@ -17,3 +17,4 @@
 #include <scene/object/surface/primitive/sor/description.hpp>
 #include <scene/object/surface/primitive/superellipsoid/description.hpp>
 #include <scene/object/surface/primitive/fractal/description.hpp>
+#include <scene/object/surface/primitive/blob/description.hpp>
