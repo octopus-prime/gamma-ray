@@ -17,6 +17,7 @@
 #include <scene/object/surface/primitive/superellipsoid/model.hpp>
 #include <scene/object/surface/primitive/fractal/model.hpp>
 #include <scene/object/surface/primitive/blob/model.hpp>
+#include <scene/object/surface/primitive/isosurface/model.hpp>
 #include <boost/iterator/filter_iterator.hpp>
 
 namespace rt {
@@ -81,6 +82,7 @@ template class instance<sor::model>;
 template class instance<superellipsoid::model>;
 template class instance<fractal::model>;
 template class instance<blob::model>;
+template class instance<isosurface::model>;
 
 }
 }

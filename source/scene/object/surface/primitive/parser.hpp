@@ -19,6 +19,7 @@
 #include <scene/object/surface/primitive/superellipsoid/parser.hpp>
 #include <scene/object/surface/primitive/fractal/parser.hpp>
 #include <scene/object/surface/primitive/blob/parser.hpp>
+#include <scene/object/surface/primitive/isosurface/parser.hpp>
 #include <boost/spirit/include/qi_grammar.hpp>
 
 namespace qi = boost::spirit::qi;
@@ -50,6 +51,7 @@ private:
 	superellipsoid::parser<Iterator, Skipper> _superellipsoid;
 	fractal::parser<Iterator, Skipper> _fractal;
 	blob::parser<Iterator, Skipper> _blob;
+	isosurface::parser<Iterator, Skipper> _isosurface;
 };
 
 }

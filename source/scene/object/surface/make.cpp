@@ -17,6 +17,7 @@
 #include <scene/object/surface/primitive/superellipsoid/make.hpp>
 #include <scene/object/surface/primitive/fractal/make.hpp>
 #include <scene/object/surface/primitive/blob/make.hpp>
+#include <scene/object/surface/primitive/isosurface/make.hpp>
 #include <scene/object/surface/csg/difference/make.hpp>
 #include <scene/object/surface/csg/intersection/make.hpp>
 #include <scene/object/surface/csg/union/make.hpp>
@@ -105,6 +106,11 @@ public:
 	result_type operator()(const primitive::blob::description_t& description) const
 	{
 		return primitive::blob::make(description);
+	}
+
+	result_type operator()(const primitive::isosurface::description_t& description) const
+	{
+		return primitive::isosurface::make(description);
 	}
 };
 

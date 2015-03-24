@@ -1,31 +1,20 @@
-// Blob example
+// Isosurface example
 
 include "includes/constants.gri"
 include "includes/surfaces.gri"
 include "includes/textures.gri"
 
-Surface blob = Blob
+Surface isosurface = Isosurface
 {
-	carriers =
-	[
-		{<-1.5, -1.0, +1.0>, 1.0},
-		{< 0.0, +1.0,  0.0>, 1.5},
-		{<+1.5, -1.0, -1.0>, 1.2},
-		{<-1.5, +1.0, -1.0>, 0.3},
-		{<+1.5, +1.0, -1.0>, 0.5},
-		{<-1.5, +1.0, +1.0>, 0.3},
-		{<+1.5, +1.0, +1.0>, 0.5},
-		{< 0.0,  0.0, -1.5>, 0.5}
-	]
-	threshold = 1.8
+	function = 3*x*x + y*y + z*z - 3
 }
-blob.rotate(30 * Y)
-blob.translate(Z)
+//blob.rotate(30 * Y)
+//blob.translate(Z)
 //blob.translate(<-0.5, +0.5, +1.0>)
 
 Object obj = Object
 {
-	surface = blob
+	surface = isosurface
 	texture = MetallicRed
 }
 //obj.rotate(< 45, 45, 0>)
