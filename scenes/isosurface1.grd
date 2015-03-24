@@ -6,9 +6,9 @@ include "includes/textures.gri"
 
 Surface isosurface = Isosurface
 {
-	function = 3*x*x + y*y + z*z - 3
+	function = x*x*x + y*y + z*z - 1
 }
-//blob.rotate(30 * Y)
+isosurface.rotate(75 * Y)
 //blob.translate(Z)
 //blob.translate(<-0.5, +0.5, +1.0>)
 
