@@ -30,7 +30,7 @@ public:
 	:
 		_carriers(std::forward<carriers_t>(carriers)),
 		_threshold(threshold),
-		_rtree(rtree)
+		_rtree(std::forward<rtree_t>(rtree))
 	{
 	}
 
@@ -68,9 +68,9 @@ public:
 			const float t = boost::math::tools::newton_raphson_iterate
 			(
 				function,
-				l - 0.1 + std::numeric_limits<float>::epsilon(),
-				l - 0.1,
-				l + 0.1,
+				l - 0.1f + std::numeric_limits<float>::epsilon(),
+				l - 0.1f,
+				l + 0.1f,
 				std::numeric_limits<float>::digits,
 				max
 			);
