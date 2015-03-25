@@ -96,6 +96,10 @@ parser<Iterator, Skipper>::parser(const parsing::variable::descriptions_t& descr
 			|
 			_variable								[qi::_val = qi::_1]
 			|
+			_unary_function							[qi::_val = qi::_1]
+			|
+			_binary_function						[qi::_val = qi::_1]
+			|
 			(qi::lit('(') > _expr > qi::lit(')'))	[qi::_val = qi::_1]
 			|
 			(qi::lit('+') > _factor)				[qi::_val = qi::_1]
@@ -103,8 +107,37 @@ parser<Iterator, Skipper>::parser(const parsing::variable::descriptions_t& descr
 			(qi::lit('-') > _factor)				[qi::_val = px::bind(neg, qi::_1)]
 	;
 
+	_unary_function =
+			_unary									[qi::_a = qi::_1]
+			>
+			(qi::lit('(') > _expr > qi::lit(')'))	[qi::_val = px::bind(qi::_a, qi::_1)]
+	;
+
+	_binary_function =
+			_binary									[qi::_a = qi::_1]
+			>
+			(qi::lit('(') > _expr > qi::lit(',') > _expr > qi::lit(')'))	[qi::_val = px::bind(qi::_a, qi::_1, qi::_2)]
+	;
+
 	_value =
 			qi::float_								[qi::_val = px::bind(val, qi::_1)]
+	;
+
+	_unary.add
+		("sqrt", [](const function_t& f){return [f](const vector3_t& point){return std::sqrt(f(point));};})
+		("cbrt", [](const function_t& f){return [f](const vector3_t& point){return std::cbrt(f(point));};})
+		("sin", [](const function_t& f){return [f](const vector3_t& point){return std::sin(f(point));};})
+		("cos", [](const function_t& f){return [f](const vector3_t& point){return std::cos(f(point));};})
+		("tan", [](const function_t& f){return [f](const vector3_t& point){return std::tan(f(point));};})
+		("abs", [](const function_t& f){return [f](const vector3_t& point){return std::abs(f(point));};})
+		("log", [](const function_t& f){return [f](const vector3_t& point){return std::log(f(point));};})
+		("exp", [](const function_t& f){return [f](const vector3_t& point){return std::exp(f(point));};})
+	;
+
+	_binary.add
+		("min", [](const function_t& f1, const function_t& f2){return [f1,f2](const vector3_t& point){return std::min(f1(point), f2(point));};})
+		("max", [](const function_t& f1, const function_t& f2){return [f1,f2](const vector3_t& point){return std::max(f1(point), f2(point));};})
+		("pow", [](const function_t& f1, const function_t& f2){return [f1,f2](const vector3_t& point){return std::pow(f1(point), f2(point));};})
 	;
 
 	_variable.add

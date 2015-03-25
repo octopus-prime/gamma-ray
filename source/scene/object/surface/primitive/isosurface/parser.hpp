@@ -36,7 +36,11 @@ private:
 	qi::rule<Iterator, Skipper, function_t()> _term;
 	qi::rule<Iterator, Skipper, function_t()> _factor;
 	qi::rule<Iterator, Skipper, function_t()> _value;
+	qi::rule<Iterator, Skipper, function_t(), qi::locals<boost::function<function_t (function_t)>>> _unary_function;
+	qi::rule<Iterator, Skipper, function_t(), qi::locals<boost::function<function_t (function_t, function_t)>>> _binary_function;
 	qi::symbols<char, function_t> _variable;
+	qi::symbols<char, boost::function<function_t (function_t)>> _unary;
+	qi::symbols<char, boost::function<function_t (function_t, function_t)>> _binary;
 };
 
 }
