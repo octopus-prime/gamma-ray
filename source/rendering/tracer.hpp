@@ -16,10 +16,10 @@ namespace rendering {
 class tracer_t
 {
 public:
-	tracer_t(const scene::instance_t& scene, const std::size_t max_hits)
+	tracer_t(const scene::instance_t& scene, hits_t& hits)
 	:
 		_scene(scene),
-		_hits(10 * max_hits)
+		_hits(hits)
 	{
 	}
 
@@ -108,7 +108,7 @@ protected:
 
 private:
 	const scene::instance_t& _scene;
-	mutable hits_t _hits;
+	hits_t& _hits;
 };
 
 }

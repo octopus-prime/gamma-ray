@@ -10,9 +10,12 @@
 #include <rendering/tracer.hpp>
 #include <tbb/blocked_range2d.h>
 #include <tbb/parallel_for.h>
+#include <tbb/enumerable_thread_specific.h>
 
 namespace rt {
 namespace rendering {
+
+typedef tbb::enumerable_thread_specific<hits_t> thread_specific_hits_t;
 
 renderer_t::renderer_t(const scene::instance_t& scene, const AA aa, const std::size_t depth, const std::size_t max)
 :
@@ -27,15 +30,17 @@ void
 renderer_t::operator()(view_t view) const
 {
 	progress_t progress(view.width() * view.height());
+	hits_t hits(10 * _max);
+	thread_specific_hits_t thread_specific_hits(hits);
 
 	const float factor = float(view.width()) / float(view.height());
 	const vector2_t increment {{factor / view.width(), 1.0f / view.height() }};
 	tbb::parallel_for
 	(
 		tbb::blocked_range2d<coord_t>(0, view.height(), 0, view.width()),
-		[&view, this, &increment, factor, &progress](const tbb::blocked_range2d<coord_t>& range)
+		[&view, this, &increment, factor, &progress, &thread_specific_hits](const tbb::blocked_range2d<coord_t>& range)
 		{
-			const tracer_t trace(_scene, _max);
+			const tracer_t trace(_scene, thread_specific_hits.local());
 			for (coord_t y = range.rows().begin(); y != range.rows().end(); ++y)
 			{
 				for (coord_t x = range.cols().begin(); x != range.cols().end(); ++x)

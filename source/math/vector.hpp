@@ -87,8 +87,8 @@ normalize(const basic_vector_t<N>& vector) noexcept
 	return vector / length(vector);
 }
 
-typedef basic_vector_t<2> vector2_t;
-typedef basic_vector_t<3> vector3_t;
-typedef basic_vector_t<4> vector4_t;
+typedef basic_vector_t<2> vector2_t __attribute__((aligned(8)));
+typedef basic_vector_t<3> vector3_t __attribute__((aligned(16)));
+typedef basic_vector_t<4> vector4_t __attribute__((aligned(16)));
 
 }
